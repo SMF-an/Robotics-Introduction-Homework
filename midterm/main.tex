@@ -1,0 +1,976 @@
+\documentclass{homework}
+\author{Mufan Shi 23307130075}
+\class{Introduction to Robotics}
+\date{\today}
+\title{Midterm Exam}
+
+\usepackage{ctex} 
+\usepackage{subcaption}
+\usepackage{listings}  
+\usepackage{xcolor}  
+
+\lstset{
+  language=Python,    
+  numbers=left,       
+  numberstyle=\tiny,  
+  basicstyle=\small\ttfamily,  
+  keywordstyle=\color{blue},  
+  commentstyle=\color{gray},  
+  stringstyle=\color{red},    
+  frame=single,      
+  breaklines=true     
+}
+
+\graphicspath{{./media/}}
+
+\begin{document} \maketitle
+
+\question 
+
+\begin{sol}
+
+第一问：建立坐标系如图所示
+
+\img<q1>[0.5]{Question 1}{figs/Q1.png}
+
+第二问：写出DH表如下
+
+\tbl<tb1>{DH-table for question 1} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & $ l_1 $ & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_2 $ \\
+    3 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_3 $ \\
+    4 & $ l_2 $ & 0 & 0 & $ \theta_4 $ \\
+    5 & $ l_3 $ & 0 & 0 & $ \theta_5 $ \\
+    6 & 0 & $ \frac{\pi}{2} $ & 0 & $ \theta_6 $ \\
+  }
+
+第三问：求出各坐标系变换矩阵如下
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & l_1 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    -\sin\theta_2 & -\cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    -\sin\theta_3 & -\cos\theta_3 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_4 & -\sin\theta_4 & 0 & l_2 \\
+    \sin\theta_4 & \cos\theta_4 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^4\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_5 & -\sin\theta_5 & 0 & l_3 \\
+    \sin\theta_5 & \cos\theta_5 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^5\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_6 & -\sin\theta_6 & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    \sin\theta_6 & \cos\theta_6 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+第四问：总的变换矩阵为
+
+\[
+  _6^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} _6^5\mathbf{T} =
+  \begin{bmatrix} 
+r_{11} & r_{12} & r_{13} & p_x \\ 
+r_{21} & r_{22} & r_{23} & p_y \\ 
+r_{31} & r_{32} & r_{33} & p_z \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\] 
+
+\begin{align*} 
+r_{11} &= c_{6}\,\left(c_{5}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right)\right)-c_{1}\,s_{2}\,s_{6} \\ 
+r_{12} &= -s_{6}\,\left(c_{5}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right)\right)-c_{1}\,c_{6}\,s_{2} \\ 
+r_{13} &= s_{5}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)-c_{5}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right) \\ 
+p_x &= l_{2}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+l_{3}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right) \\ 
+r_{21} &= -c_{6}\,\left(c_{5}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)\right)-s_{1}\,s_{2}\,s_{6} \\ 
+r_{22} &= s_{6}\,\left(c_{5}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)\right)-c_{6}\,s_{1}\,s_{2} \\ 
+r_{23} &= c_{5}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)-s_{5}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right) \\ 
+p_y &= -l_{2}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)-l_{3}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right) \\ 
+r_{31} &= -c_{2}\,s_{6}-c_{345}\,c_{6}\,s_{2} \\ 
+r_{32} &= c_{345}\,s_{2}\,s_{6}-c_{2}\,c_{6} \\ 
+r_{33} &= -s_{345}\,s_{2} \\ 
+p_z &= l_{1}+l_{3}\,\left(s_{2}\,s_{3}\,s_{4}-c_{3}\,c_{4}\,s_{2}\right)-l_{2}\,c_{3}\,s_{2}
+\end{align*}
+
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+第一问：建立坐标系如图所示
+
+\img<q2>[0.75]{Question 2}{figs/q2.png}
+
+第二问：写出DH表如下
+
+\tbl<tb2>{DH-table for question 2} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & $ l_0 $ & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & $ l_1 $ & $ \theta_2 $ \\
+    3 & 0 & $ -\frac{\pi}{2} $ & $ l_2 $ & $ \theta_3 $ \\
+    4 & $ l_3 $ & 0 & d & $ \theta_4 $ \\
+    5 & $ l_4 $ & 0 & $ l_5 $ & $ \theta_5 $ \\
+    6 & 0 & $ -\frac{\pi}{2} $ & $ l_6 $ & $ \theta_6 $ \\
+    7 & 0 & $ -\frac{\pi}{2} $ & $ l_7 $ & $ \theta_7 $ \\
+  }
+
+其中
+\begin{align*}
+l_0 &= 37 \\
+l_1 &= 60 \\
+l_2 &= 55 \\
+l_3 &= 600 \\
+l_4 &= 600 \\
+l_5 &= 50 \\
+l_6 &= 73 \\
+l_7 &= 80 \\
+d &= 20
+\end{align*}
+
+第三问：求出各坐标系变换矩阵如下
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 37 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & 0 \\
+    0 & 0 & 1 & 60 \\
+    -\sin\theta_2 & -\cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & 55 \\
+    -\sin\theta_3 & -\cos\theta_3 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_4 & -\sin\theta_4 & 0 & 600 \\
+    \sin\theta_4 & \cos\theta_4 & 0 & 0 \\
+    0 & 0 & 1 & 20 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^4\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_5 & -\sin\theta_5 & 0 & 600 \\
+    \sin\theta_5 & \cos\theta_5 & 0 & 0 \\
+    0 & 0 & 1 & 50 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^5\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_6 & -\sin\theta_6 & 0 & 0 \\
+    0 & 0 & 1 & 73 \\
+    -\sin\theta_6 & -\cos\theta_6 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _7^6\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_7 & -\sin\theta_7 & 0 & 0 \\
+    0 & 0 & 1 & 80 \\
+    -\sin\theta_7 & -\cos\theta_7 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+第四问：
+
+我们可以看到，关节3，4，5的轴线是平行的，将他们一起计算会更简单
+
+\[
+  _5^2\mathbf{T} = _3^2\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} =
+  \begin{bmatrix} 
+    c_{345} & -s_{345} & 0 & l_{4}\,c_{34}+l_{3}\,c_{3} \\ 
+    0 & 0 & 1 & d+l_{2}+l_{5} \\ 
+    -s_{345} & -c_{345} & 0 & -l_{4}\,s_{34}-l_{3}\,s_{3} \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+我们计算一些中间结果，方便后面逆运动学的计算
+
+\[
+  _6^2\mathbf{T} =
+\begin{bmatrix} 
+r_{11} & r_{12} & r_{13} & p_x \\ 
+r_{21} & r_{22} & r_{23} & p_y \\ 
+r_{31} & r_{32} & r_{33} & p_z \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\] 
+
+\begin{align*} 
+r_{11} &= c_{345}\,c_{6} \\ 
+r_{12} &= -c_{345}\,s_{6} \\ 
+r_{13} &= -s_{345} \\ 
+p_x &= l_{4}\,c_{34}+l_{3}\,c_{3}-l_{6}\,s_{345} \\ 
+r_{21} &= -s_{6} \\ 
+r_{22} &= -c_{6} \\ 
+r_{23} &= 0 \\ 
+p_y &= d+l_{2}+l_{5} \\ 
+r_{31} &= -s_{345}\,c_{6} \\ 
+r_{32} &= s_{345}\,s_{6} \\ 
+r_{33} &= -c_{345} \\ 
+p_z &= -l_{4}\,s_{34}-l_{3}\,s_{3}-l_{6}\,c_{345}
+\end{align*}
+
+\[
+  _7^2\mathbf{T} =
+\begin{bmatrix} 
+r_{11} & r_{12} & r_{13} & p_x \\ 
+r_{21} & r_{22} & r_{23} & p_y \\ 
+r_{31} & r_{32} & r_{33} & p_z \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\] 
+
+\begin{align*} 
+r_{11} &= s_{345}\,s_{7}+c_{345}\,c_{6}\,c_{7} \\ 
+r_{12} &= s_{345}\,c_{7}-c_{345}\,c_{6}\,s_{7} \\ 
+r_{13} &= -c_{345}\,s_{6} \\ 
+p_x &= l_{4}\,c_{34}+l_{3}\,c_{3}-l_{6}\,s_{345}-l_{7}\,c_{345}\,s_{6} \\ 
+r_{21} &= -c_{7}\,s_{6} \\ 
+r_{22} &= s_{6}\,s_{7} \\ 
+r_{23} &= -c_{6} \\ 
+p_y &= d+l_{2}+l_{5}-l_{7}\,c_{6} \\ 
+r_{31} &= c_{345}\,s_{7}-s_{345}\,c_{6}\,c_{7} \\ 
+r_{32} &= c_{345}\,c_{7}+s_{345}\,c_{6}\,s_{7} \\ 
+r_{33} &= s_{345}\,s_{6} \\ 
+p_z &= l_{7}\,s_{345}\,s_{6}-l_{3}\,s_{3}-l_{6}\,c_{345}-l_{4}\,s_{34}
+\end{align*}
+
+总的变换矩阵为
+
+\[
+  _7^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} _6^5\mathbf{T} _7^6\mathbf{T} =
+  \begin{bmatrix} 
+r_{11} & r_{12} & r_{13} & p_x \\ 
+r_{21} & r_{22} & r_{23} & p_y \\ 
+r_{31} & r_{32} & r_{33} & p_z \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\] 
+
+{
+  \small
+\begin{align*} 
+r_{11} &= c_{7}\,\left(c_{6}\,\left(c_{5}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right)\right)+c_{1}\,s_{2}\,s_{6}\right)-s_{7}\,\left(c_{5}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right)-s_{5}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)\right) \\ 
+r_{12} &= -s_{7}\,\left(c_{6}\,\left(c_{5}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right)\right)+c_{1}\,s_{2}\,s_{6}\right)-c_{7}\,\left(c_{5}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right)-s_{5}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)\right) \\ 
+r_{13} &= c_{1}\,c_{6}\,s_{2}-s_{6}\,\left(c_{5}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right)\right) \\ 
+p_x &= 73\,c_{5}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right)-60\,s_{1}-73\,s_{5}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)-125\,c_{1}\,s_{2}+600\,s_{1}\,s_{3}+600\,c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)-80\,s_{6}\,\left(c_{5}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right)\right)+600\,s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)+600\,c_{1}\,c_{2}\,c_{3}+80\,c_{1}\,c_{6}\,s_{2} \\ 
+r_{21} &= s_{7}\,\left(c_{5}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)-s_{5}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)\right)-c_{7}\,\left(c_{6}\,\left(c_{5}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)\right)-s_{1}\,s_{2}\,s_{6}\right) \\ 
+r_{22} &= s_{7}\,\left(c_{6}\,\left(c_{5}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)\right)-s_{1}\,s_{2}\,s_{6}\right)+c_{7}\,\left(c_{5}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)-s_{5}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)\right) \\ 
+r_{23} &= s_{6}\,\left(c_{5}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)\right)+c_{6}\,s_{1}\,s_{2} \\ 
+p_y &= 60\,c_{1}-73\,c_{5}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)+73\,s_{5}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)-600\,c_{1}\,s_{3}-125\,s_{1}\,s_{2}-600\,c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+80\,s_{6}\,\left(c_{5}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)+s_{5}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)\right)-600\,s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)+80\,c_{6}\,s_{1}\,s_{2}+600\,c_{2}\,c_{3}\,s_{1} \\ 
+r_{31} &= c_{7}\,\left(c_{2}\,s_{6}-c_{345}\,c_{6}\,s_{2}\right)-s_{345}\,s_{2}\,s_{7} \\ 
+r_{32} &= -s_{7}\,\left(c_{2}\,s_{6}-c_{345}\,c_{6}\,s_{2}\right)-s_{345}\,c_{7}\,s_{2} \\ 
+r_{33} &= c_{2}\,c_{6}+c_{345}\,s_{2}\,s_{6} \\ 
+p_z &= 80\,c_{2}\,c_{6}-125\,c_{2}-600\,c_{3}\,s_{2}+600\,s_{2}\,s_{3}\,s_{4}+80\,c_{345}\,s_{2}\,s_{6}+73\,c_{34}\,s_{2}\,s_{5}+73\,s_{34}\,c_{5}\,s_{2}-600\,c_{3}\,c_{4}\,s_{2}+37
+\end{align*}
+}
+
+第五问的第一小问：
+
+令 $ \theta_1 = 0 $，得总的变换矩阵为
+\[
+  _7^0\mathbf{T} =
+  \begin{bmatrix} 
+r_{11} & r_{12} & r_{13} & p_x \\ 
+r_{21} & r_{22} & r_{23} & p_y \\ 
+r_{31} & r_{32} & r_{33} & p_z \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\] 
+
+\begin{align*} 
+r_{11} &= c_{7}\,\left(s_{2}\,s_{6}+c_{345}\,c_{2}\,c_{6}\right)+s_{345}\,c_{2}\,s_{7} \\ 
+r_{12} &= s_{345}\,c_{2}\,c_{7}-s_{7}\,\left(s_{2}\,s_{6}+c_{345}\,c_{2}\,c_{6}\right) \\ 
+r_{13} &= c_{6}\,s_{2}-c_{345}\,c_{2}\,s_{6} \\ 
+p_x &= l_{7}\,\left(c_{6}\,s_{2}-c_{345}\,c_{2}\,s_{6}\right)-d\,s_{2}-l_{2}\,s_{2}-l_{5}\,s_{2}+l_{4}\,c_{34}\,c_{2}+l_{3}\,c_{2}\,c_{3}-l_{6}\,s_{345}\,c_{2} \\ 
+r_{21} &= c_{345}\,s_{7}-s_{345}\,c_{6}\,c_{7} \\ 
+r_{22} &= c_{345}\,c_{7}+s_{345}\,c_{6}\,s_{7} \\ 
+r_{23} &= s_{345}\,s_{6} \\ 
+p_y &= l_{1}-l_{4}\,s_{34}-l_{3}\,s_{3}-l_{6}\,c_{345}+l_{7}\,s_{345}\,s_{6} \\ 
+r_{31} &= c_{7}\,\left(c_{2}\,s_{6}-c_{345}\,c_{6}\,s_{2}\right)-s_{345}\,s_{2}\,s_{7} \\ 
+r_{32} &= -s_{7}\,\left(c_{2}\,s_{6}-c_{345}\,c_{6}\,s_{2}\right)-s_{345}\,c_{7}\,s_{2} \\ 
+r_{33} &= c_{2}\,c_{6}+c_{345}\,s_{2}\,s_{6} \\ 
+p_z &= l_{0}-d\,c_{2}-l_{2}\,c_{2}-l_{5}\,c_{2}-l_{4}\,c_{34}\,s_{2}+l_{7}\,c_{2}\,c_{6}-l_{3}\,c_{3}\,s_{2}+l_{6}\,s_{345}\,s_{2}+l_{7}\,c_{345}\,s_{2}\,s_{6}
+\end{align*}
+
+因此，机械臂只剩下了6个自由度。而且我们可以观察到，关节3，4，5的轴线是平行的，所以从理论上来说，逆运动学是有解析解的。
+
+求解 $ \theta_2 $：
+
+由于 $ _7^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} _6^5\mathbf{T} _7^6\mathbf{T} $，用逆变换 $ _2^0\mathbf{T}^{-1} $ 左乘上式可得
+\[
+  _7^2\mathbf{T} = _2^0\mathbf{T}^{-1} {_7}^0\mathbf{T}
+\]
+
+而 $ _2^0\mathbf{T}^{-1} =
+  \begin{bmatrix}
+    \cos\theta_2 & 0 & -\sin\theta_2 & l_0 \sin\theta_2 \\
+    -\sin\theta_2 & 0 & -\cos\theta_2 & l_0 \cos\theta_2 \\
+    0 & 1 & 0 & -l_1 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+$，所以
+\[
+  \begin{bmatrix}
+    \cos\theta_2 & 0 & -\sin\theta_2 & l_0 \sin\theta_2 \\
+    -\sin\theta_2 & 0 & -\cos\theta_2 & l_0 \cos\theta_2 \\
+    0 & 1 & 0 & -l_1 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix} 
+    r_{11} & r_{12} & r_{13} & p_x \\ 
+    r_{21} & r_{22} & r_{23} & p_y \\ 
+    r_{31} & r_{32} & r_{33} & p_z \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix} = _7^2\mathbf{T}
+\]
+
+令矩阵方程中两端的元素(2, 3)和(2, 4)对应相等，可得
+\begin{align}
+  -\sin\theta_2 r_{13} - \cos\theta_2 r_{33} &= -\cos\theta_6 \label{eq:2_3} \\
+  -\sin\theta_2 p_x - \cos\theta_2 p_z + l_0 \cos\theta_2 &= d + l_2 + l_5 - l_7 \cos\theta_6 \label{eq:2_4}
+\end{align}
+
+将\eqref{eq:2_3}式代入\eqref{eq:2_4}式，得
+\[
+  (l_7 r_{13} - p_x)\sin\theta_2 + (l_7 r_{33} - p_z + l_0)\cos\theta_2 = d + l_2 + l_5
+\]  
+
+利用辅助角公式可得
+\[
+  \sin(\theta_2 + \phi) = \frac{d + l_2 + l_5}{\rho}
+\]
+其中 $ \rho = \sqrt{(l_7 r_{13} - p_x)^2 + (l_7 r_{33} - p_z + l_0)^2} $，$ \phi = Atan2(l_7 r_{33} - p_z + l_0, l_7 r_{13} - p_x) $。
+
+则
+\[
+  \cos(\theta_2 + \phi) = \pm \sqrt{1 - (\frac{d + l_2 + l_5}{\rho})^2}
+\]
+
+所以
+\[
+  \theta_2 + \phi = Atan2(\frac{d + l_2 + l_5}{\rho}, \pm \sqrt{1 - (\frac{d + l_2 + l_5}{\rho})^2})
+\]
+
+故
+\[
+  \theta_2 = Atan2(d + l_2 + l_5, \pm \sqrt{(l_7 r_{13} - p_x)^2 + (l_7 r_{33} - p_z + l_0)^2 - (d + l_2 + l_5)^2}) - Atan2(l_7 r_{33} - p_z + l_0, l_7 r_{13} - p_x)
+\]  
+其中的正负号对应 $ \theta_2 $ 的两种解。
+
+代入数据解得
+\[
+  \theta_2 = 133.8570^\circ \quad or \quad -60^\circ
+\]
+
+求解 $ \theta_7 $：
+
+令矩阵方程中两端的元素(2, 1)和(2, 2)对应相等，可得
+\begin{align*}
+  -\sin\theta_2 r_{11} - \cos\theta_2 r_{31} &= -c_{7} s_{6} \\
+  -\sin\theta_2 r_{12} - \cos\theta_2 r_{32} &= s_{7} s_{6}
+\end{align*}
+
+当 $ s_6 \neq 0 $ 时，有
+\[
+  \theta_7 = Atan2(-\sin\theta_2 r_{12} - \cos\theta_2 r_{32}, \sin\theta_2 r_{11} + \cos\theta_2 r_{31})
+\]
+
+由于 $ \theta_2 $ 有两个解，所以 $ \theta_7 $ 也有两个解，分别为
+\[
+  \theta_7 = 13.4003^\circ \quad or \quad 180^\circ
+\]
+
+将手腕坐标系翻转后，即将 $ \theta_7 $ 加上 $ 180^\circ $， 又能得到两个解
+\[
+  \theta_7 = -166.5997^\circ \quad or \quad 0^\circ
+\]
+
+所以 $ \theta_7 $ 一共有4个解。
+
+求解 $ \theta_6 $：
+
+由于 $ _7^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} _6^5\mathbf{T} _7^6\mathbf{T} $，用逆变换 $ _2^0\mathbf{T}^{-1} $ 左乘上式，$ _7^6\mathbf{T}^{-1} $右乘上式可得
+\[
+  _6^2\mathbf{T} = _2^0\mathbf{T}^{-1} {_7}^0\mathbf{T} _7^6\mathbf{T}^{-1}
+\]
+
+所以
+\[
+  \begin{bmatrix}
+    \cos\theta_2 & 0 & -\sin\theta_2 & l_0 \sin\theta_2 \\
+    -\sin\theta_2 & 0 & -\cos\theta_2 & l_0 \cos\theta_2 \\
+    0 & 1 & 0 & -l_1 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix} 
+    r_{11} & r_{12} & r_{13} & p_x \\ 
+    r_{21} & r_{22} & r_{23} & p_y \\ 
+    r_{31} & r_{32} & r_{33} & p_z \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix} 
+  \begin{bmatrix}
+    \cos\theta_7 & 0 & -\sin\theta_7 & 0 \\
+    -\sin\theta_7 & 0 & -\cos\theta_7 & 0 \\
+    0 & 1 & 0 & -l_7 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix} = _6^2\mathbf{T}
+\]
+
+令矩阵方程中两端的元素(2, 1)和(2, 2)对应相等，可得
+\begin{align*}
+  -r_{11}\cos\theta_7 \sin\theta_2 + r_{12}\sin\theta_7 \sin\theta_2 - r_{31}\cos\theta_7 \cos\theta_2 + r_{32}\sin\theta_7 \cos\theta_2 &= -s_{6} \\
+  -r_{13}\sin\theta_2 - r_{33}\cos\theta_2 &= -c_{6}
+\end{align*} 
+
+所以
+\[
+  \theta_6 = Atan2(r_{11}\cos\theta_7 \sin\theta_2 - r_{12}\sin\theta_7 \sin\theta_2 + r_{31}\cos\theta_7 \cos\theta_2 - r_{32}\sin\theta_7 \cos\theta_2, r_{13}\sin\theta_2 + r_{33}\cos\theta_2)
+\]
+
+由于$ \theta_7 $ 有4个解，所以 $ \theta_6 $ 也有4个解，分别为
+\[  
+  \theta_6 = 86.4474^\circ \quad or \quad 90^\circ \quad or \quad -86.4474^\circ \quad or \quad -90^\circ
+\]
+
+求解 $ \theta_3, \theta_4, \theta_5 $：
+
+令矩阵方程中两端的元素(1, 3)和(3, 3)对应相等，可得
+\begin{align*}
+  -r_{11}\cos\theta_2\sin\theta_7 - r_{12}\cos\theta_2\cos\theta_7 + r_{31}\sin\theta_2\sin\theta_7 + r_{32}\sin\theta_2\cos\theta_7 &= -s_{345} \\
+  -r_{21}\sin\theta_7 - r_{22}\cos\theta_7 &= -c_{345}
+\end{align*} 
+
+所以
+\[
+  \theta_3 + \theta_4 + \theta_5 = Atan2(r_{11}\cos\theta_2\sin\theta_7 + r_{12}\cos\theta_2\cos\theta_7 - r_{31}\sin\theta_2\sin\theta_7 - r_{32}\sin\theta_2\cos\theta_7, r_{21}\sin\theta_7 + r_{22}\cos\theta_7)
+\]
+
+令矩阵方程中两端的元素(1, 4)和(3, 4)对应相等，可得
+\begin{align}
+  p_x \cos\theta_2 - p_z \sin\theta_2 - l_7 r_{13} \cos\theta_2 + l_7 r_{33} \sin\theta_2 + l_0 \sin\theta_2 &= l_4 c_{34} + l_3 c_3 - l_6 s_{345} \label{eq:1_4} \\
+  p_y - l_7 r_{23} - l_1 &= -l_4 s_{34} - l_3 s_3 - l_6 c_{345} \label{eq:3_4}
+\end{align} 
+
+两式平方相加，得
+\[
+  (p_x \cos\theta_2 - p_z \sin\theta_2 - l_7 r_{13} \cos\theta_2 + l_7 r_{33} \sin\theta_2 + l_0 \sin\theta_2 + l_6 s_{345})^2 + (p_y - l_7 r_{23} - l_1 + l_6 c_{345})^2 = l_4^2 + l_3^2 + 2 l_3 l_4 c_4
+\]
+
+所以
+\[
+  \cos\theta_4 = \frac{(p_x \cos\theta_2 - p_z \sin\theta_2 - l_7 r_{13} \cos\theta_2 + l_7 r_{33} \sin\theta_2 + l_0 \sin\theta_2 + l_6 s_{345})^2 + (p_y - l_7 r_{23} - l_1 + l_6 c_{345})^2 - l_4^2 - l_3^2}{2 l_3 l_4}
+\]
+
+\[
+  \sin\theta_4 = \pm \sqrt{1 - \cos^2\theta_4}
+\]
+
+因此
+\[
+  \theta_4 = Atan2(\sin\theta_4, \cos\theta_4)
+\]
+
+由于 $ \theta_3 + \theta_4 + \theta_5 $ 有4个解，所以 $ \theta_4 $ 一共有8个解，但是其中有4个解是重合的，所以只有4个不同的解，分别为
+\[
+  \theta_4 = 45^\circ \quad or \quad -45^\circ \quad or \quad 73^\circ \quad or \quad -73^\circ 
+\]
+
+将式\eqref{eq:1_4}和\eqref{eq:3_4}重新整理，得
+\begin{align*}
+  (l_4 c_4 + l_3) c_3 - l_4 s_4 s_3 &= p_x \cos\theta_2 - p_z \sin\theta_2 - l_7 r_{13} \cos\theta_2 + l_7 r_{33} \sin\theta_2 + l_0 \sin\theta_2 + l_6 s_{345} \\
+  (l_4 c_4 + l_3) s_3 + l_4 s_4 c_3 &= -p_y + l_7 r_{23} + l_1 - l_6 c_{345}
+\end{align*}
+
+由辅助角公式可得
+\begin{align*}
+  \cos(\theta_3 + \psi) &= \frac{p_x \cos\theta_2 - p_z \sin\theta_2 - l_7 r_{13} \cos\theta_2 + l_7 r_{33} \sin\theta_2 + l_0 \sin\theta_2 + l_6 s_{345}}{r} \\
+  \sin(\theta_3 + \psi) &= \frac{-p_y + l_7 r_{23} + l_1 - l_6 c_{345}}{r}
+\end{align*}
+其中 $ r = \sqrt{(l_4 c_4 + l_3)^2 + (l_4 s_4)^2} $，$ \psi = Atan2(l_4 s_4, l_4 c_4 + l_3) $。
+
+则
+\[
+  \theta_3 + \psi = Atan2(-p_y + l_7 r_{23} + l_1 - l_6 c_{345}, p_x \cos\theta_2 - p_z \sin\theta_2 - l_7 r_{13} \cos\theta_2 + l_7 r_{33} \sin\theta_2 + l_0 \sin\theta_2 + l_6 s_{345})
+\]
+
+$ \theta_4 $ 有8个解，分别为
+{
+\small
+\[
+  \theta_3 = 150^\circ \quad or \quad 195^\circ \quad or \quad -30^\circ \quad or \quad 43^\circ \quad or \quad 137^\circ \quad or \quad -150^\circ \quad or \quad -15^\circ \quad or \quad 30^\circ
+\]
+}
+
+{
+\small
+$ \theta_5 $ 可由 $ \theta_3 + \theta_4 + \theta_5 $ 求出。
+\[
+  \theta_5 = 60^\circ \quad or \quad 105^\circ \quad or \quad -118^\circ \quad or \quad -45^\circ \quad or \quad -135^\circ \quad or \quad -62^\circ \quad or \quad 75^\circ \quad or \quad 120^\circ
+\]
+}
+
+综上，我们一共得到了8组解，分别为
+\tbl<tb3>{Solutions 1} {
+    $ \theta_2 $ & $ \theta_3 $ & $ \theta_4 $ & $ \theta_5 $ & $ \theta_6 $ & $ \theta_7 $ \\
+    133.8570 & 150 & 45 & 60 & 86.4474 & 13.4003 \\
+    133.8570 & 195 & -45 & 105 & 86.4474 & 13.4003 \\
+    -60 & -30 & 73 & -118 & 90 & 180 \\
+    -60 & 43 & -73 & -45 & 90 & 180 \\
+    133.8570 & 137 & 73 & -135 & -86.4474 & -166.5997 \\
+    133.8570 & -150 & -73 & -62 & -86.4474 & -166.5997 \\
+    -60 & -15 & 45 & 75 & -90 & 0 \\
+    -60 & 30 & -45 & 120 & -90 & 0 \\
+  }
+
+第五问的第二小问：
+
+令 $ \theta_5 = 0 $，得总的变换矩阵为
+\[
+  _7^0\mathbf{T} =
+  \begin{bmatrix} 
+r_{11} & r_{12} & r_{13} & p_x \\ 
+r_{21} & r_{22} & r_{23} & p_y \\ 
+r_{31} & r_{32} & r_{33} & p_z \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\] 
+
+{
+\small
+\begin{align*} 
+r_{11} &= c_{7}\,\left(c_{6}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)+c_{1}\,s_{2}\,s_{6}\right)-s_{7}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right) \\ 
+r_{12} &= -c_{7}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right)-s_{7}\,\left(c_{6}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)+c_{1}\,s_{2}\,s_{6}\right) \\ 
+r_{13} &= c_{1}\,c_{6}\,s_{2}-s_{6}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right) \\ 
+p_x &= l_{3}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)-l_{7}\,\left(s_{6}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)-c_{1}\,c_{6}\,s_{2}\right)+l_{4}\,\left(c_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)+s_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)\right)+l_{6}\,\left(c_{4}\,\left(c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3}\right)-s_{4}\,\left(s_{1}\,s_{3}+c_{1}\,c_{2}\,c_{3}\right)\right)-l_{1}\,s_{1}-d\,c_{1}\,s_{2}-l_{2}\,c_{1}\,s_{2}-l_{5}\,c_{1}\,s_{2} \\ 
+r_{21} &= s_{7}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)-c_{7}\,\left(c_{6}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)-s_{1}\,s_{2}\,s_{6}\right) \\ 
+r_{22} &= c_{7}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)+s_{7}\,\left(c_{6}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)-s_{1}\,s_{2}\,s_{6}\right) \\ 
+r_{23} &= s_{6}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)+c_{6}\,s_{1}\,s_{2} \\ 
+p_y &= l_{7}\,\left(s_{6}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)+c_{6}\,s_{1}\,s_{2}\right)-l_{3}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)-l_{4}\,\left(c_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)+s_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)\right)-l_{6}\,\left(c_{4}\,\left(c_{1}\,c_{3}+c_{2}\,s_{1}\,s_{3}\right)-s_{4}\,\left(c_{1}\,s_{3}-c_{2}\,c_{3}\,s_{1}\right)\right)+l_{1}\,c_{1}-d\,s_{1}\,s_{2}-l_{2}\,s_{1}\,s_{2}-l_{5}\,s_{1}\,s_{2} \\ 
+r_{31} &= c_{7}\,\left(c_{2}\,s_{6}+c_{6}\,\left(s_{2}\,s_{3}\,s_{4}-c_{3}\,c_{4}\,s_{2}\right)\right)-s_{7}\,\left(c_{3}\,s_{2}\,s_{4}+c_{4}\,s_{2}\,s_{3}\right) \\ 
+r_{32} &= -s_{7}\,\left(c_{2}\,s_{6}+c_{6}\,\left(s_{2}\,s_{3}\,s_{4}-c_{3}\,c_{4}\,s_{2}\right)\right)-c_{7}\,\left(c_{3}\,s_{2}\,s_{4}+c_{4}\,s_{2}\,s_{3}\right) \\ 
+r_{33} &= c_{2}\,c_{6}-s_{6}\,\left(s_{2}\,s_{3}\,s_{4}-c_{3}\,c_{4}\,s_{2}\right) \\ 
+p_z &= l_{0}+l_{4}\,\left(s_{2}\,s_{3}\,s_{4}-c_{3}\,c_{4}\,s_{2}\right)+l_{6}\,\left(c_{3}\,s_{2}\,s_{4}+c_{4}\,s_{2}\,s_{3}\right)-d\,c_{2}-l_{2}\,c_{2}-l_{5}\,c_{2}+l_{7}\,\left(c_{2}\,c_{6}-s_{6}\,\left(s_{2}\,s_{3}\,s_{4}-c_{3}\,c_{4}\,s_{2}\right)\right)-l_{3}\,c_{3}\,s_{2}
+\end{align*}
+}
+
+此时，机械臂的关节中没有3个轴线平行或者交于一点的。这意味着，逆运动学没有解析解，要求解就需要使用数值解法，例如牛顿-拉夫森法或雅可比矩阵法。
+
+数值解法很难找全所有解，因此我们可以通过设计更多的初始猜测（种子解）来增加找到不同解的概率。由于时间有限，我们得到了以下几组解：
+\tbl<tb4>{Solutions 2} {
+    $ \theta_1 $ & $ \theta_2 $ & $ \theta_3 $ & $ \theta_4 $ & $ \theta_6 $ & $ \theta_7 $ \\
+    -128.97 & -173.51 & 5.18 & -49.42 & 14.51 & -53.53 \\
+    -81.64 & -165.22 & -88.75 & 44.11 & 13.93 & -5.93 \\
+    -92.88 & 31.75 & -102.83 & -56.71 & 149.31 & -171.29
+  }
+
+数值解法的python代码如下
+\begin{lstlisting}[language=Python, caption=code for numerical IK solution]
+import numpy as np
+from scipy.optimize import minimize
+
+
+def generate_noisy_seeds(base_seeds, num_variations=5, noise_level=0.2, fixed_joints=None):
+    """
+    在基础种子解的基础上添加噪声，生成更多的初始猜测
+    
+    参数:
+    - base_seeds: 基础种子解的列表，每个种子是一个关节角度数组
+    - num_variations: 每个种子生成的变体数量
+    - noise_level: 噪声水平（弧度）
+    
+    返回:
+    - 扩展后的种子列表
+    """
+    noisy_seeds = []
+    
+    for seed in base_seeds:
+        # 首先添加原始种子
+        noisy_seeds.append(seed.copy())
+        
+        # 为每个种子生成多个带噪声的变体
+        for _ in range(num_variations):
+            noisy_seed = seed.copy()
+            
+            # 为每个关节添加噪声，除了固定关节
+            for i in range(len(seed)):
+                if fixed_joints is None or i not in fixed_joints:
+                    # 添加高斯噪声
+                    noise = np.random.normal(0, noise_level)
+                    noisy_seed[i] += noise
+                    
+                    # 确保角度在[-π, π]范围内
+                    noisy_seed[i] = (noisy_seed[i] + np.pi) % (2 * np.pi) - np.pi
+            
+            noisy_seeds.append(noisy_seed)
+    
+    return noisy_seeds
+
+def generate_strategic_seeds(base_seeds, fixed_joints=None):
+    """
+    生成策略性的种子变体，通过有目的地修改某些关节
+    
+    参数:
+    - base_seeds: 基础种子解
+    - fixed_joints: 固定关节的字典 {关节索引: 固定值}
+    
+    返回:
+    - 策略性扩展的种子列表
+    """
+    strategic_seeds = []
+    
+    for seed in base_seeds:
+        # 添加原始种子
+        strategic_seeds.append(seed.copy())
+        
+        # 策略1: 对每个关节分别进行小的正负偏移
+        for i in range(len(seed)):
+            if fixed_joints is None or i not in fixed_joints:
+                for offset in [0.1, -0.1, 0.2, -0.2]:  # 小偏移
+                    new_seed = seed.copy()
+                    new_seed[i] += offset
+                    new_seed[i] = (new_seed[i] + np.pi) % (2 * np.pi) - np.pi
+                    strategic_seeds.append(new_seed)
+        
+        # 策略2: 关节角度的周期性等价表示
+        for i in range(len(seed)):
+            if fixed_joints is None or i not in fixed_joints:
+                new_seed = seed.copy()
+                new_seed[i] += np.pi
+                new_seed[i] = (new_seed[i] + np.pi) % (2 * np.pi) - np.pi
+                strategic_seeds.append(new_seed)
+        
+        # 策略3: 镜像解（对于某些对称结构）
+        # 这里我们创建一个简单的镜像：某些关节取负值
+        for i in range(len(seed)):
+            if fixed_joints is None or i not in fixed_joints:
+                new_seed = seed.copy()
+                new_seed[i] = -new_seed[i]
+                new_seed = (new_seed + np.pi) % (2 * np.pi) - np.pi
+                strategic_seeds.append(new_seed)
+    
+    return strategic_seeds
+
+
+class DH_Robot_IK:
+    def __init__(self, dh_params):
+        """
+        DH参数格式: [[a, alpha, d, theta], ...]
+        theta是关节变量
+        """
+        self.dh_params = dh_params
+        self.n_joints = len(dh_params)
+    
+    def dh_matrix(self, a, alpha, d, theta):
+        """计算DH变换矩阵"""
+        ct = np.cos(theta)
+        st = np.sin(theta)
+        ca = np.cos(alpha)
+        sa = np.sin(alpha)
+        
+        T = np.array([
+            [ct, -st, 0, a],
+            [st*ca, ct*ca, -sa, -d*sa],
+            [st*sa, ct*sa, ca, d*ca],
+            [0, 0, 0, 1]
+        ])
+        return T
+    
+    def forward_kinematics(self, joint_angles):
+        """正运动学计算"""
+        T = np.eye(4)
+        
+        for i, (a, alpha, d, _) in enumerate(self.dh_params):
+            theta = joint_angles[i]
+            T_i = self.dh_matrix(a, alpha, d, theta)
+            T = T @ T_i
+            
+        return T
+    
+    def objective_function(self, joint_angles, target_pose, weights=None):
+        """目标函数：最小化末端位姿误差"""
+        if weights is None:
+            pos_weight = 1.0
+            rot_weight = 1.0
+        else:
+            pos_weight, rot_weight = weights
+        
+        current_pose = self.forward_kinematics(joint_angles)
+        
+        # 位置误差
+        pos_error = np.linalg.norm(current_pose[:3, 3] - target_pose[:3, 3])
+        
+        # 方向误差（使用旋转矩阵的Frobenius范数）
+        rot_error = np.linalg.norm(current_pose[:3, :3] - target_pose[:3, :3], 'fro')
+        
+        # 总误差
+        total_error = pos_weight * pos_error + rot_weight * rot_error
+        
+        return total_error
+    
+    def solve_ik(self, target_pose, fixed_joints=None, initial_guess=None, method='SLSQP', weights=None):
+        """求解带约束的逆运动学"""
+        if initial_guess is None:
+            initial_guess = np.zeros(self.n_joints)
+        
+        # 默认关节限制
+        bounds = [(-np.pi, np.pi) for _ in range(self.n_joints)]
+        
+        # 如果有固定关节，设置约束
+        constraints = []
+        if fixed_joints is not None:
+            for joint_idx, fixed_value in fixed_joints.items():
+                def constraint_func(q, idx=joint_idx, value=fixed_value):
+                    return q[idx] - value
+                constraints.append({'type': 'eq', 'fun': constraint_func})
+        
+        # 优化
+        result = minimize(
+            self.objective_function,
+            initial_guess,
+            args=(target_pose, weights),
+            method=method,
+            bounds=bounds,
+            constraints=constraints,
+            options={'maxiter': 1000, 'ftol': 1e-6}
+        )
+        
+        return result
+    
+    def are_solutions_similar(self, sol1, sol2, tol=1e-1):
+        """检查两个解是否相似"""
+        # 考虑关节角的周期性，将角度归一化到[-π, π]范围内
+        sol1_norm = np.arctan2(np.sin(sol1), np.cos(sol1))
+        sol2_norm = np.arctan2(np.sin(sol2), np.cos(sol2))
+        
+        # 计算角度差
+        diff = np.abs(sol1_norm - sol2_norm)
+        # 考虑周期性，取最小角度差
+        diff = np.minimum(diff, 2*np.pi - diff)
+        
+        return np.all(diff < tol)
+
+
+def find_multiple_solutions(robot, target_pose, fixed_joints=None, weights=(1.0, 1.0)):
+    """寻找多个不同的逆运动学解"""
+    solutions = []
+    errors = []
+    
+    # # 基础初始猜测
+    # base_guesses = [
+    #     np.zeros(robot.n_joints),
+    #     np.array([0, np.pi/4, 0, 0, 0, 0, 0]),
+    #     np.array([np.pi/4, np.pi/4, 0, 0, 0, 0, 0]),
+    #     np.array([0, 0, 0, np.pi/4, 0, 0, 0]),
+    #     np.array([-np.pi/4, -np.pi/4, 0, 0, 0, 0, 0]),
+    #     np.array([0, -np.pi/4, 0, 0, 0, 0, 0]),
+    #     np.array([np.pi/2, 0, 0, 0, 0, 0, 0]),
+    #     np.array([0, 0, np.pi/4, 0, 0, 0, 0]),
+    #     np.array([0, 0, 0, 0, 0, np.pi/4, 0]),
+    #     np.array([0, 0, 0, 0, 0, 0, np.pi/4])
+    # ]
+    
+    # # 添加随机初始猜测
+    # for _ in range(60):
+    #     random_guess = np.random.uniform(-np.pi, np.pi, robot.n_joints)
+    #     base_guesses.append(random_guess)
+        
+  
+    # 初始种子解     
+    seeds = [
+        np.radians([-128.97, -173.51, 5.18, -49.42, 0, 14.51, -53.53]),
+        np.radians([-81.64, -165.22, -88.75, 44.11, 0, 13.93, -5.93]),
+        np.radians([-92.88, 31.75, -102.83, -56.71, 0, 149.31, -171.29]),
+    ]
+    
+    # 生成带噪声的种子
+    noisy_seeds = generate_noisy_seeds(seeds, num_variations=5, noise_level=0.3, fixed_joints=fixed_joints)
+    
+    # 生成策略性种子
+    strategic_seeds = generate_strategic_seeds(seeds, fixed_joints=fixed_joints)
+    
+    # 合并所有种子
+    all_seeds = seeds + noisy_seeds + strategic_seeds
+    
+    # 去除重复的种子（基于一定的容差）
+    base_guesses = []
+    tolerance = 1e-3
+    
+    for seed in all_seeds:
+        is_unique = True
+        for existing in base_guesses:
+            if np.allclose(seed, existing, atol=tolerance):
+                is_unique = False
+                break
+        if is_unique:
+            base_guesses.append(seed)
+    
+    
+    # 尝试所有初始猜测
+    for i, q0 in enumerate(base_guesses):
+        result = robot.solve_ik(target_pose, fixed_joints, q0, weights=weights)
+        
+        if result.success:
+            error = robot.objective_function(result.x, target_pose)
+            
+            # 检查是否与已有解相似
+            is_similar = False
+            for existing_sol in solutions:
+                if robot.are_solutions_similar(result.x, existing_sol):
+                    is_similar = True
+                    break
+            
+            # 如果不相似，添加到解列表
+            if not is_similar and error < 0.01:
+                solutions.append(result.x)
+                errors.append(error)
+                print(f"找到新解 {len(solutions)}: 误差 = {error:.6f}")
+    
+    # 按误差排序
+    if solutions:
+        sorted_indices = np.argsort(errors)
+        solutions = [solutions[i] for i in sorted_indices]
+        errors = [errors[i] for i in sorted_indices]
+    
+    return solutions, errors
+
+
+if __name__ == "__main__":
+    l0 = 37
+    l1 = 60
+    l2 = 55
+    l3 = 600
+    l4 = 600
+    l5 = 50
+    l6 = 73
+    l7 = 80
+    d = 20
+
+    dh_table = [
+        [0, 0, l0, 0],           
+        [0, -np.pi/2, l1, 0],   
+        [0, -np.pi/2, l2, 0],   
+        [l3, 0, d, 0],           
+        [l4, 0, l5, 0],         
+        [0, -np.pi/2, l6, 0],   
+        [0, -np.pi/2, l7, 0]     
+    ]
+
+    robot = DH_Robot_IK(dh_table)
+
+    T_des = np.array([
+        [0.483,    0.8571,   -0.1791,  939.8881],
+        [0.8748,   -0.4811,   0.0566,  592.5323],
+        [-0.0376,  -0.184,    -0.9822,  204.5932],
+        [0,        0,         0,        1.0000]
+    ])
+    
+    # 设置固定关节 - 关节4 (索引4) 固定为 0
+    fixed_joints = {4: 0}
+    
+    solutions, errors = find_multiple_solutions(
+        robot, 
+        T_des, 
+        fixed_joints,   
+        weights=(1.0, 1.0)
+    )
+
+    if solutions:
+        print(f"\n找到了 {len(solutions)} 个不同的解:")
+        
+        for i, (sol, error) in enumerate(zip(solutions, errors)):
+            print(f"\n解 {i+1} (误差: {error:.6f}):")
+            for j, angle in enumerate(sol):
+                print(f"  关节 {j+1} (theta{j+1}): {angle:.4f} rad ({np.degrees(angle):.2f}°)")
+            
+            T_actual = robot.forward_kinematics(sol)
+            pos_error = np.linalg.norm(T_actual[:3, 3] - T_des[:3, 3])
+            rot_error = np.linalg.norm(T_actual[:3, :3] - T_des[:3, :3], 'fro')
+            
+            print(f"  位置误差: {pos_error:.4f} mm")
+            print(f"  旋转误差: {rot_error:.4f}")
+            print(f"  实际末端位姿:\n{T_actual}")
+        
+    else:
+        print("\n未能找到可行解。建议:")
+        print("1. 检查DH参数是否正确")
+        print("2. 验证目标位姿是否在机器人的工作空间内")
+        print("3. 尝试调整优化参数或使用不同的初始猜测")
+\end{lstlisting}
+
+\end{sol}
+
+\end{document}

@@ -1,0 +1,937 @@
+\documentclass{homework}
+\author{Mufan Shi 23307130075}
+\class{Introduction to Robotics}
+\date{\today}
+\title{Homework of Chapter3}
+
+\usepackage{ctex} 
+\usepackage{subcaption}
+\graphicspath{{./media/}}
+
+\begin{document} \maketitle
+
+\question 
+
+\begin{sol}
+
+\img<q1>[0.5]{Question 1}{figs/q1.png}
+
+\tbl<tb1>{DH-table for question 1} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & $ L_1 $ & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_2 $ \\
+    3 & $ L_2 $ & $ -\frac{\pi}{2} $ & $ d_3 $ & 0 \\
+  }
+  
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+\img<q2>[0.5]{Question 2}{figs/q2.png}
+
+\tbl<tb2>{DH-table for question 2} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & $ L_1 $ & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_2 $ \\
+    3 & $ L_2 $ & 0 & 0 & $ \theta_3 $ \\
+  }
+  
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+我们把末端执行器作为第5个关节，并把它当作一个固定关节来处理。
+
+\img<q3>[0.75]{Question 3}{figs/q3.png}
+
+\tbl<tb3>{DH-table for question 3} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & 0 & $ \theta_1 $ \\
+    2 & $ l_1 $ & 0 & 0 & $ \theta_2 $ \\
+    3 & $ l_2 $ & 0 & 0 & $ \theta_3 $ \\
+    4 & $ l_3 $ & 0 & 0 & $ \theta_4 $ \\
+    5 & $ l_4 $ & 0 & 0 & 0 \\
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & l_1 \\
+    \sin\theta_2 & \cos\theta_2 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & l_2 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_4 & -\sin\theta_4 & 0 & l_3 \\
+    \sin\theta_4 & \cos\theta_4 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^4\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & l_4 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+末端执行器在基坐标下的位姿为：
+
+\[
+  _5^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} =
+  \begin{bmatrix}
+    c_{1234} & -s_{1234} & 0 & l_1 c_1 + l_2 c_{12} + l_3 c_{123} + l_4 c_{1234} \\
+    s_{1234} & c_{1234} & 0 & l_1 s_1 + l_2 s_{12} + l_3 s_{123} + l_4 s_{1234} \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+  
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+修正后的DH表如下：
+\tbl<tb4>{DH-table for question 4} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & 0 & $ \theta_1 $ \\
+    2 & 0 & $ \frac{\pi}{2} $ & $ b_1 + b_2 $ & $ \theta_2 $ \\
+    3 & 8 & 0 & 0 & $ \theta_3 $ \\
+    4 & 0 & $ \frac{\pi}{2} $ & 8 & $ \theta_4 $ \\
+    5 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_5 $ \\
+    6 & 0 & $ -\frac{\pi}{2} $ & $ b_3 $ & $ \theta_6 $ 
+  }
+
+各连杆变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & 0 \\
+    0 & 0 & -1 & - b_1 - b_2 \\
+    \sin\theta_2 & \cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & 8 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_4 & -\sin\theta_4 & 0 & 0 \\
+    0 & 0 & -1 & -8 \\
+    \sin\theta_4 & \cos\theta_4 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^4\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_5 & -\sin\theta_5 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    -\sin\theta_5 & -\cos\theta_5 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^5\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_6 & -\sin\theta_6 & 0 & 0 \\
+    0 & 0 & 1 & b_3 \\
+    -\sin\theta_6 & -\cos\theta_6 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+从DH表我们可以看出，关节2和关节3是平行的，所以 $ _2^1\mathbf{T} $ 和 $ _3^2\mathbf{T} $ 的乘积用和差化积公式将得到一个简化的表达式。
+\[
+  _3^1\mathbf{T} = _2^1\mathbf{T} _3^2\mathbf{T} =
+  \begin{bmatrix}
+    c_{23} & -s_{23} & 0 & 8c_2 \\
+    0 & 0 & -1 & - b_1 - b_2 \\
+    s_{23} & c_{23} & 0 & 8s_2 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+末端执行器的变换矩阵为：
+
+\[
+  _6^0\mathbf{T} = _1^0\mathbf{T} _3^1\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} _6^5\mathbf{T} =
+  \begin{bmatrix} 
+r_{11} & r_{12} & r_{13} & p_x \\ 
+r_{21} & r_{22} & r_{23} & p_y \\ 
+r_{31} & r_{32} & r_{33} & p_z \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\] 
+
+\begin{align*} 
+r_{11} &= c_{6}\,\left(c_{5}\,\left(s_{1}\,s_{4}+c_{23}\,c_{1}\,c_{4}\right)-s_{23}\,c_{1}\,s_{5}\right)-s_{6}\,\left(c_{4}\,s_{1}-c_{23}\,c_{1}\,s_{4}\right) \\ 
+r_{12} &= -s_{6}\,\left(c_{5}\,\left(s_{1}\,s_{4}+c_{23}\,c_{1}\,c_{4}\right)-s_{23}\,c_{1}\,s_{5}\right)-c_{6}\,\left(c_{4}\,s_{1}-c_{23}\,c_{1}\,s_{4}\right) \\ 
+r_{13} &= -s_{5}\,\left(s_{1}\,s_{4}+c_{23}\,c_{1}\,c_{4}\right)-s_{23}\,c_{1}\,c_{5} \\ 
+p_x &= 8\,c_{1}\,c_{2}+s_{1}\,\left(b_{1}+b_{2}\right)-b_{3}\,\left(s_{5}\,\left(s_{1}\,s_{4}+c_{23}\,c_{1}\,c_{4}\right)+s_{23}\,c_{1}\,c_{5}\right)+8\,s_{23}\,c_{1} \\ 
+r_{21} &= s_{6}\,\left(c_{1}\,c_{4}+c_{23}\,s_{1}\,s_{4}\right)-c_{6}\,\left(c_{5}\,\left(c_{1}\,s_{4}-c_{23}\,c_{4}\,s_{1}\right)+s_{23}\,s_{1}\,s_{5}\right) \\ 
+r_{22} &= s_{6}\,\left(c_{5}\,\left(c_{1}\,s_{4}-c_{23}\,c_{4}\,s_{1}\right)+s_{23}\,s_{1}\,s_{5}\right)+c_{6}\,\left(c_{1}\,c_{4}+c_{23}\,s_{1}\,s_{4}\right) \\ 
+r_{23} &= s_{5}\,\left(c_{1}\,s_{4}-c_{23}\,c_{4}\,s_{1}\right)-s_{23}\,c_{5}\,s_{1} \\ 
+p_y &= 8\,s_{23}\,s_{1}+8\,c_{2}\,s_{1}-c_{1}\,\left(b_{1}+b_{2}\right)+b_{3}\,\left(s_{5}\,\left(c_{1}\,s_{4}-c_{23}\,c_{4}\,s_{1}\right)-s_{23}\,c_{5}\,s_{1}\right) \\ 
+r_{31} &= c_{6}\,\left(c_{23}\,s_{5}+s_{23}\,c_{4}\,c_{5}\right)+s_{23}\,s_{4}\,s_{6} \\ 
+r_{32} &= s_{23}\,c_{6}\,s_{4}-s_{6}\,\left(c_{23}\,s_{5}+s_{23}\,c_{4}\,c_{5}\right) \\ 
+r_{33} &= c_{23}\,c_{5}-s_{23}\,c_{4}\,s_{5} \\ 
+p_z &= 8\,s_{2}-8\,c_{23}+b_{3}\,\left(c_{23}\,c_{5}-s_{23}\,c_{4}\,s_{5}\right)
+\end{align*}
+  
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+公垂线的方向向量应该同时垂直于 $ \hat{m} $ 和 $ \hat{n} $，所以我们可以用叉积得到公垂线的方向向量：$ \hat{d} = \hat{m} \times \hat{n} $。公垂线的长度 a 是两条直线之间的最短距离。这个最短距离可以通过向量 $ \mathbf{p} - \mathbf{q} $ 在公垂线方向上的投影的绝对值得到，也就是
+
+\[
+  a = \frac{(\mathbf{p} - \mathbf{q})(\hat{m} \times \hat{n})}{|\hat{m} \times \hat{n}|}
+\]
+
+当两条直线平行时，$ \hat{m} \times \hat{n} = \mathbf{0} $，上述表达式分母为零。但此时公垂线长度 a 为点 q 到直线 $ \mathbf{p} + t \hat{m} $ 的距离，即：
+
+\[
+  a = |(\mathbf{p} - \mathbf{q}) \times \hat{m}|
+\]
+
+需要注意的是，当两条直线相交时，公垂线长度 $ a = 0 $。
+
+角 $ \alpha $ 是两条直线在与公垂线相垂直的平面上的投影的夹角。由于公垂线垂直于两条直线，两条直线的方向矢量在垂直于公垂线的平面上的投影即为自身，因此 $ \alpha $ 是方向矢量 $ \hat{m} $ 和 $ \hat{n} $ 之间的最小夹角。表达式为：
+
+\[
+  \alpha = \arccos (|\hat{m} \cdot \hat{n}|)
+\]
+  
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+这个问题其实取决于坐标系的放置方式。如果坐标系按照 DH 约定放置（即 $ x_{i-1} $ 轴沿 $ z_{i-1} $ 和 $ z_i $ 的公垂线方向），则任意刚体变换都可以用这四个参数表示。这种放置方式确保了变换矩阵具有上述形式，从而用四个参数捕获了变换的六个自由度（三个平移和三个旋转），因为坐标系的约束减少了参数数量。
+
+然而，如果坐标系不是按照 DH 约定放置的，则变换矩阵可能无法直接表示为上述形式，需要先调整坐标系。
+  
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+设第一次重合时的变换矩阵为 $ _W^0\mathbf{T}_1 $，第二次重合时的变换矩阵为 $ _W^0\mathbf{T}_2 $。这些变换矩阵可以通过正运动学计算得到。
+
+变换矩阵可以写为矩阵分块的形式，即
+
+\[
+  _W^0\mathbf{T}_1 = 
+  \begin{bmatrix}
+    R_1 & t_1 \\
+    0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _W^0\mathbf{T}_2 = 
+  \begin{bmatrix}
+    R_2 & t_2 \\
+    0 & 1
+  \end{bmatrix}
+\]
+
+两次变换工具点与固定点重合时，满足：
+\[
+  _W^0\mathbf{T}_1 {^6}P = _W^0\mathbf{T}_2 {^6}P
+\]
+
+其中 $ {^6}P = [{^6}p_x, {^6}p_y, {^6}p_z, 1]^T $ 为齐次坐标形式。展开得，
+\[
+  R_1 {^6}P + t_1 = R_2 {^6}P + t_2
+\]
+
+整理得，
+\[
+  (R_1 - R_2) {^6}P = t_2 - t_1
+\]
+
+因此，工具偏移量 $ {^6}P $ 的表达式为：
+\[
+ {^6}P = (R_1 - R_2)^{-1} (t_2 - t_1)
+\]
+（我们可以通过调整机械臂的姿态来保证矩阵 $ R_1 - R_2 $ 一定可逆）
+  
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+由于关节3的轴线方向发生了变化，所以需要对坐标系做一点改动。
+
+\img<q8>[0.5]{Question 8}{figs/q8.png}
+
+\tbl<tb8>{DH-table for question 8} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & $ a_1 $ & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & $ d_3 $ & $ \theta_2 $ \\
+    3 & 0 & $ -\frac{\pi}{2} $ & $ a_2 + d $ & 0 \\
+    4 & $ a_3 $ & 0 & $ d_4 $ & $ \theta_4 $ \\
+    5 & 0 & $ \frac{\pi}{2} $ & 0 & $ \theta_5 $ \\
+    6 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_6 $
+  }
+
+各连杆变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & a_1 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & 0 \\
+    0 & 0 & 1 & d_3 \\
+    -\sin\theta_2 & -\cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 0 & 1 & a_2 + d \\
+    0 & -1 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_4 & -\sin\theta_4 & 0 & a_3 \\
+    \sin\theta_4 & \cos\theta_4 & 0 & 0 \\
+    0 & 0 & 1 & d_4 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^4\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_5 & -\sin\theta_5 & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    \sin\theta_5 & \cos\theta_5 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^5\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_6 & -\sin\theta_6 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    -\sin\theta_6 & -\cos\theta_6 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+正运动学方程为：
+
+\[
+  _6^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} _6^5\mathbf{T} =
+  \begin{bmatrix} 
+r_{11} & r_{12} & r_{13} & p_x \\ 
+r_{21} & r_{22} & r_{23} & p_y \\ 
+r_{31} & r_{32} & r_{33} & p_z \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\] 
+
+\begin{align*} 
+r_{11} &= c_{6}\,\left(c_{5}\,\left(s_{1}\,s_{4}+c_{1}\,c_{2}\,c_{4}\right)-c_{1}\,s_{2}\,s_{5}\right)+s_{6}\,\left(c_{4}\,s_{1}-c_{1}\,c_{2}\,s_{4}\right) \\ 
+r_{12} &= c_{6}\,\left(c_{4}\,s_{1}-c_{1}\,c_{2}\,s_{4}\right)-s_{6}\,\left(c_{5}\,\left(s_{1}\,s_{4}+c_{1}\,c_{2}\,c_{4}\right)-c_{1}\,s_{2}\,s_{5}\right) \\ 
+r_{13} &= -s_{5}\,\left(s_{1}\,s_{4}+c_{1}\,c_{2}\,c_{4}\right)-c_{1}\,c_{5}\,s_{2} \\ 
+p_x &= a_{3}\,c_{1}\,c_{2}-c_{1}\,s_{2}\,\left(a_{2}+d\right)-d_{3}\,s_{1}-d_{4}\,c_{1}\,s_{2} \\ 
+r_{21} &= -c_{6}\,\left(c_{5}\,\left(c_{1}\,s_{4}-c_{2}\,c_{4}\,s_{1}\right)+s_{1}\,s_{2}\,s_{5}\right)-s_{6}\,\left(c_{1}\,c_{4}+c_{2}\,s_{1}\,s_{4}\right) \\ 
+r_{22} &= s_{6}\,\left(c_{5}\,\left(c_{1}\,s_{4}-c_{2}\,c_{4}\,s_{1}\right)+s_{1}\,s_{2}\,s_{5}\right)-c_{6}\,\left(c_{1}\,c_{4}+c_{2}\,s_{1}\,s_{4}\right) \\ 
+r_{23} &= s_{5}\,\left(c_{1}\,s_{4}-c_{2}\,c_{4}\,s_{1}\right)-c_{5}\,s_{1}\,s_{2} \\ 
+p_y &= d_{3}\,c_{1}-s_{1}\,s_{2}\,\left(a_{2}+d\right)+a_{3}\,c_{2}\,s_{1}-d_{4}\,s_{1}\,s_{2} \\ 
+r_{31} &= s_{2}\,s_{4}\,s_{6}-c_{6}\,\left(c_{2}\,s_{5}+c_{4}\,c_{5}\,s_{2}\right) \\ 
+r_{32} &= s_{6}\,\left(c_{2}\,s_{5}+c_{4}\,c_{5}\,s_{2}\right)+c_{6}\,s_{2}\,s_{4} \\ 
+r_{33} &= c_{4}\,s_{2}\,s_{5}-c_{2}\,c_{5} \\ 
+p_z &= a_{1}-c_{2}\,\left(a_{2}+d\right)-d_{4}\,c_{2}-a_{3}\,s_{2}
+\end{align*}
+
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+人在行走时，如果只考虑腿在竖直平面内的运动，那么就可以等价为一个平面三连杆机械臂。
+
+\img<q9>[0.5]{Question 9}{figs/q9.png}
+
+\tbl<tb9>{DH-table for question 9} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & 0 & $ \theta_{hip} $ \\
+    2 & $ l_{thigh} $ & 0 & 0 & $ \theta_{knee} $ \\
+    3 & $ l_{shin} $ & 0 & 0 & $ \theta_{ankle} + \frac{\pi}{2} $ \\
+  }
+
+首先计算出正运动学变换矩阵：
+\[
+  _3^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} =
+  \begin{bmatrix} 
+    -s_{123} & -c_{123} & 0 & l_{shin} c_{12} + l_{thigh} c_1 \\ 
+    c_{123} & -s_{123} & 0 & l_{shin} s_{12} + l_{thigh} s_1 \\ 
+    0 & 0 & 1 & 0 \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\] 
+其中 $ \theta_{hip} $ 简写为 $ \theta_1 $，$ \theta_{knee} $ 简写为 $ \theta_2 $，$ \theta_{ankle} $ 简写为 $ \theta_3 $。
+
+在脚趾离地和脚跟触地的过程中，我们假设0号坐标系不动。
+
+脚趾触地时，根据各关节角度，计算得脚踝的变换矩阵为
+\[
+ _3^0\mathbf{T}_1 = 
+ \begin{bmatrix} 
+    0.7061 & -0.7081 & 0 & 794.3064 \\ 
+    0.7081 & 0.7061 & 0 & -305.6470 \\ 
+    0 & 0 & 1 & 0 \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+脚趾在脚踝坐标系中的位置向量为 $ ^{3}p_{toe} = (150, 0, 0, 1)^T $，所以脚趾在0号坐标系中的位置向量
+\[
+ ^{0}p_{toe} = _3^0\mathbf{T}{_1} ^{3}p_{toe} = 
+  \begin{pmatrix} 
+    900.2242 \\
+    -199.4330 \\
+    0 \\
+    1.0000 \\
+  \end{pmatrix}
+\]
+ 
+脚跟离地时，脚踝的变换矩阵为
+\[
+ _3^0\mathbf{T}_2 = 
+ \begin{bmatrix} 
+    -0.2001 & -0.9798 & 0 & 886.5435 \\ 
+    0.9798 & -0.2001 & 0 & 12.4824 \\ 
+    0 & 0 & 1 & 0 \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+脚跟在脚踝坐标系中的位置向量为 $ ^{3}p_{heel} = (-50, 0, 0, 1)^T $，所以脚跟在0号坐标系中的位置向量
+\[
+ ^{0}p_{heel} = _3^0\mathbf{T}{_2} ^{3}p_{heel} = 
+ \begin{pmatrix} 
+    896.5461 \\
+    -36.5068 \\
+    0 \\
+    1.0000
+  \end{pmatrix}
+\]
+
+步幅是脚趾触地点与脚跟离地点之间的距离，也就是 $ ^{0}p_{toe} $ 和 $ ^{0}p_{heel} $ 之间的距离。我们忽略x方向分量的变化，只取y方向分量的变化，也就是
+\[
+  stride = ^{0}_{y}p_{heel} - ^{0}_{y}p_{toe} = 162.9261
+\]
+  
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+\img<q10>[0.75]{Question 10}{figs/q10.png}
+
+\tbl<tb10>{DH-table for question 10} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & $ d_1 $ & $ \theta_1 $ \\
+    2 & 0 & $ \frac{\pi}{2} $ & 0 & $ \theta_2 $ \\
+    3 & $ \sqrt{d_2^2 + d_3^2} $ & 0 & $ d_4 + x $ & 0 \\
+    4 & 0 & 0 & 0 & $ \theta_4 $ \\
+    5 & 0 & $ \frac{\pi}{2} $ & 0 & $ \theta_5 $ \\
+    6 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_6 $ \\
+    7 & 0 & 0 & y & 0 \\
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & d_1 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    \sin\theta_2 & \cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & \sqrt{d_2^2 + d_3^2} \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & d_4 + x \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_4 & -\sin\theta_4 & 0 & 0 \\
+    \sin\theta_4 & \cos\theta_4 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^4\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_5 & -\sin\theta_5 & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    \sin\theta_5 & \cos\theta_5 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^5\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_6 & -\sin\theta_6 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    -\sin\theta_6 & -\cos\theta_6 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _7^6\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & y \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+最终的正运动学变换矩阵为：
+
+\[
+  _7^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} _6^5\mathbf{T} _7^6\mathbf{T} =
+  \begin{bmatrix} 
+r_{11} & r_{12} & r_{13} & p_x \\ 
+r_{21} & r_{22} & r_{23} & p_y \\ 
+r_{31} & r_{32} & r_{33} & p_z \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\] 
+
+\begin{align*} 
+r_{11} &= c_{6}\,\left(s_{1}\,s_{5}-c_{5}\,\left(c_{1}\,s_{2}\,s_{4}-c_{1}\,c_{2}\,c_{4}\right)\right)-s_{6}\,\left(c_{1}\,c_{2}\,s_{4}+c_{1}\,c_{4}\,s_{2}\right) \\ 
+r_{12} &= -s_{6}\,\left(s_{1}\,s_{5}-c_{5}\,\left(c_{1}\,s_{2}\,s_{4}-c_{1}\,c_{2}\,c_{4}\right)\right)-c_{6}\,\left(c_{1}\,c_{2}\,s_{4}+c_{1}\,c_{4}\,s_{2}\right) \\ 
+r_{13} &= c_{5}\,s_{1}+s_{5}\,\left(c_{1}\,s_{2}\,s_{4}-c_{1}\,c_{2}\,c_{4}\right) \\ 
+p_x &= s_{1}\,x+d_{4}\,s_{1}+y\,\left(c_{5}\,s_{1}+s_{5}\,\left(c_{1}\,s_{2}\,s_{4}-c_{1}\,c_{2}\,c_{4}\right)\right)+c_{1}\,c_{2}\,\sqrt{{d_{2}}^2+{d_{3}}^2} \\ 
+r_{21} &= -c_{6}\,\left(c_{1}\,s_{5}+c_{5}\,\left(s_{1}\,s_{2}\,s_{4}-c_{2}\,c_{4}\,s_{1}\right)\right)-s_{6}\,\left(c_{2}\,s_{1}\,s_{4}+c_{4}\,s_{1}\,s_{2}\right) \\ 
+r_{22} &= s_{6}\,\left(c_{1}\,s_{5}+c_{5}\,\left(s_{1}\,s_{2}\,s_{4}-c_{2}\,c_{4}\,s_{1}\right)\right)-c_{6}\,\left(c_{2}\,s_{1}\,s_{4}+c_{4}\,s_{1}\,s_{2}\right) \\ 
+r_{23} &= s_{5}\,\left(s_{1}\,s_{2}\,s_{4}-c_{2}\,c_{4}\,s_{1}\right)-c_{1}\,c_{5} \\ 
+p_y &= \left(-c_{1}\right)\,x+c_{2}\,s_{1}\,\sqrt{{d_{2}}^2+{d_{3}}^2}-y\,\left(c_{1}\,c_{5}-s_{5}\,\left(s_{1}\,s_{2}\,s_{4}-c_{2}\,c_{4}\,s_{1}\right)\right)-d_{4}\,c_{1} \\ 
+r_{31} &= c_{24}\,s_{6}+s_{24}\,c_{5}\,c_{6} \\ 
+r_{32} &= c_{24}\,c_{6}-s_{24}\,c_{5}\,s_{6} \\ 
+r_{33} &= -s_{24}\,s_{5} \\ 
+p_z &= d_{1}+s_{2}\,\sqrt{{d_{2}}^2+{d_{3}}^2}-y\,s_{24}\,s_{5}
+\end{align*}
+
+当机械手处于平衡状态时，各关节变量的值如下：
+\begin{align*} 
+  \theta_1 &= \frac{\pi}{2} \\
+  \theta_2 &= -\arctan(\frac{d_3}{d_2}) \\
+  x &= 0 \\
+  \theta_4 &= \frac{\pi}{2} + \arctan(\frac{d_3}{d_2}) \\
+  \theta_5 &= 0 \\
+  \theta_6 &= 0 \\
+  y &= 0 \\
+\end{align*}
+
+代入计算得机械手平衡状态时的变换矩阵为
+\[
+\begin{bmatrix}
+    0 & 0 & 1 & d_4 \\
+    0 & -1 & 0 & d_2 \\
+    1 & 0 & 0 & d_1 - d_3 \\
+    0 & 0 & 0 & 1
+\end{bmatrix}
+\]
+
+我们可以从另一个角度得到这个变换矩阵。直接看图可知，机械手末端相对于基坐标系的位移为 $ ^0\mathbf{p}_{7O} = (d_4, d_2, d_1 - d_3)^T $。再看机械手末端坐标系相对于基坐标系的旋转关系，可以写出旋转矩阵为
+\[
+^0_7\mathbf{R} = 
+\begin{bmatrix}
+  0 & 0 & 1 \\
+  0 & -1 & 0 \\
+  1 & 0 & 0
+\end{bmatrix}
+\]
+
+因此，机械手平衡状态时的变换矩阵为
+\[
+\begin{bmatrix}
+  ^0_7\mathbf{R} & ^0\mathbf{p}_{7O} \\
+  0 & 1
+\end{bmatrix}
+\]
+
+这印证了我们之前计算结果的正确。
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+图中原有坐标系不符合我们建系的习惯，遂重新建立坐标系如下：
+
+\img<q11>[0.75]{Question 11}{figs/q11.png}
+
+\tbl<tb11>{DH-table for question 11} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & $ l_0 $ & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & $ l_1 $ & $ \theta_2 $ \\
+    3 & 0 & $ -\frac{\pi}{2} $ & $ l_2 $ & $ \theta_3 $ \\
+    4 & $ l_3 $ & 0 & 0 & $ \theta_4 $ \\
+    5 & $ l_4 $ & 0 & $ l_5 $ & $ \theta_5 $ \\
+    6 & 0 & $ -\frac{\pi}{2} $ & $ l_6 $ & $ \theta_6 $ \\
+    7 & 0 & $ -\frac{\pi}{2} $ & $ l_7 $ & $ \theta_7 $ \\
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & l_0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & 0 \\
+    0 & 0 & 1 & l_1 \\
+    -\sin\theta_2 & -\cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & l_2 \\
+    -\sin\theta_3 & -\cos\theta_3 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_4 & -\sin\theta_4 & 0 & l_3 \\
+    \sin\theta_4 & \cos\theta_4 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^4\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_5 & -\sin\theta_5 & 0 & l_4 \\
+    \sin\theta_5 & \cos\theta_5 & 0 & 0 \\
+    0 & 0 & 1 & l_5 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^5\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_6 & -\sin\theta_6 & 0 & 0 \\
+    0 & 0 & 1 & l_6 \\
+    -\sin\theta_6 & -\cos\theta_6 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _7^6\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_7 & -\sin\theta_7 & 0 & 0 \\
+    0 & 0 & 1 & l_7 \\
+    -\sin\theta_7 & -\cos\theta_7 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+在计算 $ _7^8\mathbf{T} $ 时，我们只需要以坐标系{$ \mathbf{B}_4 $ }作为参考坐标系即可。
+\[
+  _7^4\mathbf{T} = _5^4\mathbf{T} _6^5\mathbf{T} _7^6\mathbf{T} =
+  \begin{bmatrix} 
+    s_{5}s_{7} + s_{5}s_{6}s_{7} & s_{7}s_{5} - s_{5}s_{6}s_{7} & -s_{5}s_{6} & l_4 - l_6s_{5} - l_7s_{5}s_{6} \\ 
+    s_{6}s_{7}s_{5} - s_{5}s_{7} & -s_{5}s_{7} - s_{6}s_{5}s_{7} & -s_{5}s_{6} & l_6s_{5} - l_7s_{5}s_{6} \\ 
+    -s_{7}s_{6} & s_{6}s_{7} & -s_{6} & l_5 - l_7s_{6} \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+从 $ _7^4\mathbf{T} $ 中提取出坐标系{$ \mathbf{B}_7 $ }的原点在坐标系{$ \mathbf{B}_4 $ }中的表示 $ ^{4}p_{7O} $为：
+\[
+  ^{4}p_{7O} = 
+  \begin{pmatrix}
+    l_4 - l_6s_{5} - l_7s_{5}s_{6} \\
+    l_6s_{5} - l_7s_{5}s_{6} \\
+    l_5 - l_7s_{6}
+  \end{pmatrix}
+\]
+
+根据题意，坐标系{ $ \mathbf{B}_8 $ }的原点在坐标系{ $ \mathbf{B}_4 $ }中的表示 $ ^{4}p_{8O} $可以写出：
+\[
+  ^{4}p_{8O} = 
+  \begin{pmatrix}
+    l_4 - a \\
+    b \\
+    0
+  \end{pmatrix}
+\]
+
+因为 $ x_8 $ 轴指向坐标系{ $ \mathbf{B}_7 $ }的原点，所以
+\[
+  ^{4}X_{8} = ^{4}p_{7O} - ^{4}p_{8O} =
+  \begin{pmatrix}
+    a - l_6s_{5} - l_7s_{5}s_{6} \\
+    l_6s_{5} - l_7s_{5}s_{6} - b \\
+    l_5 - l_7s_{6}
+  \end{pmatrix}
+\]
+
+将其单位化，得
+\[
+  ^{4}\hat{X}_{8} =
+  \frac{1}{\sqrt{\left(a - l_6 s_5 - l_7 s_5 s_6\right)^2 + \left(l_6 s_5 - l_7 s_5 s_6 - b\right)^2 + \left(l_5 - l_7 s_6\right)^2}}
+  \begin{pmatrix}
+    a - l_6 s_5 - l_7 s_5 s_6 \\
+    l_6 s_5 - l_7 s_5 s_6 - b \\
+    l_5 - l_7 s_6
+  \end{pmatrix}
+\]
+
+由题意知，$ ^{4}\hat{Z}_{8} $ 即为 $ (0, 0, 1)^T $。因为x轴与z轴必须正交，所以
+\[
+  ^{4}\hat{X}_{8} \cdot ^{4}\hat{Z}_{8} = l_5 - l_7s_{6} = 0
+\]
+
+即 $ s_{6} = \frac{l_5}{l_7} $。要想使解存在，则 $ l_5 $ 必须小于等于 $ l_7 $。$ \theta_6 $ 存在2个解，分别是 $ \arcsin{\frac{l_5}{l_7}} $ 和 $ \pi - \arcsin{\frac{l_5}{l_7}} $。
+
+$ ^{4}\hat{Y}_{8} $ 可由 $ ^{4}\hat{Z}_{8} $ 和 $ ^{4}\hat{X}_{8} $ 叉乘得到：
+\[
+  ^{4}\hat{Y}_{8} = ^{4}\hat{Z}_{8} \times ^{4}\hat{X}_{8} = 
+  \frac{1}{\sqrt{\left(a - l_6 s_5 - l_7 s_5 s_6\right)^2 + \left(l_6 s_5 - l_7 s_5 s_6 - b\right)^2 + \left(l_5 - l_7 s_6\right)^2}}
+  \begin{pmatrix}
+    l_6s_{5} - l_7s_{5}s_{6} - b \\
+    l_6s_{5} + l_7s_{5}s_{6} - a \\
+    0
+  \end{pmatrix}
+\]
+
+所以我们得到了变换矩阵
+\[
+  _8^4\mathbf{T} = 
+  \begin{bmatrix} 
+    \frac{a - l_6 s_5 - l_5 s_5}{\sqrt{(a - l_6 s_5 - l_5 s_5)^2 + (l_6 s_5 - l_5 s_5 - b)^2}} & \frac{l_6 s_5 - l_5 s_5 - b}{\sqrt{(a - l_6 s_5 - l_5 s_5)^2 + (l_6 s_5 - l_5 s_5 - b)^2}} & 0 & l_4 - a \\
+    \frac{l_6 s_5 - l_5 s_5 - b}{\sqrt{(a - l_6 s_5 - l_5 s_5)^2 + (l_6 s_5 - l_5 s_5 - b)^2}} & \frac{l_6 s_5 + l_5 s_5 - a}{\sqrt{(a - l_6 s_5 - l_5 s_5)^2 + (l_6 s_5 - l_5 s_5 - b)^2}} & 0 & b \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+所以其他矩阵也就迎刃而解了：
+\[
+  _7^8\mathbf{T} = _8^4\mathbf{T}^{-1} {_7}^4\mathbf{T} = 
+\]
+
+\[
+  \small
+  \begin{bmatrix} 
+    \frac{A\,\left(s_{5}\,s_{7}+c_{5}\,c_{6}\,c_{7}\right)}{\sqrt{A^2+B^2}}-\frac{B\,\left(c_{5}\,s_{7}-c_{6}\,c_{7}\,s_{5}\right)}{\sqrt{A^2+B^2}} & 
+    \frac{A\,\left(c_{7}\,s_{5}-c_{5}\,c_{6}\,s_{7}\right)}{\sqrt{A^2+B^2}}-\frac{B\,\left(c_{5}\,c_{7}+c_{6}\,s_{5}\,s_{7}\right)}{\sqrt{A^2+B^2}} & 
+    -\frac{s_{6}\,\left(A\,c_{5}+B\,s_{5}\right)}{\sqrt{A^2+B^2}} & 
+    -\frac{B\,b-A\,a-B\,l_{6}\,c_{5}+A\,l_{6}\,s_{5}+A\,l_{7}\,c_{5}\,s_{6}+B\,l_{7}\,s_{5}\,s_{6}}{\sqrt{A^2+B^2}} \\[8pt] 
+    \frac{A\,\left(c_{5}\,s_{7}-c_{6}\,c_{7}\,s_{5}\right)}{\sqrt{A^2+B^2}}+\frac{B\,\left(s_{5}\,s_{7}+c_{5}\,c_{6}\,c_{7}\right)}{\sqrt{A^2+B^2}} & 
+    \frac{A\,\left(c_{5}\,c_{7}+c_{6}\,s_{5}\,s_{7}\right)}{\sqrt{A^2+B^2}}+\frac{B\,\left(c_{7}\,s_{5}-c_{5}\,c_{6}\,s_{7}\right)}{\sqrt{A^2+B^2}} & 
+    -\frac{s_{6}\,\left(B\,c_{5}-A\,s_{5}\right)}{\sqrt{A^2+B^2}} & 
+    \frac{A\,b+B\,a-A\,l_{6}\,c_{5}-B\,l_{6}\,s_{5}-B\,l_{7}\,c_{5}\,s_{6}+A\,l_{7}\,s_{5}\,s_{6}}{\sqrt{A^2+B^2}} \\[8pt] 
+    -c_{7}\,s_{6} & s_{6}\,s_{7} & -c_{6} & l_{5}-l_{7}\,c_{6} \\[6pt] 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+为了表示方便，我们将 $ l_6 s_5 - l_5 s_5 - b $ 和 $ a - l_5 s_5 - l_6 s_5 $ 分别简写为 $ B $ 和 $ A $。
+
+\[
+  _8^3\mathbf{T} = _4^3\mathbf{T} _8^4\mathbf{T} =
+  \begin{bmatrix} 
+\frac{A\,c_{4}-B\,s_{4}}{\sqrt{A^2+B^2}} & \frac{B\,c_{4}+A\,s_{4}}{\sqrt{A^2+B^2}} & 0 & l_{3}-b\,s_{4}-c_{4}\,\left(a-l_{4}\right) \\ 
+\frac{B\,c_{4}+A\,s_{4}}{\sqrt{A^2+B^2}} & -\frac{A\,c_{4}-B\,s_{4}}{\sqrt{A^2+B^2}} & 0 & b\,c_{4}-s_{4}\,\left(a-l_{4}\right) \\ 
+0 & 0 & 1 & 0 \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\]
+
+在这里需要注意，我们可以看到关节3和关节4是平行的，所以 $ _3^2\mathbf{T} $ 和 $ _4^3\mathbf{T} $ 的乘积用和差化积公式将得到一个简化的表达式。
+\[
+  _4^2\mathbf{T} = _3^2\mathbf{T} _4^3\mathbf{T} =
+  \begin{bmatrix} 
+    c_{34} & -s_{34} & 0 & l_{3}\,c_{3} \\ 
+    0 & 0 & 1 & l_{2} \\ 
+    -s_{34} & -c_{34} & 0 & -l_{3}\,s_{3} \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _8^2\mathbf{T} = _4^2\mathbf{T} _8^4\mathbf{T} =
+  \begin{bmatrix} 
+\frac{A\,c_{34}-B\,s_{34}}{\sqrt{A^2+B^2}} & \frac{B\,c_{34}+A\,s_{34}}{\sqrt{A^2+B^2}} & 0 & l_{3}\,c_{3}-c_{34}\,\left(a-l_{4}\right)-b\,s_{34} \\ 
+0 & 0 & 1 & l_{2} \\ 
+-\frac{B\,c_{34}+A\,s_{34}}{\sqrt{A^2+B^2}} & \frac{A\,c_{34}-B\,s_{34}}{\sqrt{A^2+B^2}} & 0 & s_{34}\,\left(a-l_{4}\right)-b\,c_{34}-l_{3}\,s_{3} \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\]
+
+\[
+  _8^1\mathbf{T} = _2^1\mathbf{T} _8^2\mathbf{T} =
+  \begin{bmatrix} 
+\frac{c_{2}\,\left(A\,c_{34}-B\,s_{34}\right)}{\sqrt{A^2+B^2}} & \frac{c_{2}\,\left(B\,c_{34}+A\,s_{34}\right)}{\sqrt{A^2+B^2}} & -s_{2} & -c_{2}\,\left(b\,s_{34}+c_{34}\,\left(a-l_{4}\right)-l_{3}\,c_{3}\right)-l_{2}\,s_{2} \\ 
+-\frac{B\,c_{34}+A\,s_{34}}{\sqrt{A^2+B^2}} & \frac{A\,c_{34}-B\,s_{34}}{\sqrt{A^2+B^2}} & 0 & l_{1}-b\,c_{34}+s_{34}\,\left(a-l_{4}\right)-l_{3}\,s_{3} \\ 
+-\frac{s_{2}\,\left(A\,c_{34}-B\,s_{34}\right)}{\sqrt{A^2+B^2}} & -\frac{s_{2}\,\left(B\,c_{34}+A\,s_{34}\right)}{\sqrt{A^2+B^2}} & -c_{2} & s_{2}\,\left(b\,s_{34}+c_{34}\,\left(a-l_{4}\right)-l_{3}\,c_{3}\right)-l_{2}\,c_{2} \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\]
+
+\[
+  _8^0\mathbf{T} = _1^0\mathbf{T} _8^1\mathbf{T} =
+  \begin{bmatrix} 
+r_{11} & r_{12} & r_{13} & p_x \\ 
+r_{21} & r_{22} & r_{23} & p_y \\ 
+r_{31} & r_{32} & r_{33} & p_z \\ 
+0 & 0 & 0 & 1
+\end{bmatrix}
+\] 
+
+\begin{align*} 
+r_{11} &= s_{1}\,\left(\frac{B\,c_{34}}{\sqrt{A^2+B^2}}+\frac{A\,s_{34}}{\sqrt{A^2+B^2}}\right)+c_{1}\,c_{2}\,\left(\frac{A\,c_{34}}{\sqrt{A^2+B^2}}-\frac{B\,s_{34}}{\sqrt{A^2+B^2}}\right) \\ 
+r_{12} &= c_{1}\,c_{2}\,\left(\frac{B\,c_{34}}{\sqrt{A^2+B^2}}+\frac{A\,s_{34}}{\sqrt{A^2+B^2}}\right)-s_{1}\,\left(\frac{A\,c_{34}}{\sqrt{A^2+B^2}}-\frac{B\,s_{34}}{\sqrt{A^2+B^2}}\right) \\ 
+r_{13} &= -c_{1}\,s_{2} \\ 
+p_x &= -c_{1}\,\left(c_{2}\,\left(b\,s_{34}+c_{34}\,\left(a-l_{4}\right)-l_{3}\,c_{3}\right)+l_{2}\,s_{2}\right)-s_{1}\,\left(l_{1}-b\,c_{34}+s_{34}\,\left(a-l_{4}\right)-l_{3}\,s_{3}\right) \\ 
+r_{21} &= c_{2}\,s_{1}\,\left(\frac{A\,c_{34}}{\sqrt{A^2+B^2}}-\frac{B\,s_{34}}{\sqrt{A^2+B^2}}\right)-c_{1}\,\left(\frac{B\,c_{34}}{\sqrt{A^2+B^2}}+\frac{A\,s_{34}}{\sqrt{A^2+B^2}}\right) \\ 
+r_{22} &= c_{1}\,\left(\frac{A\,c_{34}}{\sqrt{A^2+B^2}}-\frac{B\,s_{34}}{\sqrt{A^2+B^2}}\right)+c_{2}\,s_{1}\,\left(\frac{B\,c_{34}}{\sqrt{A^2+B^2}}+\frac{A\,s_{34}}{\sqrt{A^2+B^2}}\right) \\ 
+r_{23} &= -s_{1}\,s_{2} \\ 
+p_y &= c_{1}\,\left(l_{1}-b\,c_{34}+s_{34}\,\left(a-l_{4}\right)-l_{3}\,s_{3}\right)-s_{1}\,\left(c_{2}\,\left(b\,s_{34}+c_{34}\,\left(a-l_{4}\right)-l_{3}\,c_{3}\right)+l_{2}\,s_{2}\right) \\ 
+r_{31} &= -\frac{s_{2}\,\left(A\,c_{34}-B\,s_{34}\right)}{\sqrt{A^2+B^2}} \\ 
+r_{32} &= -\frac{s_{2}\,\left(B\,c_{34}+A\,s_{34}\right)}{\sqrt{A^2+B^2}} \\ 
+r_{33} &= -c_{2} \\ 
+p_z &= l_{0}+s_{2}\,\left(b\,s_{34}+c_{34}\,\left(a-l_{4}\right)-l_{3}\,c_{3}\right)-l_{2}\,c_{2}
+\end{align*}
+
+\end{sol}
+
+\end{document}

@@ -1,0 +1,594 @@
+\documentclass{homework}
+\author{Mufan Shi 23307130075}
+\class{Introduction to Robotics}
+\date{\today}
+\title{Homework of Chapter4}
+
+\usepackage{ctex} 
+\usepackage{subcaption}
+\graphicspath{{./media/}}
+
+\begin{document} \maketitle
+
+\question 
+
+\begin{sol}
+
+由图写出DH表如下：
+
+\tbl<tb1>{DH-table for question 1} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & 0 & $ \theta_1 $ \\
+    2 & $ l_1 $ & $ -\frac{\pi}{2} $ & $ d_2 $ & 0 \\
+    3 & 0 & $ \frac{\pi}{2} $ & 0 & $ \theta_3 + \frac{\pi}{2} $ \\
+    4 & $ l_2 $ & 0 & 0 & 0 \\
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & l_1 \\
+    0 & 0 & 1 & d_2 \\
+    0 & -1 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos(\theta_3 + \frac{\pi}{2}) & -\sin(\theta_3 + \frac{\pi}{2}) & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    \sin(\theta_3 + \frac{\pi}{2}) & \cos(\theta_3 + \frac{\pi}{2}) & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & l_2 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+末端执行器在基坐标下的位姿为：
+
+\[
+  _4^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} _4^3\mathbf{T} =
+  \begin{bmatrix}
+    \cos(\theta_1 + \theta_3 + \frac{\pi}{2}) & -\sin(\theta_1 + \theta_3 + \frac{\pi}{2}) & 0 & l_1 c_1 - l_2 s_{13} - d_2 s_1 \\
+    \sin(\theta_1 + \theta_3 + \frac{\pi}{2}) & \cos(\theta_1 + \theta_3 + \frac{\pi}{2}) & 0 & l_1 s_1 + l_2 c_{13} + d_2 c_1 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+所以 
+\begin{align}
+  X &= l_1 c_1 - l_2 s_{13} - d_2 s_1 \label{eq:X} \\
+  Y &= l_1 s_1 + l_2 c_{13} + d_2 c_1 \label{eq:Y} \\
+  \phi &= \pi - (\theta_1 + \theta_3 + \frac{\pi}{2}) = \frac{\pi}{2} - \theta_1 - \theta_3 \label{eq:phi}
+\end{align}
+
+由式\eqref{eq:phi}可得
+\[
+  \theta_1 + \theta_3 = \frac{\pi}{2} - \phi
+\]
+
+代入式\eqref{eq:X}和式\eqref{eq:Y}中，得
+\begin{align*}
+  X &= l_1 c_1 - l_2 \sin(\frac{\pi}{2} - \phi) - d_2 s_1 = l_1 c_1 - l_2 \cos \phi - d_2 s_1 \\
+  Y &= l_1 s_1 + l_2 \cos(\frac{\pi}{2} - \phi) + d_2 c_1 = l_1 s_1 + l_2 \sin \phi + d_2 c_1
+\end{align*}
+
+整理得
+\begin{align}
+  l_1 c_1 - d_2 s_1 &= X + l_2 \cos \phi \label{eq:1} \\
+  l_1 s_1 + d_2 c_1 &= Y - l_2 \sin \phi \label{eq:2}
+\end{align}
+
+两式平方相加，得
+\[
+  l_1^2 + d_2^2 = (X + l_2 \cos \phi)^2 + (Y - l_2 \sin \phi)^2
+\]
+
+所以
+\[
+  d_2 = \sqrt{(X + l_2 \cos \phi)^2 + (Y - l_2 \sin \phi)^2 - l_1^2}
+\]
+从实际角度考虑，$ d_2 $ 只可能取正值。
+
+对于式\eqref{eq:1}和式\eqref{eq:2}，由辅助角公式可得
+\begin{align*}
+  \cos(\theta_1 + \beta) &= \frac{X + l_2 \cos \phi}{r} \\
+  \sin(\theta_1 + \beta) &= \frac{Y - l_2 \sin \phi}{r}
+\end{align*}
+
+其中 $ r = \sqrt{l_1^2 + d_2^2} $，$ \beta = Atan2(d_2, l_1) $。
+
+利用双变量反正切函数求解
+\[
+  \theta_1 + \beta = Atan2(\frac{Y - l_2 \sin \phi}{r}, \frac{X + l_2 \cos \phi}{r}) = Atan2(Y - l_2 \sin \phi, X + l_2 \cos \phi)
+\]
+
+故
+\[
+  \theta_1 = Atan2(Y - l_2 \sin \phi, X + l_2 \cos \phi) - Atan2(d_2, l_1)
+\]
+
+所以
+\[
+  \theta_3 = \frac{\pi}{2} - \phi - \theta_1
+\]
+
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+\img<q2>[0.75]{Question 2}{figs/Q2.png}
+
+\tbl<tb2>{DH-table for question 2} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & 0 & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & $ l_2 $ & $ \theta_2 $ \\
+    3 & 0 & $ \frac{\pi}{2} $ & $ d_3 $ & 0 \\
+    4 & 0 & 0 & 0 & $ \theta_4 $ \\
+    5 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_5 $ \\
+    6 & 0 & $ \frac{\pi}{2} $ & 0 & $ \theta_6 $ \\
+    7 & 0 & 0 & $ d_7 $ & 0 \\
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & 0 \\
+    0 & 0 & 1 & l_2 \\
+    -\sin\theta_2 & -\cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 0 & -1 & -d_3 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_4 & -\sin\theta_4 & 0 & 0 \\
+    \sin\theta_4 & \cos\theta_4 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^4\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_5 & -\sin\theta_5 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    -\sin\theta_5 & -\cos\theta_5 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^5\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_6 & -\sin\theta_6 & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    \sin\theta_6 & \cos\theta_6 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _7^6\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & d_7 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+我们计算一些中间结果，方便后面逆运动学的计算
+\[
+  _6^4\mathbf{T} = _5^4\mathbf{T} _6^5\mathbf{T} =
+  \begin{bmatrix} 
+    c_{5}\,c_{6} & -c_{5}\,s_{6} & s_{5} & 0 \\ 
+    s_{6} & c_{6} & 0 & 0 \\ 
+    -c_{6}\,s_{5} & s_{5}\,s_{6} & c_{5} & 0 \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^3\mathbf{T} = _4^3\mathbf{T} _6^4\mathbf{T} =
+  \begin{bmatrix} 
+    c_{4}\,c_{5}\,c_{6}-s_{4}\,s_{6} & -c_{6}\,s_{4}-c_{4}\,c_{5}\,s_{6} & c_{4}\,s_{5} & 0 \\ 
+    c_{4}\,s_{6}+c_{5}\,c_{6}\,s_{4} & c_{4}\,c_{6}-c_{5}\,s_{4}\,s_{6} & s_{4}\,s_{5} & 0 \\ 
+    -c_{6}\,s_{5} & s_{5}\,s_{6} & c_{5} & 0 \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^1\mathbf{T} = _2^1\mathbf{T} _3^2\mathbf{T} _6^3\mathbf{T} =
+  \begin{bmatrix} 
+    {^1}r_{11} & {^1}r_{12} & {^1}r_{13} & {^1}p_x \\ 
+    {^1}r_{21} & {^1}r_{22} & {^1}r_{23} & {^1}p_y \\ 
+    {^1}r_{31} & {^1}r_{32} & {^1}r_{33} & {^1}p_z \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\] 
+
+\begin{align*} 
+  {^1}r_{11} &= -c_{2}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)-c_{6}\,s_{2}\,s_{5} \\ 
+  {^1}r_{12} &= s_{2}\,s_{5}\,s_{6}-c_{2}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right) \\ 
+  {^1}r_{13} &= c_{5}\,s_{2}+c_{2}\,c_{4}\,s_{5} \\  
+  {^1}r_{21} &= c_{4}\,s_{6}+c_{5}\,c_{6}\,s_{4} \\ 
+  {^1}r_{22} &= c_{4}\,c_{6}-c_{5}\,s_{4}\,s_{6} \\ 
+  {^1}r_{23} &= s_{4}\,s_{5} \\ 
+  {^1}r_{31} &= s_{2}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)-c_{2}\,c_{6}\,s_{5} \\ 
+  {^1}r_{32} &= s_{2}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)+c_{2}\,s_{5}\,s_{6} \\ 
+  {^1}r_{33} &= c_{2}\,c_{5}-c_{4}\,s_{2}\,s_{5} \\ 
+  {^1}p_x &= d_{3}\,s_{2} \\
+  {^1}p_y &= l_{2} \\ 
+  {^1}p_z &= d_{3}\,c_{2}
+\end{align*}
+
+最后，正运动学变换矩阵为：
+
+\[
+  _6^0\mathbf{T} = _1^0\mathbf{T} _6^1\mathbf{T} =
+  \begin{bmatrix} 
+    r_{11} & r_{12} & r_{13} & p_x \\ 
+    r_{21} & r_{22} & r_{23} & p_y \\ 
+    r_{31} & r_{32} & r_{33} & p_z \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\] 
+
+\begin{align*} 
+  r_{11} &= -c_{1}\,\left(c_{2}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)+c_{6}\,s_{2}\,s_{5}\right)-s_{1}\,\left(c_{4}\,s_{6}+c_{5}\,c_{6}\,s_{4}\right) \\ 
+  r_{12} &= -c_{1}\,\left(c_{2}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)-s_{2}\,s_{5}\,s_{6}\right)-s_{1}\,\left(c_{4}\,c_{6}-c_{5}\,s_{4}\,s_{6}\right) \\ 
+  r_{13} &= c_{1}\,\left(c_{5}\,s_{2}+c_{2}\,c_{4}\,s_{5}\right)-s_{1}\,s_{4}\,s_{5} \\ 
+  r_{21} &= c_{1}\,\left(c_{4}\,s_{6}+c_{5}\,c_{6}\,s_{4}\right)-s_{1}\,\left(c_{2}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)+c_{6}\,s_{2}\,s_{5}\right) \\ 
+  r_{22} &= c_{1}\,\left(c_{4}\,c_{6}-c_{5}\,s_{4}\,s_{6}\right)-s_{1}\,\left(c_{2}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)-s_{2}\,s_{5}\,s_{6}\right) \\ 
+  r_{23} &= s_{1}\,\left(c_{5}\,s_{2}+c_{2}\,c_{4}\,s_{5}\right)+c_{1}\,s_{4}\,s_{5} \\ 
+  r_{31} &= s_{2}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)-c_{2}\,c_{6}\,s_{5} \\ 
+  r_{32} &= s_{2}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)+c_{2}\,s_{5}\,s_{6} \\ 
+  r_{33} &= c_{2}\,c_{5}-c_{4}\,s_{2}\,s_{5} \\ 
+  p_x &= d_{3}\,c_{1}\,s_{2}-l_{2}\,s_{1} \\ 
+  p_y &= l_{2}\,c_{1}+d_{3}\,s_{1}\,s_{2} \\ 
+  p_z &= d_{3}\,c_{2}
+\end{align*}
+
+求解 $ \theta_1 $：
+
+由于 $ _6^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} _6^5\mathbf{T} $，用逆变换 $ _1^0\mathbf{T}^{-1} $ 左乘上式可得
+\[
+  _6^1\mathbf{T} = _1^0\mathbf{T}^{-1} {_6}^0\mathbf{T}
+\]
+
+而 $ _1^0\mathbf{T}^{-1} =
+  \begin{bmatrix}
+    \cos\theta_1 & \sin\theta_1 & 0 & 0 \\
+    -\sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+$，所以
+\[
+  \begin{bmatrix}
+    \cos\theta_1 & \sin\theta_1 & 0 & 0 \\
+    -\sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix} 
+    r_{11} & r_{12} & r_{13} & p_x \\ 
+    r_{21} & r_{22} & r_{23} & p_y \\ 
+    r_{31} & r_{32} & r_{33} & p_z \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix} = _6^1\mathbf{T}
+\]
+
+令矩阵方程中两端的元素(2, 4)对应相等，可得
+\begin{align}
+  -\sin\theta_1 p_x + \cos\theta_1 p_y = l_2 \label{eq:2_4}
+\end{align}
+
+利用辅助角公式可得
+\[
+  \sin(\phi - \theta_1) = \frac{l_2}{\rho}
+\]
+其中 $ \rho = \sqrt{p_x^2 + p_y^2} $，$ \phi = Atan2(p_y, p_x) $。
+
+则
+\[
+  \cos(\phi - \theta_1) = \pm \sqrt{1 - (\frac{l_2}{\rho})^2}
+\]
+
+所以
+\[
+  \phi - \theta_1 = Atan2(\frac{l_2}{\rho}, \pm \sqrt{1 - (\frac{l_2}{\rho})^2})
+\]
+
+故
+\[
+  \theta_1 = Atan2(p_y, p_x) - Atan2(l_2, \pm \sqrt{p_x^2 + p_y^2 - l_2^2})
+\]  
+其中的正负号对应 $ \theta_1 $ 的两种解。
+
+求解 $ d_3 $：
+
+令矩阵方程中两端的元素(1, 4)和(3, 4)对应相等，可得
+\begin{align}
+  \cos\theta_1 p_x + \sin\theta_1 p_y &= d_3 s_2 \label{eq:1_4} \\
+  p_z &= d_3 c_2 \label{eq:3_4}
+\end{align}
+
+将式\eqref{eq:1_4}，式\eqref{eq:2_4}和式\eqref{eq:3_4}平方相加，得
+\[
+  p_x^2 + p_y^2 + p_z^2 = d_3^2 (s_2^2 + c_2^2) + l_2^2 = d_3^2 + l_2^2
+\]
+
+所以
+\[
+  d_3 = \sqrt{p_x^2 + p_y^2 + p_z^2 - l_2^2}
+\]
+从实际角度考虑，$ d_3 $ 只可能取正值。
+
+求解 $ \theta_2 $：
+
+当 $ d_3 \neq 0 $ 时，由式\eqref{eq:1_4}和式\eqref{eq:3_4}可得
+\[
+  \theta_2 = Atan2(d_3 s_2, d_3 c_2) = Atan2(\cos\theta_1 p_x + \sin\theta_1 p_y, p_z)
+\]
+$ \theta_2 $ 的两种解由 $ \theta_1 $ 的两种解决定。
+
+求解 $ \theta_4, \theta_6 $：
+
+由于 $ _6^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} _6^5\mathbf{T} $，用逆变换 $ _3^0\mathbf{T}^{-1} $ 左乘上式可得
+\[
+  _6^3\mathbf{T} = _3^0\mathbf{T}^{-1} {_6}^0\mathbf{T}
+\]
+
+则有
+\[
+  \begin{bmatrix} 
+    c_{1}\,c_{2} & c_{2}\,s_{1} & -s_{2} & 0 \\ 
+    -s_{1} & c_{1} & 0 & -l_{2} \\ 
+    c_{1}\,s_{2} & s_{1}\,s_{2} & c_{2} & -d_{3} \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix} 
+    r_{11} & r_{12} & r_{13} & p_x \\ 
+    r_{21} & r_{22} & r_{23} & p_y \\ 
+    r_{31} & r_{32} & r_{33} & p_z \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix} = _6^3\mathbf{T}
+\]
+
+令矩阵方程中两端的元素(1, 3)和(2, 3)对应相等，可得
+\begin{align*}
+  c_1 c_2 r_{13} + s_1 c_2 r_{23} - s_2 r_{33} = c_4 s_5 \\
+  - s_1 r_{13} + c_1 r_{23} = s_4 s_5
+\end{align*}
+
+当 $ s_5 \neq 0 $ 时，有
+\[
+  \theta_4 = Atan2(- s_1 r_{13} + c_1 r_{23}, c_1 c_2 r_{13} + s_1 c_2 r_{23} - s_2 r_{33}) 
+\]
+
+当 $ s_5 = 0 $ 时，操作臂处于奇异位置，只能解出 $ \theta_4 + \theta_6 $ 的值。
+
+令矩阵方程中两端的元素(3, 1)和(3, 2)对应相等，可得
+\begin{align*}
+  c_1 s_2 r_{11} + s_1 s_2 r_{21} + c_2 r_{31} = - s_5 c_6 \\
+  c_1 s_2 r_{12} + s_1 s_2 r_{22} + c_2 r_{32} = s_5 s_6
+\end{align*}
+
+当 $ s_5 \neq 0 $ 时，有
+\[
+  \theta_6 = Atan2(c_1 s_2 r_{12} + s_1 s_2 r_{22} + c_2 r_{32}, - (c_1 s_2 r_{11} + s_1 s_2 r_{21} + c_2 r_{31}))
+\]
+
+求解 $ \theta_5 $：
+
+由于 $ _6^0\mathbf{T} = _1^0\mathbf{T} _2^1\mathbf{T} _3^2\mathbf{T} _4^3\mathbf{T} _5^4\mathbf{T} _6^5\mathbf{T} $，用逆变换 $ _4^0\mathbf{T}^{-1} $ 左乘上式可得
+\[
+  _6^4\mathbf{T} = _4^0\mathbf{T}^{-1} {_6}^0\mathbf{T}
+\]
+
+则有
+\[
+  \begin{bmatrix} 
+    c_{1}\,c_{2}\,c_{4}-s_{1}\,s_{4} & c_{1}\,s_{4}+c_{2}\,c_{4}\,s_{1} & -c_{4}\,s_{2} & -l_{2}\,s_{4} \\ 
+    -c_{4}\,s_{1}-c_{1}\,c_{2}\,s_{4} & c_{1}\,c_{4}-c_{2}\,s_{1}\,s_{4} & s_{2}\,s_{4} & -l_{2}\,c_{4} \\ 
+    c_{1}\,s_{2} & s_{1}\,s_{2} & c_{2} & -d_{3} \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix} 
+    r_{11} & r_{12} & r_{13} & p_x \\ 
+    r_{21} & r_{22} & r_{23} & p_y \\ 
+    r_{31} & r_{32} & r_{33} & p_z \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix} = _6^4\mathbf{T}
+\]
+
+令矩阵方程中两端的元素(1, 3)和(3, 3)对应相等，可得
+\begin{align*}
+  (c_1 c_2 c_4 - s_1 s_4) r_{13} + (c_1 s_4 + c_2 c_4 s_1) r_{23} - c_4 s_2 r_{33} = s_5 \\
+  c_1 s_2 r_{13} + s_1 s_2 r_{23} + c_2 r_{33} = c_5
+\end{align*}
+
+所以
+\[
+  \theta_5 = Atan2((c_1 c_2 c_4 - s_1 s_4) r_{13} + (c_1 s_4 + c_2 c_4 s_1) r_{23} - c_4 s_2 r_{33}, c_1 s_2 r_{13} + s_1 s_2 r_{23} + c_2 r_{33})
+\]
+
+由于手腕的“翻转”可能得到两种解，即
+\begin{align*}
+  \theta_4' &= \theta_4 + 180^\circ \\
+  \theta_5' &= -\theta_5 \\
+  \theta_6' &= \theta_6 + 180^\circ
+\end{align*}
+所以，综上所述，该机械臂共有四组逆运动学解。
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+对于 Stewart 机构，如果满足以下几何条件：
+
+\begin{itemize}
+  \item 平台和基座是相似的图形（例如，均为正六边形或圆形）。
+  \item 平台上的连接点均位于一个以平台中心为圆心的圆周上，且基座上的连接点均位于一个以基座中心为圆心的圆周上，且两个圆周的半径相等。
+  \item 所有支腿的长度变化对称，即支腿在平台和基座上的连接点呈对称分布。
+\end{itemize}
+
+那么，Stewart 机构的正运动学可以解耦为以下两个步骤：
+
+平台中心位置求解：
+
+平台中心的位置向量 $ \mathbf{p} = [p_x, p_y, p_z]^T $ 可以通过支腿长度的平均值或加权平均值直接计算。具体地，平台中心的高度 $ p_z $ 与支腿长度的和或平均値相关，而水平位置 $ p_x $ 和 $ p_y $ 可以通过支腿长度的差异或对称性推导。
+
+平台方向求解：
+
+平台的旋转矩阵 $ \mathbf{R} $ 可以通过支腿长度的差异或相对变化计算。例如，平台的滚转、俯仰和偏航角可以从支腿长度的变化量中解析得出。
+
+这种解耦基于平台和基座的相似性及对称性，使得支腿长度方程中位置和方向的耦合项被简化或消除。在实际应用中，这种条件允许先独立求解平台位置，再求解方向，从而降低正运动学的计算复杂度。
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+CGK公式为
+\[
+  F = d(l - n - 1) + \sum_{i=1}^{n} f_i - \xi + \nu
+\]
+
+其中
+
+$ d = 6 $（空间机构）
+
+$ l = 14 $（每条支链2个连杆，1个动平台，1个基座）
+
+$ n = 18 $（每条支链有2个球面副和1个移动副）
+
+$ \sum_{i=1}^{n} f_i = 42 $（每条支链的自由度数为3 + 1 + 3 = 7）
+
+$ \nu = 0 $（没有虚约束）
+
+$ \xi = 6 $（每条支链存在1个局部自由度）
+
+因此，Stewart并联机构的自由度为
+\[
+  F = 6(14 - 18 - 1) + 42 - 6 + 0 = 6
+\]
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+CGK公式为
+\[
+  F = d(l - n - 1) + \sum_{i=1}^{n} f_i - \xi + \nu
+\]
+
+其中
+
+$ d = 6 $（空间机构）
+
+$ l = 5 $（3个连杆，1个动平台，1个地面）
+
+$ n = 6 $（每个连杆有2个关节）
+
+$ \sum_{i=1}^{n} f_i = 15 $（每个连杆的自由度数为3 + 2 = 5）
+
+$ \nu = 0 $（没有虚约束）
+
+$ \xi = 0 $（没有局部自由度）
+
+因此，这个机构的自由度为
+\[
+  F = 6(5 - 6 - 1) + 15 - 0 + 0 = 3
+\]
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+CGK公式为
+\[
+  F = d(l - n - 1) + \sum_{i=1}^{n} f_i - \xi + \nu
+\]
+
+其中
+
+$ d = 6 $（空间机构）
+
+$ l = 8 $（每条支链2个连杆，1个动平台，1个地面）
+
+$ n = 9 $（每条支链有2个球面副和1个移动副）
+
+$ \sum_{i=1}^{n} f_i = 21 $（每条支链的自由度数为3 + 1 + 3 = 7）
+
+$ \nu = 0 $（没有虚约束）
+
+$ \xi = 3 $（每条支链存在1个局部自由度）
+
+因此，这个机构的自由度为
+\[
+  F = 6(8 - 9 - 1) + 21 - 3 + 0 = 6
+\]
+
+\end{sol}
+
+\end{document}

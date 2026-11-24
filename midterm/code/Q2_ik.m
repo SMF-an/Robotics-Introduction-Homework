@@ -1,0 +1,176 @@
+l0 = 37;
+l1 = 60;
+l2 = 55;
+l3 = 600;
+l4 = 600;
+l5 = 50;
+l6 = 73;
+l7 = 80;
+d = 20;
+
+r11 = 0.866;
+r12 = 0.483;
+r13 = -0.1294;
+r21 = 0;
+r22 = -0.2588;
+r23 = -0.9659;
+r31 = -0.5;
+r32 = 0.8365;
+r33 = -0.2241;
+px = 612.2295;
+py = -143.0888;
+pz = 847.4126;
+
+% theta2
+A = l7 * r13 - px;              
+B = l7 * r33 - pz + l0;         
+C = d + l2 + l5;                 
+
+sqrt_arg = A^2 + B^2 - C^2;
+
+sqrt_term = sqrt(sqrt_arg);
+sqrt_term_plus = sqrt_term;   
+sqrt_term_minus = -sqrt_term;  
+
+theta2_plus = atan2(C, sqrt_term_plus) - atan2(B, A);
+theta2_minus = atan2(C, sqrt_term_minus) - atan2(B, A);
+
+% theta7
+theta7_plus = atan2(-sin(theta2_plus) * r12 - cos(theta2_plus) * r32, sin(theta2_plus) * r11 + cos(theta2_plus) * r31);
+theta7_minus = atan2(-sin(theta2_minus) * r12 - cos(theta2_minus) * r32, sin(theta2_minus) * r11 + cos(theta2_minus) * r31);
+theta7_plus_inv = theta7_plus + pi;
+theta7_minus_inv = theta7_minus + pi;
+
+% theta6
+y_plus = r11 * cos(theta7_plus) * sin(theta2_plus) - r12 * sin(theta7_plus) * sin(theta2_plus) + r31 * cos(theta7_plus) * cos(theta2_plus) - r32 * sin(theta7_plus) * cos(theta2_plus);
+x_plus = r13 * sin(theta2_plus) + r33 * cos(theta2_plus);
+theta6_plus = atan2(y_plus, x_plus);
+
+y_minus = r11 * cos(theta7_minus) * sin(theta2_minus) - r12 * sin(theta7_minus) * sin(theta2_minus) + r31 * cos(theta7_minus) * cos(theta2_minus) - r32 * sin(theta7_minus) * cos(theta2_minus);
+x_minus = r13 * sin(theta2_minus) + r33 * cos(theta2_minus);
+theta6_minus = atan2(y_minus, x_minus);
+
+y_plus_inv = r11 * cos(theta7_plus_inv) * sin(theta2_plus) - r12 * sin(theta7_plus_inv) * sin(theta2_plus) + r31 * cos(theta7_plus_inv) * cos(theta2_plus) - r32 * sin(theta7_plus_inv) * cos(theta2_plus);
+x_plus_inv = r13 * sin(theta2_plus) + r33 * cos(theta2_plus);
+theta6_plus_inv = atan2(y_plus_inv, x_plus_inv);
+
+y_minus_inv = r11 * cos(theta7_minus_inv) * sin(theta2_minus) - r12 * sin(theta7_minus_inv) * sin(theta2_minus) + r31 * cos(theta7_minus_inv) * cos(theta2_minus) - r32 * sin(theta7_minus_inv) * cos(theta2_minus);
+x_minus_inv = r13 * sin(theta2_minus) + r33 * cos(theta2_minus);
+theta6_minus_inv = atan2(y_minus_inv, x_minus_inv);
+
+% theta345
+y_plus = r11 * cos(theta2_plus) * sin(theta7_plus) + r12 * cos(theta2_plus) * cos(theta7_plus) - r31 * sin(theta2_plus) * sin(theta7_plus) - r32 * sin(theta2_plus) * cos(theta7_plus);
+x_plus = r21 * sin(theta7_plus) + r22 * cos(theta7_plus);
+theta345_plus = atan2(y_plus, x_plus);
+
+y_minus = r11 * cos(theta2_minus) * sin(theta7_minus) + r12 * cos(theta2_minus) * cos(theta7_minus) - r31 * sin(theta2_minus) * sin(theta7_minus) - r32 * sin(theta2_minus) * cos(theta7_minus);
+x_minus = r21 * sin(theta7_minus) + r22 * cos(theta7_minus);
+theta345_minus = atan2(y_minus, x_minus);
+
+y_plus_inv = r11 * cos(theta2_plus) * sin(theta7_plus_inv) + r12 * cos(theta2_plus) * cos(theta7_plus_inv) - r31 * sin(theta2_plus) * sin(theta7_plus_inv) - r32 * sin(theta2_plus) * cos(theta7_plus_inv);
+x_plus_inv = r21 * sin(theta7_plus_inv) + r22 * cos(theta7_plus_inv);
+theta345_plus_inv = atan2(y_plus_inv, x_plus_inv);
+
+y_minus_inv = r11 * cos(theta2_minus) * sin(theta7_minus_inv) + r12 * cos(theta2_minus) * cos(theta7_minus_inv) - r31 * sin(theta2_minus) * sin(theta7_minus_inv) - r32 * sin(theta2_minus) * cos(theta7_minus_inv);
+x_minus_inv = r21 * sin(theta7_minus_inv) + r22 * cos(theta7_minus_inv);
+theta345_minus_inv = atan2(y_minus_inv, x_minus_inv);
+
+% theta4
+term1_plus = px * cos(theta2_plus) - pz * sin(theta2_plus) - l7 * r13 * cos(theta2_plus) + l7 * r33 * sin(theta2_plus) + l0 * sin(theta2_plus) + l6 * sin(theta345_plus);
+term2_plus = py - l7 * r23 - l1 + l6 * cos(theta345_plus);
+numerator_plus = term1_plus^2 + term2_plus^2 - l3^2 - l4^2;
+
+term1_minus = px * cos(theta2_minus) - pz * sin(theta2_minus) - l7 * r13 * cos(theta2_minus) + l7 * r33 * sin(theta2_minus) + l0 * sin(theta2_minus) + l6 * sin(theta345_minus);
+term2_minus = py - l7 * r23 - l1 + l6 * cos(theta345_minus);
+numerator_minus = term1_minus^2 + term2_minus^2 - l3^2 - l4^2;
+
+term1_plus_inv = px * cos(theta2_plus) - pz * sin(theta2_plus) - l7 * r13 * cos(theta2_plus) + l7 * r33 * sin(theta2_plus) + l0 * sin(theta2_plus) + l6 * sin(theta345_plus_inv);
+term2_plus_inv = py - l7 * r23 - l1 + l6 * cos(theta345_plus_inv);
+numerator_plus_inv = term1_plus_inv^2 + term2_plus_inv^2 - l3^2 - l4^2;
+
+term1_minus_inv = px * cos(theta2_minus) - pz * sin(theta2_minus) - l7 * r13 * cos(theta2_minus) + l7 * r33 * sin(theta2_minus) + l0 * sin(theta2_minus) + l6 * sin(theta345_minus_inv);
+term2_minus_inv = py - l7 * r23 - l1 + l6 * cos(theta345_minus_inv);
+numerator_minus_inv = term1_minus_inv^2 + term2_minus_inv^2 - l3^2 - l4^2;
+
+denominator = 2 * l3 * l4;
+cos_theta4_plus = numerator_plus / denominator;
+cos_theta4_minus = numerator_minus / denominator;
+cos_theta4_plus_inv = numerator_plus_inv / denominator;
+cos_theta4_minus_inv = numerator_minus_inv / denominator;
+
+sin_theta4_pp = sqrt(1 - cos_theta4_plus^2);
+sin_theta4_pm = -sqrt(1 - cos_theta4_plus^2);
+sin_theta4_mp = sqrt(1 - cos_theta4_minus^2);
+sin_theta4_mm = -sqrt(1 - cos_theta4_minus^2);
+
+sin_theta4_pip = sqrt(1 - cos_theta4_plus_inv^2);
+sin_theta4_pim = -sqrt(1 - cos_theta4_plus_inv^2);
+sin_theta4_mip = sqrt(1 - cos_theta4_minus_inv^2);
+sin_theta4_mim = -sqrt(1 - cos_theta4_minus_inv^2);
+
+theta4_pp = atan2(sin_theta4_pp, cos_theta4_plus);
+theta4_pm = atan2(sin_theta4_pm, cos_theta4_plus);
+theta4_mp = atan2(sin_theta4_mp, cos_theta4_minus);
+theta4_mm = atan2(sin_theta4_mm, cos_theta4_minus);
+
+theta4_pip = atan2(sin_theta4_pip, cos_theta4_plus_inv);
+theta4_pim = atan2(sin_theta4_pim, cos_theta4_plus_inv);
+theta4_mip = atan2(sin_theta4_mip, cos_theta4_minus_inv);
+theta4_mim = atan2(sin_theta4_mim, cos_theta4_minus_inv);
+
+% theta3
+theta3_pp = atan2(-term2_plus, term1_plus) - atan2(l4 * sin_theta4_pp, l4 * cos_theta4_plus + l3);
+theta3_pm = atan2(-term2_plus, term1_plus) - atan2(l4 * sin_theta4_pm, l4 * cos_theta4_plus + l3);
+theta3_mp = atan2(-term2_minus, term1_minus) - atan2(l4 * sin_theta4_mp, l4 * cos_theta4_minus + l3);
+theta3_mm = atan2(-term2_minus, term1_minus) - atan2(l4 * sin_theta4_mm, l4 * cos_theta4_minus + l3);
+
+theta3_pip = atan2(-term2_plus_inv, term1_plus_inv) - atan2(l4 * sin_theta4_pip, l4 * cos_theta4_plus_inv + l3);
+theta3_pim = atan2(-term2_plus_inv, term1_plus_inv) - atan2(l4 * sin_theta4_pim, l4 * cos_theta4_plus_inv + l3);
+theta3_mip = atan2(-term2_minus_inv, term1_minus_inv) - atan2(l4 * sin_theta4_mip, l4 * cos_theta4_minus_inv + l3);
+theta3_mim = atan2(-term2_minus_inv, term1_minus_inv) - atan2(l4 * sin_theta4_mim, l4 * cos_theta4_minus_inv + l3);
+
+% theta5
+theta5_pp = theta345_plus - theta3_pp - theta4_pp;
+theta5_pm = theta345_plus - theta3_pm - theta4_pm;
+theta5_mp = theta345_minus - theta3_mp - theta4_mp;
+theta5_mm = theta345_minus - theta3_mm - theta4_mm;
+
+theta5_pip = theta345_plus_inv - theta3_pip - theta4_pip;
+theta5_pim = theta345_plus_inv - theta3_pim - theta4_pim;
+theta5_mip = theta345_minus_inv - theta3_mip - theta4_mip;
+theta5_mim = theta345_minus_inv - theta3_mim - theta4_mim;
+
+fprintf('θ2（1号解）：%.4f \n', rad2deg(theta2_plus));
+fprintf('θ2（2号解）：%.4f \n', rad2deg(theta2_minus)); 
+fprintf('θ7（1号解）：%.4f \n', rad2deg(theta7_plus));
+fprintf('θ7（2号解）：%.4f \n', rad2deg(theta7_minus)); 
+fprintf('θ7（1i号解）：%.4f \n', rad2deg(theta7_plus_inv));
+fprintf('θ7（2i号解）：%.4f \n', rad2deg(theta7_minus_inv)); 
+fprintf('θ6（1号解）：%.4f \n', rad2deg(theta6_plus));
+fprintf('θ6（2号解）：%.4f \n', rad2deg(theta6_minus));
+fprintf('θ6（1i号解）：%.4f \n', rad2deg(theta6_plus_inv));
+fprintf('θ6（2i号解）：%.4f \n', rad2deg(theta6_minus_inv));
+fprintf('θ4（1p号解）：%.4f \n', rad2deg(theta4_pp));
+fprintf('θ4（1m号解）：%.4f \n', rad2deg(theta4_pm));
+fprintf('θ4（2p号解）：%.4f \n', rad2deg(theta4_mp));
+fprintf('θ4（2m号解）：%.4f \n', rad2deg(theta4_mm));
+fprintf('θ4（1ip号解）：%.4f \n', rad2deg(theta4_pip));
+fprintf('θ4（1im号解）：%.4f \n', rad2deg(theta4_pim));
+fprintf('θ4（2ip号解）：%.4f \n', rad2deg(theta4_mip));
+fprintf('θ4（2im号解）：%.4f \n', rad2deg(theta4_mim));
+fprintf('θ3（1p号解）：%.4f \n', rad2deg(theta3_pp));
+fprintf('θ3（1m号解）：%.4f \n', rad2deg(theta3_pm));
+fprintf('θ3（2p号解）：%.4f \n', rad2deg(theta3_mp));
+fprintf('θ3（2m号解）：%.4f \n', rad2deg(theta3_mm));
+fprintf('θ3（1ip号解）：%.4f \n', rad2deg(theta3_pip));
+fprintf('θ3（1im号解）：%.4f \n', rad2deg(theta3_pim));
+fprintf('θ3（2ip号解）：%.4f \n', rad2deg(theta3_mip));
+fprintf('θ3（2im号解）：%.4f \n', rad2deg(theta3_mim));
+fprintf('θ5（1p号解）：%.4f \n', rad2deg(theta5_pp));
+fprintf('θ5（1m号解）：%.4f \n', rad2deg(theta5_pm));
+fprintf('θ5（2p号解）：%.4f \n', rad2deg(theta5_mp));
+fprintf('θ5（2m号解）：%.4f \n', rad2deg(theta5_mm));
+fprintf('θ5（1ip号解）：%.4f \n', rad2deg(theta5_pip));
+fprintf('θ5（1im号解）：%.4f \n', rad2deg(theta5_pim));
+fprintf('θ5（2ip号解）：%.4f \n', rad2deg(theta5_mip));
+fprintf('θ5（2im号解）：%.4f \n', rad2deg(theta5_mim));

@@ -1,0 +1,2489 @@
+\documentclass{homework}
+\author{Mufan Shi 23307130075}
+\class{Introduction to Robotics}
+\date{\today}
+\title{Homework of Chapter6}
+
+\usepackage{ctex} 
+\usepackage{subcaption}
+\graphicspath{{./media/}}
+
+\begin{document} \maketitle
+
+\question
+
+\begin{sol}
+
+（a）
+
+由于坐标系的轴刚好是该物体的主惯性轴，所以惯性积为0，即惯性张量非对角线处的元素为0，我们只需要计算对角线上的元素，也就是转动惯量。
+\begin{align*}
+    I_{xx} &= \int_{-l/2}^{l/2} \int_{-w/2}^{w/2} \int_{-h/2}^{h/2} (y^2 + z^2) \rho dx dy dz \\
+    &= \int_{-w/2}^{w/2} \int_{-h/2}^{h/2} (y^2 + z^2) l \rho dy dz \\
+    &= \int_{-h/2}^{h/2} (\frac{w^3}{12} + z^2 w) l \rho dz \\
+    &= (\frac{w^3}{12} h l + \frac{h^3}{12} w l) \rho \\
+    &= \frac{m}{12} (w^2 + h^2)
+\end{align*}
+
+同理可得
+\[
+I_{yy} = \frac{m}{12} (l^2 + h^2)
+\] 
+
+\[
+I_{zz} = \frac{m}{12} (l^2 + w^2)
+\]
+
+所以最终得到的惯性张量为：
+\[
+{^A}\mathbf{I} = 
+\begin{pmatrix}
+  \frac{m}{12}(w^2 + h^2) & 0 & 0 \\
+  0 & \frac{m}{12}(l^2 + h^2) & 0 \\
+  0 & 0 & \frac{m}{12}(l^2 + w^2)
+\end{pmatrix}
+\]
+
+
+（b）
+
+由平行轴定理得，
+\[
+{^B}\mathbf{I} = {^A}\mathbf{I} + m ({^B}\mathbf{P}{_A^T} {^B}\mathbf{P}_{A} \mathbf{I}{_3} - {^B}\mathbf{P}_{A} {^B}\mathbf{P}_{A}^T)
+\]
+其中，${^B}\mathbf{P}_{A} = \begin{pmatrix}
+\frac{l}{2} \\ \frac{w}{2} \\ \frac{h}{2}
+\end{pmatrix}$
+
+经计算可得，
+\[
+  {^B}\mathbf{I} = 
+  \begin{pmatrix}
+    \frac{m}{3}(w^2 + h^2) & -\frac{m}{4}wl & -\frac{m}{4}hl \\
+    -\frac{m}{4}wl & \frac{m}{3}(l^2 + h^2) & -\frac{m}{4}hw \\
+    -\frac{m}{4}hl & -\frac{m}{4}hw & \frac{m}{3}(l^2 + w^2)
+  \end{pmatrix}
+\]
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+\img<q2>[0.5]{Question 2}{figs/q2.png}
+
+对于连杆1而言，位置方程和速度方程为： 
+\begin{align*}
+  x_1 =& l_1 \cos\theta_1 \\
+  y_1 =& l_1 \sin\theta_1 \\
+  z_1 =& 0 \\
+\end{align*}
+
+\begin{align*}
+  \dot{x_1} =& - l_1 \dot{\theta_1} \sin\theta_1 \\
+  \dot{y_1} =& l_1 \dot{\theta_1} \cos\theta_1 \\
+  z_1 =& 0 \\
+\end{align*}
+
+则连杆1的速度为：
+\[
+  v_1^2 = l_1^2 \dot{\theta_1}^2
+\]
+
+对于连杆2而言，位置方程和速度方程为： 
+\begin{align*}
+  x_2 = & (l_1 + l_2 \cos\theta_2) \cos\theta_1 \\
+  y_2 = & (l_1 + l_2 \cos\theta_2) \sin\theta_1 \\
+  z_2 = & l_2 \sin\theta_2 \\
+\end{align*}
+
+\begin{align*}
+  \dot{x_2} = & - (l_1 + l_2 \cos\theta_2) \dot{\theta_1} \sin\theta_1 - l_2 \dot{\theta_2} \sin\theta_2 \cos\theta_1 \\
+  \dot{y_2} = & (l_1 + l_2 \cos\theta_2) \dot{\theta_1} \cos\theta_1 - l_2 \dot{\theta_2} \sin\theta_2 \sin\theta_1 \\
+  \dot{z_2} = & l_2 \dot{\theta_2} \cos\theta_2 \\
+\end{align*}
+
+则连杆2的速度为：
+\[
+  v_2^2 = (l_1 + l_2 \cos\theta_2)^2 \dot{\theta_1}^2 + l_2^2 \dot{\theta_2}^2
+\]
+
+对于连杆1的动能（连杆1质量集中在连杆末端，因此连杆1动能只有平动动能，没有转动动能）：
+\[
+  K_1 = \frac{1}{2} m_1 v_1^2 = \frac{1}{2} m_1 l_1^2 \dot{\theta_1}^2
+\]
+
+对于连杆2的动能（与连杆1类似，连杆2的动能只有平动动能）：
+\[
+  K_2 = \frac{1}{2} m_2 v_2^2 = \frac{1}{2} m_2 ((l_1 + l_2 \cos\theta_2)^2 \dot{\theta_1}^2 + l_2^2 \dot{\theta_2}^2)
+\]
+
+则系统的总动能为：
+\[
+  K = K_1 + K_2 = \frac{1}{2} m_1 l_1^2 \dot{\theta_1}^2 + \frac{1}{2} m_2 ((l_1 + l_2 \cos\theta_2)^2 \dot{\theta_1}^2 + l_2^2 \dot{\theta_2}^2)
+\]  
+
+选择图中xOy平面为零势能面，对于连杆1的势能：
+\[
+  P_1 = m_1 g z_1 = 0
+\]
+
+对于连杆2的势能：
+\[
+  P_2 = m_2 g z_2 = m_2 g l_2 \sin\theta_2
+\]
+
+则系统的总势能为：
+\[
+  P = P_1 + P_2 = m_2 g l_2 \sin\theta_2
+\]
+
+构造系统的拉格朗日函数：
+\[
+  L = K - P = \frac{1}{2} m_1 l_1^2 \dot{\theta_1}^2 + \frac{1}{2} m_2 ((l_1 + l_2 \cos\theta_2)^2 \dot{\theta_1}^2 + l_2^2 \dot{\theta_2 }^2) - m_2 g l_2 \sin\theta_2
+\]
+
+对广义坐标 $ \theta_1 $ 求导，可得
+\[
+  \frac{\partial L}{\partial \theta_1} = 0
+\]
+
+\[
+  \frac{\partial L}{\partial \dot{\theta_1}} = m_1 l_1^2 \dot{\theta_1} + m_2 (l_1 + l_2 \cos\theta_2)^2 \dot{\theta_1}
+\]
+
+\[
+  \frac{d}{dt}(\frac{\partial L}{\partial \dot{\theta_1}}) = m_1 l_1^2 \ddot{\theta_1} + m_2 (l_1 + l_2 \cos\theta_2)^2 \ddot{\theta_1} - 2 m_2 \sin\theta_2 (l_1 + l_2 \cos\theta_2) l_2 \dot{\theta_1} \dot{\theta_2} 
+\]
+
+可得系统动力学方程1为：
+\[
+  Q_1 = \frac{d}{dt}(\frac{\partial L}{\partial \dot{\theta_1}}) - \frac{\partial L}{\partial \theta_1} =  m_1 l_1^2 \ddot{\theta_1} + m_2 (l_1 + l_2 \cos\theta_2)^2 \ddot{\theta_1} - 2 m_2 \sin\theta_2 (l_1 + l_2 \cos\theta_2) l_2 \dot{\theta_1} \dot{\theta_2} 
+\]
+
+对广义坐标 $ \theta_2 $ 求导，可得
+\[
+  \frac{\partial L}{\partial \theta_2} = - m_2 \sin\theta_2 (l_1 + l_2 \cos\theta_2) l_2 \dot{\theta_1}^2 - m_2 g l_2 \cos\theta_2
+\]
+
+\[
+  \frac{\partial L}{\partial \dot{\theta_2}} = m_2 l_2^2 \dot{\theta_2}
+\]
+
+\[
+  \frac{d}{dt}(\frac{\partial L}{\partial \dot{\theta_2}}) = m_2 l_2^2 \ddot{\theta_2}
+\]
+
+可得系统动力学方程2为：
+\[
+  Q_2 = \frac{d}{dt}(\frac{\partial L}{\partial \dot{\theta_2}}) - \frac{\partial L}{\partial \theta_2} = m_2 l_2^2 \ddot{\theta_2} + m_2 \sin\theta_2 (l_1 + l_2 \cos\theta_2) l_2 \dot{\theta_1}^2 + m_2 g l_2 \cos\theta_2
+\]
+
+由于还存在黏性摩擦力，于是
+\begin{align*}
+  \tau_{friction_1} &= \nu_1 \dot{\theta_1} \\
+  \tau_{friction_2} &= \nu_2 \dot{\theta_2} 
+\end{align*}
+  
+将系统动力学方程写成矩阵的形式：
+\[
+  \begin{pmatrix}
+    Q_1 \\
+    Q_2
+  \end{pmatrix} =
+  \begin{pmatrix}
+    m_1 l_1^2 + m_2 (l_1 + l_2 \cos\theta_2)^2 & 0 \\
+    0 & m_2 l_2^2
+  \end{pmatrix}
+  \begin{pmatrix}
+    \ddot{\theta_1} \\
+    \ddot{\theta_2}
+  \end{pmatrix} +
+  \begin{pmatrix}
+    - 2 m_2 \sin\theta_2 (l_1 + l_2 \cos\theta_2) l_2 \dot{\theta_1} \dot{\theta_2} \\
+    m_2 \sin\theta_2 (l_1 + l_2 \cos\theta_2) l_2 \dot{\theta_1}^2
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0 \\
+    m_2 g l_2 \cos\theta_2
+  \end{pmatrix} +
+  \begin{pmatrix}
+    \nu_1 \dot{\theta_1} \\
+    \nu_2 \dot{\theta_2}
+  \end{pmatrix}
+\]
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+（a）
+ 
+建立连杆坐标系如图所示：
+
+\img<q3>[0.5]{Question 3}{figs/q3.png}
+
+由图写出DH表如下：
+
+\tbl<tb3>{DH-table for question 3} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & $ l_1 $ & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & d & 0 \\
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & l_1 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 0 & 1 & d \\
+    0 & -1 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & 0 & -\sin\theta_1 & - d \sin\theta_1 \\
+    \sin\theta_1 & 0 & \cos\theta_1 & d \cos\theta_1 \\
+    0 & -1 & 0 & l_1 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+变换矩阵的微分如下：
+
+\[
+  \frac{\partial {_1^0}\mathbf{T}}{\partial \theta_1} =
+  \begin{bmatrix}
+    -\sin\theta_1 & -\cos\theta_1 & 0 & 0 \\
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_1^0}\mathbf{T}}{\partial \theta_1^2} =
+  \begin{bmatrix}
+    -\cos\theta_1 & \sin\theta_1 & 0 & 0 \\
+    -\sin\theta_1 & -\cos\theta_1 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_2^0}\mathbf{T}}{\partial \theta_1} =
+  \begin{bmatrix}
+    -\sin\theta_1 & 0 & -\cos\theta_1 & - d \cos\theta_1 \\
+    \cos\theta_1 & 0 & -\sin\theta_1 & - d \sin\theta_1 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_2^0}\mathbf{T}}{\partial \theta_1^2} =
+  \begin{bmatrix}
+    -\cos\theta_1 & 0 & \sin\theta_1 & d \sin\theta_1 \\
+    -\sin\theta_1 & 0 & -\cos\theta_1 & - d \cos\theta_1 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_2^0}\mathbf{T}}{\partial \theta_1 \partial d} =
+  \begin{bmatrix}
+    0 & 0 & 0 & -\cos\theta_1 \\
+    0 & 0 & 0 & -\sin\theta_1 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_2^0}\mathbf{T}}{\partial d} =
+  \begin{bmatrix}
+    0 & 0 & 0 & -\sin\theta_1 \\
+    0 & 0 & 0 & \cos\theta_1 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_2^0}\mathbf{T}}{\partial d^2} = 0
+\]
+
+连杆1的伪惯量矩阵为：
+\[
+  \overline{\mathbf{I}_1} = 
+  \begin{pmatrix}
+    \frac{- I_{xx1} + I_{yy1} + I_{zz1}}{2} & 0 & 0 & 0 \\
+    0 & \frac{I_{xx1} - I_{yy1} + I_{zz1}}{2} & 0 & 0 \\
+    0 & 0 & \frac{I_{xx1} + I_{yy1} - I_{zz1}}{2} & 0 \\
+    0 & 0 & 0 & m_1
+  \end{pmatrix}
+\]
+
+连杆2的伪惯量矩阵为：
+\[
+  \overline{\mathbf{I}_2} = 
+  \begin{pmatrix}
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & m_2 
+  \end{pmatrix}
+\]
+
+关节1的伪惯量矩阵为：
+\[
+  \mathbf{I}_{a1} = 
+  \begin{pmatrix}
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 
+  \end{pmatrix}
+\]
+
+关节2的伪惯量矩阵为：
+\[
+  \mathbf{I}_{a2} = 
+  \begin{pmatrix}
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 
+  \end{pmatrix}
+\]
+
+计算惯性矩阵：
+
+\begin{align*}
+  D_{11} = \sum_{j=1}^2 [\operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial ({^0_j}\mathbf{T})^T}{\partial \theta_1}) + \mathbf{I}_{a1}] 
+         = [\operatorname{tr} (\frac{\partial {^0_1}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_1} \frac{\partial ({^0_1}\mathbf{T})^T}{\partial \theta_1}) + \mathbf{I}_{a1}] + [\operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial ({^0_2}\mathbf{T})^T}{\partial \theta_1}) + \mathbf{I}_{a1}] 
+         = m_2 d^2 + I_{zz1}
+\end{align*}
+
+\begin{align*}
+  D_{12} = D_{21} = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial ({^0_2}\mathbf{T})^T}{\partial d}) 
+                  = 0
+\end{align*}
+
+\begin{align*}
+  D_{22} = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial d} \overline{\mathbf{I}_2} \frac{\partial ({^0_2}\mathbf{T})^T}{\partial d}) + \mathbf{I}_{a2} 
+         = m_2
+\end{align*}
+
+计算科氏力向量：
+
+\begin{align*}
+  H_{111} = \sum_{j=1}^2 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_1^2}) 
+          = \operatorname{tr} (\frac{\partial {^0_1}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_1} \frac{\partial^2 ({^0_1}\mathbf{T})^T}{\partial \theta_1^2}) + \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1^2}) 
+          = 0
+\end{align*}
+
+\begin{align*}
+  H_{112} = H_{121} = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1 \partial d}) 
+                    = d m_2 
+\end{align*}
+
+\begin{align*}
+  H_{122} = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial d^2}) 
+          = 0
+\end{align*}
+
+\begin{align*}
+  H_{211} = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial d} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1^2}) 
+          = -d m_2
+\end{align*}
+
+\begin{align*}
+  H_{212} = H_{221} = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial d} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1 \partial d}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{222} = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial d} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial d^2}) 
+          = 0
+\end{align*}
+
+计算重力矢量：
+
+连杆1质心的位置矢量 $ {^1}\mathbf{r}_{c1} = \begin{pmatrix}
+    0 \\
+    0 \\
+    0 \\
+    1
+  \end{pmatrix} $ 
+
+连杆2质心的位置矢量 $ {^2}\mathbf{r}_{c2} = \begin{pmatrix}
+    0 \\
+    0 \\
+    0 \\
+    1
+  \end{pmatrix} $ 
+
+重力矢量 $ \mathbf{g} = \begin{pmatrix}
+    0 \\
+    0 \\
+    -g \\
+    0
+  \end{pmatrix} $
+
+\begin{align*}
+  G_1 = \sum_{j=1}^2 (-m_j \mathbf{g}^T \frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} {^j}\mathbf{r}_{cj}) 
+      = -m_1 \mathbf{g}^T \frac{\partial {^0_1}\mathbf{T}}{\partial \theta_1} {^1}\mathbf{r}_{c1} - m_2 \mathbf{g}^T \frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} {^2}\mathbf{r}_{c2}
+      = 0
+\end{align*}
+
+\begin{align*}
+  G_2 = -m_2 \mathbf{g}^T \frac{\partial {^0_2}\mathbf{T}}{\partial d} {^2}\mathbf{r}_{c2}
+      = 0
+\end{align*}
+
+综上，动力学方程为：
+\begin{align*}
+  \begin{pmatrix}
+    \tau_1 \\
+    F_d
+  \end{pmatrix} 
+  &=
+  \begin{pmatrix}
+    D_{11} & D_{12} \\
+    D_{21} & D_{22}
+  \end{pmatrix}
+  \begin{pmatrix}
+    \ddot{\theta_1} \\
+    \ddot{d}
+  \end{pmatrix} +
+  \begin{pmatrix}
+    H_{111} & H_{122} & H_{112} & H_{121} \\
+    H_{211} & H_{222} & H_{212} & H_{221} 
+  \end{pmatrix}
+  \begin{pmatrix}
+    \dot{\theta_1}^2 \\
+    \dot{d}^2 \\
+    \dot{\theta_1} \dot{d} \\
+    \dot{d} \dot{\theta_1}
+  \end{pmatrix} +
+  \begin{pmatrix}
+    G_1 \\
+    G_2
+  \end{pmatrix} \\
+  &=
+  \begin{pmatrix}
+    m_2 d^2 + I_{zz1} & 0 \\
+    0 & m_2
+  \end{pmatrix}
+  \begin{pmatrix}
+    \ddot{\theta_1} \\
+    \ddot{d}
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0 & 0 & d m_2 & d m_2 \\
+    -d m_2 & 0 & 0 & 0 
+  \end{pmatrix}
+  \begin{pmatrix}
+    \dot{\theta_1}^2 \\
+    \dot{d}^2 \\
+    \dot{\theta_1} \dot{d} \\
+    \dot{d} \dot{\theta_1}
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0 \\
+    0
+  \end{pmatrix}
+\end{align*}
+
+（b）
+
+关节空间的 $ \mathbf{D}, \mathbf{H}, \mathbf{G} $ 矩阵分别为：
+\[
+  \mathbf{D} =
+  \begin{pmatrix}
+    m_2 d^2 + I_{zz1} & 0 \\
+    0 & m_2
+  \end{pmatrix}
+\]
+
+\[
+  \mathbf{H} =
+  \begin{pmatrix}
+    2 m_2 d \dot{\theta_1} \dot{d} \\
+    -m_2 d \dot{\theta_1}^2
+  \end{pmatrix}
+\]
+
+\[
+  \mathbf{G} =
+  \begin{pmatrix}
+    0 \\
+    0
+  \end{pmatrix}
+\]
+
+这个机械臂的操作空间实际上是一个平面，很容易求得其雅可比矩阵为
+\[
+  \mathbf{J} =
+  \begin{pmatrix}
+    -d \cos\theta_1 & -\sin\theta_1 \\
+    -d \sin\theta_1 & \cos\theta_1 \\
+  \end{pmatrix}
+\]
+
+雅可比逆矩阵为
+\[
+  \mathbf{J}^{-1} =
+  \begin{pmatrix}
+    -\frac{\cos\theta_1}{d} & -\frac{\sin\theta_1}{d} \\
+    -\sin\theta_1 & \cos\theta_1 \\
+  \end{pmatrix}
+\]
+
+雅可比矩阵对时间的导数为
+\[
+  \dot{\mathbf{J}} = \frac{\partial \mathbf{J}}{\partial \theta_1} \dot{\theta_1} + \frac{\partial \mathbf{J}}{\partial d} \dot{d} =
+  \begin{pmatrix}
+    d \dot{\theta_1} \sin\theta_1 - \dot{d} \cos\theta_1 & - \dot{\theta_1} \cos\theta_1 \\
+    -d \dot{\theta_1} \cos\theta_1 - \dot{d} \sin\theta_1 & - \dot{\theta_1} \sin\theta_1 \\
+  \end{pmatrix}
+\]
+
+则操作空间中的 $ \mathbf{V}, \mathbf{u}, \mathbf{p} $ 矩阵分别为：
+\[
+  \mathbf{V} = \mathbf{J}^{-T} \mathbf{D} \mathbf{J}^{-1} =
+  \begin{pmatrix}
+    \frac{m_2 d^2 - I_{zz1} \sin^2\theta_1 + I_{zz1}}{d^2} & \frac{I_{zz1} \sin(2\theta_1)}{2d^2} \\
+    \frac{I_{zz1} \sin(2\theta_1)}{2d^2} & \frac{m_2 d^2 + I_{zz1} \sin^2\theta_1}{d^2}
+  \end{pmatrix}
+\]
+
+\[
+  \mathbf{u} = \mathbf{J}^{-T} \mathbf{H} - \mathbf{V} \dot{\mathbf{J}} \dot{\mathbf{q}} =
+  \begin{pmatrix}
+    \frac{2 I_{zz1} \dot{d} \dot{\theta}_1 \cos\theta_1}{d^2} \\
+    \frac{2 I_{zz1} \dot{d} \dot{\theta}_1 \sin\theta_1}{d^2}
+  \end{pmatrix}
+\]
+
+\[
+  \mathbf{p} = \mathbf{J}^{-T} \mathbf{G} =
+  \begin{pmatrix}
+    0 \\
+    0
+  \end{pmatrix}
+\]
+
+所以操作空间的动力学方程为：
+\[
+  \begin{pmatrix}
+    F_x \\
+    F_y
+  \end{pmatrix} =
+  \begin{pmatrix}
+    \frac{m_2 d^2 - I_{zz1} \sin^2\theta_1 + I_{zz1}}{d^2} & \frac{I_{zz1} \sin(2\theta_1)}{2d^2} \\
+    \frac{I_{zz1} \sin(2\theta_1)}{2d^2} & \frac{m_2 d^2 + I_{zz1} \sin^2\theta_1}{d^2}
+  \end{pmatrix}
+  \begin{pmatrix}
+    \ddot{x} \\
+    \ddot{y}
+  \end{pmatrix} +
+  \begin{pmatrix}
+    \frac{2 I_{zz1} \dot{d} \dot{\theta}_1 \cos\theta_1}{d^2} \\
+    \frac{2 I_{zz1} \dot{d} \dot{\theta}_1 \sin\theta_1}{d^2}
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0 \\
+    0
+  \end{pmatrix}
+\]
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+建立连杆坐标系如图所示：
+
+\img<q4>[0.5]{Question 4}{figs/q4.png}
+
+由图写出DH表如下：
+
+\tbl<tb4>{DH-table for question 4} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & 0 & $ \theta_1 $ \\
+    2 & $ l_1 $ & $ \frac{\pi}{2} $ & 0 & $ \theta_2 $ \\
+    3 & $ l_2 $ & 0 & 0 & $ \theta_3 $ \\
+    4 & $ l_3 $ & 0 & 0 & 0
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & l_1 \\
+    0 & 0 & -1 & 0 \\
+    \sin\theta_2 & \cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & l_2 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^0\mathbf{T} =
+  \begin{bmatrix} 
+    c_{1}\,c_{2} & -c_{1}\,s_{2} & s_{1} & l_{1}\,c_{1} \\ 
+    c_{2}\,s_{1} & -s_{1}\,s_{2} & -c_{1} & l_{1}\,s_{1} \\ 
+    s_{2} & c_{2} & 0 & 0 \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^0\mathbf{T} =
+  \begin{bmatrix} 
+    c_{23}\,c_{1} & -s_{23}\,c_{1} & s_{1} & c_{1}\,\left(l_{1}+l_{2}\,c_{2}\right) \\ 
+    c_{23}\,s_{1} & -s_{23}\,s_{1} & -c_{1} & s_{1}\,\left(l_{1}+l_{2}\,c_{2}\right) \\ 
+    s_{23} & c_{23} & 0 & l_{2}\,s_{2} \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+变换矩阵的微分如下：
+
+\[
+  \frac{\partial {_1^0}\mathbf{T}}{\partial \theta_1} =
+  \begin{bmatrix}
+    -\sin\theta_1 & -\cos\theta_1 & 0 & 0 \\
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_1^0}\mathbf{T}}{\partial \theta_1^2} =
+  \begin{bmatrix}
+    -\cos\theta_1 & \sin\theta_1 & 0 & 0 \\
+    -\sin\theta_1 & -\cos\theta_1 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_2^0}\mathbf{T}}{\partial \theta_1} =
+  \begin{bmatrix} 
+    -s_{1} c_{2} & s_{1} s_{2} & c_{1} & -l_{1} s_{1} \\ 
+    c_{2} c_{1} & -c_{1} s_{2} & s_{1} & l_{1} c_{1} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_2^0}\mathbf{T}}{\partial \theta_1^2} =
+  \begin{bmatrix} 
+    -c_{1} c_{2} & c_{1} s_{2} & -s_{1} & -l_{1} c_{1} \\ 
+    -c_{2} s_{1} & s_{1} s_{2} & c_{1} & -l_{1} s_{1} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_2^0}\mathbf{T}}{\partial \theta_1 \partial \theta_2} =
+  \begin{bmatrix} 
+    s_{1} s_{2} & s_{1} c_{2} & 0 & 0 \\ 
+    -s_{2} c_{1} & -c_{1} c_{2} & 0 & 0 \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_2^0}\mathbf{T}}{\partial \theta_2} =
+  \begin{bmatrix} 
+    -c_{1} s_{2} & -c_{1} c_{2} & 0 & 0 \\ 
+    -s_{2} s_{1} & -s_{1} c_{2} & 0 & 0 \\ 
+    c_{2} & -s_{2} & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_2^0}\mathbf{T}}{\partial \theta_2^2} =
+  \begin{bmatrix} 
+    -c_{1} c_{2} & c_{1} s_{2} & 0 & 0 \\ 
+    -c_{2} s_{1} & s_{1} s_{2} & 0 & 0 \\ 
+    -s_{2} & -c_{2} & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_3^0}\mathbf{T}}{\partial \theta_1} =
+  \begin{bmatrix} 
+    -c_{23} s_{1} & s_{23} s_{1} & c_{1} & -s_{1} (l_{1} + l_{2} c_{2}) \\ 
+    c_{23} c_{1} & -s_{23} c_{1} & s_{1} & c_{1} (l_{1} + l_{2} c_{2}) \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_1^2} =
+  \begin{bmatrix} 
+    -c_{23} c_{1} & s_{23} c_{1} & -s_{1} & -c_{1} (l_{1} + l_{2} c_{2}) \\ 
+    -c_{23} s_{1} & s_{23} s_{1} & c_{1} & -s_{1} (l_{1} + l_{2} c_{2}) \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_1 \partial \theta_2} =
+  \begin{bmatrix} 
+    s_{23} s_{1} & c_{23} s_{1} & 0 & l_{2} s_{1} s_{2} \\ 
+    -s_{23} c_{1} & -c_{23} c_{1} & 0 & -l_{2} c_{1} s_{2} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_1 \partial \theta_3} =
+  \begin{bmatrix} 
+    s_{23} s_{1} & c_{23} s_{1} & 0 & 0 \\ 
+    -s_{23} c_{1} & -c_{23} c_{1} & 0 & 0 \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_3^0}\mathbf{T}}{\partial \theta_2} =
+  \begin{bmatrix} 
+    -s_{23} c_{1} & -c_{23} c_{1} & 0 & - l_{2} c_{1} s_{2} \\ 
+    -s_{23} s_{1} & -c_{23} s_{1} & 0 & - l_{2} s_{1} s_{2} \\ 
+    c_{23} & -s_{23} & 0 & l_{2} c_{2} \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_2^2} =
+  \begin{bmatrix} 
+    -c_{23} c_{1} & s_{23} c_{1} & 0 & - l_{2} c_{1} c_{2} \\ 
+    -c_{23} s_{1} & s_{23} s_{1} & 0 & - l_{2} s_{1} c_{2} \\ 
+    -s_{23} & -c_{23} & 0 & -l_{2} s_{2} \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_2 \partial \theta_3} =
+  \begin{bmatrix} 
+    -c_{23} c_{1} & s_{23} c_{1} & 0 & 0 \\ 
+    -c_{23} s_{1} & s_{23} s_{1} & 0 & 0 \\ 
+    -s_{23} & -c_{23} & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_3^0}\mathbf{T}}{\partial \theta_3} =
+  \begin{bmatrix} 
+    -s_{23} c_{1} & -c_{23} c_{1} & 0 & 0 \\ 
+    -s_{23} s_{1} & -c_{23} s_{1} & 0 & 0 \\ 
+    c_{23} & -s_{23} & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_3^2} =
+  \begin{bmatrix} 
+    -c_{23} c_{1} & s_{23} c_{1} & 0 & 0 \\ 
+    -c_{23} s_{1} & s_{23} s_{1} & 0 & 0 \\ 
+    -s_{23} & -c_{23} & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+连杆1的伪惯量矩阵为：
+\[
+  \overline{\mathbf{I}_1} = 
+  \begin{pmatrix}
+    \int {^i}x^2 dm & \int {^i}x {^i}y dm & \int {^i}x {^i}z dm & \int {^i}x dm \\
+    \int {^i}x {^i}y dm & \int {^i}y^2 dm & \int {^i}y {^i}z dm & \int {^i}y dm \\
+    \int {^i}x {^i}z dm & \int {^i}y {^i}z dm & \int {^i}z^2 dm & \int {^i}z dm \\
+    \int {^i}x dm & \int {^i}y dm & \int {^i}z dm & \int dm
+  \end{pmatrix} =
+  \begin{pmatrix}
+    \frac{1}{3} m_1 l_1^2 & 0 & 0 & \frac{1}{2} m_1 l_1 \\
+    0 & \frac{1}{12} m_1 w_1^2 & 0 & 0 \\
+    0 & 0 & \frac{1}{12} m_1 h_1^2 & 0 \\
+    \frac{1}{2} m_1 l_1 & 0 & 0 & m_1
+  \end{pmatrix}
+\]
+
+连杆2的伪惯量矩阵为：
+\[
+  \overline{\mathbf{I}_2} = 
+  \begin{pmatrix}
+    \frac{1}{3} m_2 l_2^2 & 0 & 0 & \frac{1}{2} m_2 l_2 \\
+    0 & \frac{1}{12} m_2 w_2^2 & 0 & 0 \\
+    0 & 0 & \frac{1}{12} m_2 h_2^2 & 0 \\
+    \frac{1}{2} m_2 l_2 & 0 & 0 & m_2
+  \end{pmatrix}
+\]
+
+连杆3的伪惯量矩阵为：
+\[
+  \overline{\mathbf{I}_3} = 
+  \begin{pmatrix}
+    \frac{1}{3} m_3 l_3^2 & 0 & 0 & \frac{1}{2} m_3 l_3 \\
+    0 & \frac{1}{12} m_3 w_3^2 & 0 & 0 \\
+    0 & 0 & \frac{1}{12} m_3 h_3^2 & 0 \\
+    \frac{1}{2} m_3 l_3 & 0 & 0 & m_3
+  \end{pmatrix}
+\]
+
+关节1的伪惯量矩阵为：
+\[
+  \mathbf{I}_{a1} = 
+  \begin{pmatrix}
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 
+  \end{pmatrix}
+\]
+
+关节2的伪惯量矩阵为：
+\[
+  \mathbf{I}_{a2} = 
+  \begin{pmatrix}
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 
+  \end{pmatrix}
+\]
+
+关节3的伪惯量矩阵为：
+\[
+  \mathbf{I}_{a3} = 
+  \begin{pmatrix}
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 
+  \end{pmatrix}
+\]
+
+计算惯性矩阵：
+
+\begin{align*}
+  D_{11} &= \sum_{j=1}^3 [\operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial ({^0_j}\mathbf{T})^T}{\partial \theta_1}) + \mathbf{I}_{a1}] 
+         = [\operatorname{tr} (\frac{\partial {^0_1}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_1} \frac{\partial ({^0_1}\mathbf{T})^T}{\partial \theta_1}) + \mathbf{I}_{a1}] + [\operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial ({^0_2}\mathbf{T})^T}{\partial \theta_1}) + \mathbf{I}_{a1}] + [\operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_1}) + \mathbf{I}_{a1}] \\
+         &= \frac{h_2^2 m_2}{12} + \frac{h_3^2 m_3}{12} + \frac{l_1^2 m_1}{3} + l_1^2 m_2 + l_1^2 m_3 + \frac{l_2^2 m_2}{6} + \frac{l_2^2 m_3}{2} + \frac{l_3^2 m_3}{6} + \frac{m_1 w_1^2}{12} + \frac{m_2 w_2^2}{24} + \frac{m_3 w_3^2}{24} + \\ 
+         & \frac{l_3^2 m_3 \cos(2\theta_2 + 2\theta_3)}{6} - \frac{m_3 w_3^2 \cos(2\theta_2 + 2\theta_3)}{24} + \frac{l_2^2 m_2 \cos(2\theta_2)}{6} + \frac{l_2^2 m_3 \cos(2\theta_2)}{2} - \frac{m_2 w_2^2 \cos(2\theta_2)}{24} + \\
+         & l_1 l_3 m_3 \cos(\theta_2 + \theta_3) + l_1 l_2 m_2 \cos(\theta_2) + 2 l_1 l_2 m_3 \cos(\theta_2) + \frac{l_2 l_3 m_3 \cos(\theta_3)}{2} + \frac{l_2 l_3 m_3 \cos(2\theta_2 + \theta_3)}{2}
+\end{align*}
+
+\begin{align*}
+  D_{12} = D_{21} = \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial ({^0_j}\mathbf{T})^T}{\partial \theta_2}) 
+                  = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial ({^0_2}\mathbf{T})^T}{\partial \theta_2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_2}) 
+                  = 0
+\end{align*}
+
+\begin{align*}
+  D_{13} = D_{31} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_3}) 
+                  = 0
+\end{align*}
+
+\begin{align*}
+  D_{22} &= \sum_{j=2}^3 [\operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_j} \frac{\partial ({^0_j}\mathbf{T})^T}{\partial \theta_2}) + \mathbf{I}_{a2}]
+         = [\operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_2} \frac{\partial ({^0_2}\mathbf{T})^T}{\partial \theta_2}) + \mathbf{I}_{a2}] + [\operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_2}) + \mathbf{I}_{a2}] \\
+         &= \frac{l_2^2 m_2}{3} + l_2^2 m_3 + \frac{l_3^2 m_3}{3} + \frac{m_2 w_2^2}{12} + \frac{m_3 w_3^2}{12} + l_2 l_3 m_3 \cos(\theta_3)
+\end{align*}
+
+\begin{align*}
+  D_{23} = D_{32} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_3}) 
+                  = \frac{m_3 (4 l_3^2 + 6 l_2 \cos(\theta_3) l_3 + w_3^2)}{12}
+\end{align*}
+
+\begin{align*}
+  D_{33} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_3}) + \mathbf{I}_{a3}
+         = \frac{m_3 (4 l_3^2 + w_3^2)}{12}
+\end{align*}
+
+计算科氏力向量：
+
+\begin{align*}
+  H_{111} = \sum_{j=1}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_1^2}) 
+          = \operatorname{tr} (\frac{\partial {^0_1}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_1} \frac{\partial^2 ({^0_1}\mathbf{T})^T}{\partial \theta_1^2}) + \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1^2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1^2})
+          = 0
+\end{align*}
+
+\begin{align*}
+  H_{112} = H_{121} &= \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2}) 
+                    = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2}) \\
+                    &= \frac{m_2 \sin(2\theta_2) w_2^2}{24} + \frac{m_3 \sin(2\theta_2 + 2\theta_3) w_3^2}{24} - \frac{l_3^2 m_3 \sin(2\theta_2 + 2\theta_3)}{6} - \frac{l_2^2 m_2 \sin(2\theta_2)}{6} - \frac{l_2^2 m_3 \sin(2\theta_2)}{2} - \\
+                    & \frac{l_1 l_3 m_3 \sin(\theta_2 + \theta_3)}{2} - \frac{l_1 l_2 m_2 \sin(\theta_2)}{2} - l_1 l_2 m_3 \sin(\theta_2) - \frac{l_2 l_3 m_3 \sin(2\theta_2 + \theta_3)}{2} 
+\end{align*}
+
+\begin{align*}
+  H_{113} = H_{131} &= \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_3}) \\
+                    &= -\frac{m_3 (2 l_3^2 \sin(2\theta_2 + 2\theta_3) - \frac{w_3^2 \sin(2\theta_2 + 2\theta_3)}{2} + 3 l_2 l_3 \sin(\theta_3) + 3 l_2 l_3 \sin(2\theta_2 + \theta_3) + 6 l_1 l_3 \sin(\theta_2 + \theta_3))}{12}
+\end{align*}
+
+\begin{align*}
+  H_{122} = \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_2^2}) 
+          = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_2^2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2^2})
+          = 0
+\end{align*}
+
+\begin{align*}
+  H_{123} = H_{132} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2 \partial \theta_3}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{133} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_3^2}) 
+          = 0
+\end{align*}
+
+\begin{align*}
+  H_{211} &= \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_1^2}) 
+          = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1^2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1^2}) \\
+          &= \frac{l_3^2 m_3 \sin(2\theta_2 + 2\theta_3)}{6} - \frac{m_3 w_3^2 \sin(2\theta_2 + 2\theta_3)}{24} + \frac{l_2^2 m_2 \sin(2\theta_2)}{6} + \frac{l_2^2 m_3 \sin(2\theta_2)}{2} - \frac{m_2 w_2^2 \sin(2\theta_2)}{24} + \\
+          & \frac{l_1 l_3 m_3 \sin(\theta_2 + \theta_3)}{2} + \frac{l_1 l_2 m_2 \sin(\theta_2)}{2} + l_1 l_2 m_3 \sin(\theta_2) + \frac{l_2 l_3 m_3 \sin(2\theta_2 + \theta_3)}{2}
+\end{align*}
+
+\begin{align*}
+  H_{212} = H_{221} = \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2}) 
+                    = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2})
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{213} = H_{231} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_3}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{222} = \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_2^2}) 
+          = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_2^2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2^2})
+          = 0
+\end{align*}
+
+\begin{align*}
+  H_{223} = H_{232} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2 \partial \theta_3}) 
+                    = -\frac{l_2 l_3 m_3 \sin(\theta_3)}{2}
+\end{align*}
+
+\begin{align*}
+  H_{233} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_3^2}) 
+          = -\frac{l_2 l_3 m_3 \sin(\theta_3)}{2}
+\end{align*}
+
+\begin{align*}
+  H_{311} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1^2}) 
+          = \frac{m_3 (2 l_3^2 \sin(2\theta_2 + 2\theta_3) - \frac{w_3^2 \sin(2\theta_2 + 2\theta_3)}{2} + 3 l_2 l_3 \sin(\theta_3) + 3 l_2 l_3 \sin(2\theta_2 + \theta_3) + 6 l_1 l_3 \sin(\theta_2 + \theta_3))}{12}
+\end{align*}
+
+\begin{align*}
+  H_{312} = H_{321} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2})
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{313} = H_{331} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_3}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{322} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2^2})
+          = \frac{l_2 l_3 m_3 \sin(\theta_3)}{2}
+\end{align*}
+
+\begin{align*}
+  H_{323} = H_{332} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2 \partial \theta_3}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{333} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_3^2}) 
+          = 0
+\end{align*}
+
+计算重力矢量：
+
+连杆1质心的位置矢量 $ {^1}\mathbf{r}_{c1} = \begin{pmatrix}
+    \frac{l_1}{2} \\
+    0 \\
+    0 \\
+    1
+  \end{pmatrix} $ 
+
+连杆2质心的位置矢量 $ {^2}\mathbf{r}_{c2} = \begin{pmatrix}
+    \frac{l_2}{2} \\
+    0 \\
+    0 \\
+    1
+  \end{pmatrix} $ 
+
+连杆3质心的位置矢量 $ {^2}\mathbf{r}_{c3} = \begin{pmatrix}
+    \frac{l_3}{2} \\
+    0 \\
+    0 \\
+    1
+  \end{pmatrix} $ 
+
+重力矢量 $ \mathbf{g} = \begin{pmatrix}
+    0 \\
+    0 \\
+    -g \\
+    0
+  \end{pmatrix} $
+
+\begin{align*}
+  G_1 = \sum_{j=1}^3 (-m_j \mathbf{g}^T \frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} {^j}\mathbf{r}_{cj}) 
+      = -m_1 \mathbf{g}^T \frac{\partial {^0_1}\mathbf{T}}{\partial \theta_1} {^1}\mathbf{r}_{c1} - m_2 \mathbf{g}^T \frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} {^2}\mathbf{r}_{c2} - m_3 \mathbf{g}^T \frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} {^3}\mathbf{r}_{c3}
+      = 0
+\end{align*}
+
+\begin{align*}
+  G_2 = \sum_{j=2}^3 (-m_j \mathbf{g}^T \frac{\partial {^0_j}\mathbf{T}}{\partial \theta_2} {^j}\mathbf{r}_{cj}) 
+      = - m_2 \mathbf{g}^T \frac{\partial {^0_2}\mathbf{T}}{\partial \theta_2} {^2}\mathbf{r}_{c2} - m_3 \mathbf{g}^T \frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} {^3}\mathbf{r}_{c3}
+      = \frac{g}{2} (l_2 m_2 \cos(\theta_2) + 2 l_2 m_3 \cos(\theta_2) + l_3 m_3 \cos(\theta_2 + \theta_3))
+\end{align*}
+
+\begin{align*}
+  G_3 = - m_3 \mathbf{g}^T \frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} {^3}\mathbf{r}_{c3}
+      = \frac{g}{2} l_3 m_3 \cos(\theta_2 + \theta_3)
+\end{align*}
+
+综上，动力学方程为：
+\begin{align*}
+  \begin{pmatrix}
+    \tau_1 \\
+    \tau_2 \\
+    \tau_3 
+  \end{pmatrix} =
+  \begin{pmatrix}
+    D_{11} & D_{12} & D_{13} \\
+    D_{21} & D_{22} & D_{23} \\
+    D_{31} & D_{32} & D_{33}
+  \end{pmatrix}
+  \begin{pmatrix}
+    \ddot{\theta_1} \\
+    \ddot{\theta_2} \\
+    \ddot{\theta_3} 
+  \end{pmatrix} +
+  \begin{pmatrix}
+    H_{111} & H_{112} & H_{113} & H_{121} & H_{122} & H_{123} & H_{131} & H_{132} & H_{133} \\
+    H_{211} & H_{212} & H_{213} & H_{221} & H_{222} & H_{223} & H_{231} & H_{232} & H_{233} \\
+    H_{311} & H_{312} & H_{313} & H_{321} & H_{322} & H_{323} & H_{331} & H_{332} & H_{333}  
+  \end{pmatrix}
+  \begin{pmatrix}
+    \dot{\theta_1}^2 \\
+    \dot{\theta_1} \dot{\theta_2} \\
+    \dot{\theta_1} \dot{\theta_3} \\
+    \dot{\theta_2} \dot{\theta_1} \\
+    \dot{\theta_2}^2 \\
+    \dot{\theta_2} \dot{\theta_3} \\
+    \dot{\theta_3} \dot{\theta_1} \\
+    \dot{\theta_3} \dot{\theta_2} \\
+    \dot{\theta_3}^2
+  \end{pmatrix} +
+  \begin{pmatrix}
+    G_1 \\
+    G_2 \\
+    G_3
+  \end{pmatrix}
+\end{align*}
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+先求系统的动能（包括车和摆的动能）。
+
+摆的速度是小车的速度及摆相对于车的速度的合成，即
+\[
+  v_p^2 = (l \dot{\theta} \sin(\pi - \theta))^2 + (\dot{x} + l \dot{\theta} \cos(\pi - \theta))^2 
+\]
+
+因此摆的动能为
+\[
+  K_p = \frac{1}{2} m_p v_p^2 = \frac{1}{2} m_p (l \dot{\theta} \sin\theta)^2 + \frac{1}{2} m_p (\dot{x} - l \dot{\theta} \cos\theta)^2
+\]
+
+车的动能为
+\[
+  K_c = \frac{1}{2} m_c \dot{x}^2
+\]
+
+则系统的动能为
+\[
+  K = K_p + K_c = \frac{1}{2} (m_c + m_p) \dot{x}^2 + \frac{1}{2} m_p (l^2 \dot{\theta}^2 - 2 l \dot{x} \dot{\theta} \cos\theta)
+\]
+
+再求系统的势能（只有摆的势能）。
+
+摆的重力势能为
+\[
+  P = m_p g l \cos(\pi - \theta) = - m_p g l \cos\theta
+\]
+
+系统的拉格朗日函数为
+\[
+  L = K - P = \frac{1}{2} (m_c + m_p) \dot{x}^2 + \frac{1}{2} m_p (l^2 \dot{\theta}^2 - 2 l \dot{x} \dot{\theta} \cos\theta) + m_p g l \cos\theta
+\]
+
+对直线运动变量 $ x $ 求导，即
+\[
+  \frac{\partial L}{\partial x} = 0
+\]
+
+\[
+  \frac{\partial L}{\partial \dot{x}} = (m_c + m_p) \dot{x} - m_p l \dot{\theta} \cos\theta
+\]
+
+\[
+  \frac{d}{dt}(\frac{\partial L}{\partial \dot{x}}) = (m_c + m_p) \ddot{x} - m_p l (\ddot{\theta} \cos\theta - \dot{\theta}^2 \sin\theta)
+\]
+
+对旋转运动变量 $ \theta $ 求导，即
+\[
+  \frac{\partial L}{\partial \theta} = m_p l \dot{x} \dot{\theta} \sin\theta - m_p g l \sin\theta
+\]
+
+\[
+  \frac{\partial L}{\partial \dot{\theta}} = m_p (l^2 \dot{\theta} - l \dot{x} \cos\theta)
+\]
+
+\[
+  \frac{d}{dt}(\frac{\partial L}{\partial \dot{\theta}}) = m_p (l^2 \ddot{\theta} - l \ddot{x} \cos\theta + l \dot{x} \dot{\theta} \sin\theta)
+\]
+
+代入拉格朗日方程
+
+对于直线运动
+\[
+  Q_1 = \frac{d}{dt}(\frac{\partial L}{\partial \dot{x}}) - \frac{\partial L}{\partial x} = (m_c + m_p) \ddot{x} - m_p l (\ddot{\theta} \cos\theta - \dot{\theta}^2 \sin\theta)
+\]
+
+对于旋转运动
+\[
+  Q_2 = \frac{d}{dt}(\frac{\partial L}{\partial \dot{\theta}}) - \frac{\partial L}{\partial \theta} = m_p (l^2 \ddot{\theta} - l \ddot{x} \cos\theta + g l \sin\theta)
+\]
+
+将上面两式改写为矩阵形式为
+\[
+  \begin{pmatrix}
+    Q_1 \\
+    Q_2
+  \end{pmatrix} =
+  \begin{pmatrix}
+    m_c + m_p & - m_p l \cos\theta \\
+    - m_p l \cos\theta & m_p l^2
+  \end{pmatrix}
+  \begin{pmatrix}
+    \ddot{x} \\
+    \ddot{\theta}
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0 & m_p l \sin\theta \\
+    0 & 0
+  \end{pmatrix}
+  \begin{pmatrix}
+    \dot{x}^2 \\
+    \dot{\theta}^2
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0 \\
+    m_p g l \sin\theta
+  \end{pmatrix}
+\]
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+坐标系如图所示：
+
+\img<q6>[0.5]{Question 6}{figs/q6.png}
+
+每个连杆质心的位置矢量
+\begin{align*}
+  {^1}P_{C1} = l_1 \hat{Y}_1 \\
+  {^2}P_{C2} = -l_2 \hat{Z}_2
+\end{align*}
+
+每个连杆质心的惯性张量为
+\begin{align*}
+  {^{C_1}}I_1 =
+  \begin{pmatrix}
+    I_{xx1} & 0 & 0 \\
+    0 & I_{yy1} & 0 \\
+    0 & 0 & I_{zz1}
+  \end{pmatrix}
+\end{align*}
+
+\begin{align*}
+  {^{C_2}}I_2 =
+  \begin{pmatrix}
+    I_{xx2} & 0 & 0 \\
+    0 & I_{yy2} & 0 \\
+    0 & 0 & I_{zz2}
+  \end{pmatrix}
+\end{align*}
+  
+机器人基座不旋转，因此有
+\begin{align*}
+  \omega_0 = 0 \\
+  \dot{\omega_0} = 0
+\end{align*}
+
+包括重力因素，有
+\[
+  {^0}\dot{v_0} = g \hat{Y}_0
+\]
+
+相邻连杆坐标之间的旋转矩阵为
+\[
+  _1^0\mathbf{R} =
+  \begin{pmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 \\
+    0 & 0 & 1
+  \end{pmatrix}
+\]
+
+\[
+  _2^1\mathbf{R} =
+  \begin{pmatrix}
+    1 & 0 & 0 \\
+    0 & 0 & 1 \\
+    0 & -1 & 0
+  \end{pmatrix}
+\]
+
+对连杆1应用外推法求解如下：
+\[
+  {^1}\omega_1 = \dot{\theta_1} {^1}\hat{Z_1} = 
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    \dot{\theta_1} 
+  \end{pmatrix}
+\]
+
+\[
+  {^1}\dot{\omega_1} = \ddot{\theta_1} {^1}\hat{Z_1} = 
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    \ddot{\theta_1} 
+  \end{pmatrix}
+\]
+
+\[
+  {^1}\dot{v_1} = 
+  \begin{pmatrix}
+    \cos\theta_1 & \sin\theta_1 & 0 \\
+    -\sin\theta_1 & \cos\theta_1 & 0 \\
+    0 & 0 & 1
+  \end{pmatrix}
+  \begin{pmatrix}
+    0 \\
+    g \\
+    0
+  \end{pmatrix} =
+  \begin{pmatrix}
+    g \sin\theta_1 \\
+    g \cos\theta_1 \\
+    0 
+  \end{pmatrix}
+\]
+
+\[
+  {^1}\dot{v_{c_1}} = 
+  \begin{pmatrix}
+    -l_1 \ddot{\theta_1} \\
+    0 \\
+    0 
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0 \\
+    -l_1 \dot{\theta_1}^2 \\
+    0 
+  \end{pmatrix} +
+  \begin{pmatrix}
+    g \sin\theta_1 \\
+    g \cos\theta_1 \\
+    0 
+  \end{pmatrix} =
+  \begin{pmatrix}
+    -l_1 \ddot{\theta_1} + g \sin\theta_1 \\
+    -l_1 \dot{\theta_1}^2 + g \cos\theta_1 \\
+    0 
+  \end{pmatrix}
+\]
+
+\[
+  {^1}F_1 = 
+  \begin{pmatrix}
+    -m_1 l_1 \ddot{\theta_1} + m_1 g \sin\theta_1 \\
+    -m_1 l_1 \dot{\theta_1}^2 + m_1 g \cos\theta_1 \\
+    0 
+  \end{pmatrix}
+\]
+
+\[
+  {^1}N_1 = 
+  \begin{pmatrix}
+    I_{xx1} & 0 & 0 \\
+    0 & I_{yy1} & 0 \\
+    0 & 0 & I_{zz1}
+  \end{pmatrix}
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    \ddot{\theta_1} 
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    \dot{\theta_1} 
+  \end{pmatrix} \times
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    I_{zz1} \dot{\theta_1}
+  \end{pmatrix} =
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    I_{zz1} \ddot{\theta_1} 
+  \end{pmatrix}
+\]
+
+对连杆2应用外推法求解如下：
+\[
+  {^2}\omega_2 = _1^2\mathbf{R} {^1}\omega_1 = 
+  \begin{pmatrix}
+    0 \\
+    -\dot{\theta_1} \\
+    0 
+  \end{pmatrix}
+\]
+
+\[
+  {^2}\dot{\omega_2} = 
+  \begin{pmatrix}
+    0 \\
+    -\ddot{\theta_1} \\
+    0 
+  \end{pmatrix}
+\]
+
+\[
+  {^2}\dot{v_2} = 
+  \begin{pmatrix}
+    g \sin\theta_1 - \ddot{\theta_1} (d_2 + l_2) \\
+    0 \\
+    g \cos\theta_1 - \dot{\theta_1}^2 (d_2 + l_2) 
+  \end{pmatrix} +
+  \begin{pmatrix}
+    -4 \dot{\theta_1} \dot{d_2} \\
+    0 \\
+    0 
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    \ddot{d_2} 
+  \end{pmatrix} =
+  \begin{pmatrix}
+    g \sin\theta_1 - \ddot{\theta_1} (d_2 + l_2) - 4 \dot{\theta_1} \dot{d_2} \\
+    0 \\
+    g \cos\theta_1 - \dot{\theta_1}^2 (d_2 + l_2) + \ddot{d_2}
+  \end{pmatrix}
+\]
+
+\[
+  {^2}\dot{v_{c_2}} = 
+  \begin{pmatrix}
+    g \sin\theta_1 - \ddot{\theta_1} (d_2 + l_2) - 4 \dot{\theta_1} \dot{d_2} \\
+    0 \\
+    g \cos\theta_1 - \dot{\theta_1}^2 (d_2 + l_2) + \ddot{d_2}
+  \end{pmatrix} +
+  \begin{pmatrix}
+    l_2 \ddot{\theta_1} \\
+    0 \\
+    0 
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    l_2 \dot{\theta_1}^2
+  \end{pmatrix} =
+  \begin{pmatrix}
+    g \sin\theta_1 - \ddot{\theta_1} (d_2 + l_2) - 4 \dot{\theta_1} \dot{d_2} + l_2 \ddot{\theta_1} \\
+    0 \\
+    g \cos\theta_1 - \dot{\theta_1}^2 (d_2 + l_2) + \ddot{d_2} + l_2 \dot{\theta_1}^2
+  \end{pmatrix}
+\]
+
+\[
+  {^2}F_2 = 
+  \begin{pmatrix}
+    m_2 g \sin\theta_1 - m_2 \ddot{\theta_1} (d_2 + l_2) - 4 m_2 \dot{\theta_1} \dot{d_2} + m_2 l_2 \ddot{\theta_1} \\
+    0 \\
+    m_2 g \cos\theta_1 - m_2 \dot{\theta_1}^2 (d_2 + l_2) + m_2 \ddot{d_2} + m_2 l_2 \dot{\theta_1}^2
+  \end{pmatrix}
+\]
+
+\[
+  {^2}N_2 = 
+  \begin{pmatrix}
+    I_{xx2} & 0 & 0 \\
+    0 & I_{yy2} & 0 \\
+    0 & 0 & I_{zz2}
+  \end{pmatrix}
+  \begin{pmatrix}
+    0 \\
+    -\ddot{\theta_1}  \\
+    0
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0 \\
+    -\dot{\theta_1}  \\
+    0
+  \end{pmatrix} \times
+  \begin{pmatrix}
+    0 \\
+    -I_{yy2} \dot{\theta_1} \\
+    0
+  \end{pmatrix} =
+  \begin{pmatrix}
+    0 \\
+    -I_{yy2} \ddot{\theta_1} \\
+    0 
+  \end{pmatrix}
+\]
+
+对连杆2用内推法求解如下：
+
+\[
+ {^2}f_2 = {^2}F_2 =
+ \begin{pmatrix}
+    m_2 g \sin\theta_1 - m_2 \ddot{\theta_1} (d_2 + l_2) - 4 m_2 \dot{\theta_1} \dot{d_2} + m_2 l_2 \ddot{\theta_1} \\
+    0 \\
+    m_2 g \cos\theta_1 - m_2 \dot{\theta_1}^2 (d_2 + l_2) + m_2 \ddot{d_2} + m_2 l_2 \dot{\theta_1}^2
+  \end{pmatrix}
+\]
+
+\[
+  {^2}n_2 = {^2}N_2 + {^2}P_{C2} \times {^2}F_2 =
+  \begin{pmatrix}
+    0 \\
+    -I_{yy2} \ddot{\theta_1} - l_2 [m_2 g \sin\theta_1 - m_2 \ddot{\theta_1} (d_2 + l_2) - 4 m_2 \dot{\theta_1} \dot{d_2} + m_2 l_2 \ddot{\theta_1}] \\
+    0 
+  \end{pmatrix}
+\]
+
+对连杆1用内推法求解如下：
+
+\[
+  {^1}f_1 = _2^1\mathbf{R} {^2}f_2 + {^1}F_1 =
+  \begin{pmatrix}
+    m_2 g \sin\theta_1 - m_2 \ddot{\theta_1} (d_2 + l_2) - 4 m_2 \dot{\theta_1} \dot{d_2} + m_2 l_2 \ddot{\theta_1} - m_1 l_1 \ddot{\theta_1} + m_1 g \sin\theta_1 \\
+    m_2 g \cos\theta_1 - m_2 \dot{\theta_1}^2 (d_2 + l_2) + m_2 \ddot{d_2} + m_2 l_2 \dot{\theta_1}^2 - m_1 l_1 \dot{\theta_1}^2 + m_1 g \cos\theta_1 \\
+    0 
+  \end{pmatrix}
+\]
+
+\begin{align*}
+  {^1}n_1 &= {^1}N_1 + _2^1\mathbf{R} {^2}n_2 + {^1}P_{C1} \times {^1}F_1 + {^1}P_2 \times _2^1\mathbf{R} {^2}f_2 \\
+  &=
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    \left( I_{zz1} + I_{yy2} + m_1 l_1^2 + m_2 d_2 (d_2 + 2 l_2) \right) \ddot{\theta_1} + 4 m_2 (d_2 + 2 l_2) \dot{\theta_1} \dot{d_2} - (m_1 l_1 + m_2 d_2) g \sin\theta_1
+  \end{pmatrix}
+\end{align*}
+
+取 $ {^1}n_1 $ 和 $ {^2}f_2 $ 中的 $ \hat{Z} $ 方向分量，得
+\begin{align*}
+  \tau_1 &= \left( I_{zz1} + I_{yy2} + m_1 l_1^2 + m_2 d_2 (d_2 + 2 l_2) \right) \ddot{\theta_1} + 4 m_2 (d_2 + 2 l_2) \dot{\theta_1} \dot{d_2} - (m_1 l_1 + m_2 d_2) g \sin\theta_1 \\
+  f_2 &= m_2 \ddot{d_2} - m_2 d_2 \dot{\theta_1}^2 + m_2 g \cos\theta_1
+\end{align*}
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+建立连杆坐标系如图所示：
+
+\img<q7>[0.5]{Question 7}{figs/q7.png}
+
+由图写出DH表如下：
+
+\tbl<tb7>{DH-table for question 7} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & 0 & $ \theta_1 $ \\
+    2 & $ l_1 $ & 0 & 0 & $ \theta_2 $ \\
+    3 & $ l_2 $ & 0 & 0 & $ \theta_3 $ \\
+    4 & $ l_3 $ & 0 & 0 & 0
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & l_1 \\
+    \sin\theta_2 & \cos\theta_2 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & l_2 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^0\mathbf{T} =
+  \begin{bmatrix} 
+    c_{123} & -s_{123} & 0 & l_{2} c_{12} + l_{1} c_{1} \\ 
+    s_{123} & c_{123} & 0 & l_{2} s_{12} + l_{1} s_{1} \\ 
+    0 & 0 & 1 & 0 \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+变换矩阵的微分如下：
+
+\[
+  \frac{\partial {_3^0}\mathbf{T}}{\partial \theta_1} =
+  \begin{bmatrix} 
+    -s_{123} & -c_{123} & 0 & -l_{2} s_{12} - l_{1} s_{1} \\ 
+    c_{123} & -s_{123} & 0 & l_{2} c_{12} + l_{1} c_{1} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_1^2} =
+  \begin{bmatrix} 
+    -c_{123} & s_{123} & 0 & -l_{2} c_{12} - l_{1} c_{1} \\ 
+    -s_{123} & -c_{123} & 0 & -l_{2} s_{12} - l_{1} s_{1} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_1 \partial \theta_2} =
+  \begin{bmatrix} 
+    -c_{123} & s_{123} & 0 & -l_{2} c_{12} \\ 
+    -s_{123} & -c_{123} & 0 & -l_{2} s_{12} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_1 \partial \theta_3} =
+  \begin{bmatrix} 
+    -c_{123} & s_{123} & 0 & 0 \\ 
+    -s_{123} & -c_{123} & 0 & 0 \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_3^0}\mathbf{T}}{\partial \theta_2} =
+  \begin{bmatrix} 
+    -s_{123} & -c_{123} & 0 & -l_{2} s_{12} \\ 
+    c_{123} & -s_{123} & 0 & l_{2} c_{12} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_2^2} =
+  \begin{bmatrix} 
+    -c_{123} & s_{123} & 0 & -l_{2} c_{12} \\ 
+    -s_{123} & -c_{123} & 0 & -l_{2} s_{12} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_2 \partial \theta_3} =
+  \begin{bmatrix} 
+    -c_{123} & s_{123} & 0 & 0 \\ 
+    -s_{123} & -c_{123} & 0 & 0 \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_3^0}\mathbf{T}}{\partial \theta_3} =
+  \begin{bmatrix} 
+    -s_{123} & -c_{123} & 0 & 0 \\ 
+    c_{123} & -s_{123} & 0 & 0 \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_3^2} =
+  \begin{bmatrix} 
+    -c_{123} & s_{123} & 0 & 0 \\ 
+    -s_{123} & -c_{123} & 0 & 0 \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+连杆3的伪惯量矩阵为：
+\[
+  \overline{\mathbf{I}_3} = 
+  \begin{pmatrix}
+    m_3 l_3^2 & 0 & 0 & m_3 l_3 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    m_3 l_3 & 0 & 0 & m_3
+  \end{pmatrix}
+\]
+
+关节3的伪惯量矩阵为：
+\[
+  \mathbf{I}_{a3} = 
+  \begin{pmatrix}
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 
+  \end{pmatrix}
+\]
+
+计算惯性矩阵：
+
+\begin{align*}
+  D_{31} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_3}) 
+         = l_3 m_3 (l_1 \cos(\theta_2 + \theta_3) + l_2 \cos\theta_3 + l_3)
+\end{align*}
+
+\begin{align*}
+  D_{32} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_3}) 
+         = l_3 m_3 (l_2 \cos\theta_3 + l_3)
+\end{align*}
+
+\begin{align*}
+  D_{33} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_3}) + \mathbf{I}_{a3}
+         = l_3^2 m_3
+\end{align*}
+
+计算科氏力向量：
+
+\begin{align*}
+  H_{311} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1^2}) 
+          = l_3 m_3 (l_1 \sin(\theta_2 + \theta_3) + l_2 \sin\theta_3)
+\end{align*}
+
+\begin{align*}
+  H_{312} = H_{321} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2})
+                    = l_2 l_3 m_3 \sin\theta_3
+\end{align*}
+
+\begin{align*}
+  H_{313} = H_{331} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_3}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{322} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2^2})
+          = l_2 l_3 m_3 \sin\theta_3
+\end{align*}
+
+\begin{align*}
+  H_{323} = H_{332} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2 \partial \theta_3}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{333} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_3^2}) 
+          = 0
+\end{align*}
+
+因为不考虑重力，所以重力矢量为零。
+
+综上，动力学方程为：
+\begin{align*}
+  \tau_3 
+  &=
+  \begin{pmatrix}
+    D_{31} & D_{32} & D_{33}
+  \end{pmatrix}
+  \begin{pmatrix}
+    \ddot{\theta_1} \\
+    \ddot{\theta_2} \\
+    \ddot{\theta_3} 
+  \end{pmatrix} +
+  \begin{pmatrix}
+    H_{311} & H_{312} & H_{313} & H_{321} & H_{322} & H_{323} & H_{331} & H_{332} & H_{333}  
+  \end{pmatrix}
+  \begin{pmatrix}
+    \dot{\theta_1}^2 \\
+    \dot{\theta_1} \dot{\theta_2} \\
+    \dot{\theta_1} \dot{\theta_3} \\
+    \dot{\theta_2} \dot{\theta_1} \\
+    \dot{\theta_2}^2 \\
+    \dot{\theta_2} \dot{\theta_3} \\
+    \dot{\theta_3} \dot{\theta_1} \\
+    \dot{\theta_3} \dot{\theta_2} \\
+    \dot{\theta_3}^2
+  \end{pmatrix} \\
+  &=
+  \begin{pmatrix}
+    l_3 m_3 (l_1 \cos(\theta_2 + \theta_3) + l_2 \cos\theta_3 + l_3) & l_3 m_3 (l_2 \cos\theta_3 + l_3) & l_3^2 m_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    \ddot{\theta_1} \\
+    \ddot{\theta_2} \\
+    \ddot{\theta_3} 
+  \end{pmatrix} \\
+  &+
+  \begin{pmatrix}
+    l_3 m_3 (l_1 \sin(\theta_2 + \theta_3) + l_2 \sin\theta_3) & l_2 l_3 m_3 \sin\theta_3 & 0 & l_2 l_3 m_3 \sin\theta_3 & l_2 l_3 m_3 \sin\theta_3 & 0 & 0 & 0 & 0  
+  \end{pmatrix}
+  \begin{pmatrix}
+    \dot{\theta_1}^2 \\
+    \dot{\theta_1} \dot{\theta_2} \\
+    \dot{\theta_1} \dot{\theta_3} \\
+    \dot{\theta_2} \dot{\theta_1} \\
+    \dot{\theta_2}^2 \\
+    \dot{\theta_2} \dot{\theta_3} \\
+    \dot{\theta_3} \dot{\theta_1} \\
+    \dot{\theta_3} \dot{\theta_2} \\
+    \dot{\theta_3}^2
+  \end{pmatrix} 
+\end{align*}
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+（a）
+
+由图写出DH表如下：
+
+\tbl<tb8>{DH-table for question 8} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & 0 & $ \theta_1 $ \\
+    2 & 0 & $ \frac{\pi}{2} $ & $ -l_1 $ & $ \theta_2 $ \\
+    3 & $ l_2 $ & 0 & 0 & $ \theta_3 $ \\
+    4 & 0 & $ \frac{\pi}{2} $ & $ l_3 $ & 0
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & 0 \\
+    0 & 0 & -1 & l_1 \\
+    \sin\theta_2 & \cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & l_2 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^0\mathbf{T} =
+  \begin{bmatrix} 
+    c_{1}\,c_{2} & -c_{1}\,s_{2} & s_{1} & -l_{1}\,s_{1} \\ 
+    c_{2}\,s_{1} & -s_{1}\,s_{2} & -c_{1} & l_{1}\,c_{1} \\ 
+    s_{2} & c_{2} & 0 & 0 \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^0\mathbf{T} =
+  \begin{bmatrix} 
+    c_{23}\,c_{1} & -s_{23}\,c_{1} & s_{1} & l_{2}\,c_{1}\,c_{2}-l_{1}\,s_{1} \\ 
+    c_{23}\,s_{1} & -s_{23}\,s_{1} & -c_{1} & l_{1}\,c_{1}+l_{2}\,c_{2}\,s_{1} \\ 
+    s_{23} & c_{23} & 0 & l_{2}\,s_{2} \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+变换矩阵的微分如下：
+
+\[
+  \frac{\partial {_1^0}\mathbf{T}}{\partial \theta_1} =
+  \begin{bmatrix}
+    -\sin\theta_1 & -\cos\theta_1 & 0 & 0 \\
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_1^0}\mathbf{T}}{\partial \theta_1^2} =
+  \begin{bmatrix}
+    -\cos\theta_1 & \sin\theta_1 & 0 & 0 \\
+    -\sin\theta_1 & -\cos\theta_1 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_2^0}\mathbf{T}}{\partial \theta_1} =
+  \begin{bmatrix} 
+    -s_{1} c_{2} & s_{1} s_{2} & c_{1} & -l_{1} c_{1} \\ 
+    c_{2} c_{1} & -c_{1} s_{2} & s_{1} & -l_{1} s_{1} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_2^0}\mathbf{T}}{\partial \theta_1^2} =
+  \begin{bmatrix} 
+    -c_{1} c_{2} & c_{1} s_{2} & -s_{1} & l_{1} s_{1} \\ 
+    -c_{2} s_{1} & s_{1} s_{2} & c_{1} & -l_{1} c_{1} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_2^0}\mathbf{T}}{\partial \theta_1 \partial \theta_2} =
+  \begin{bmatrix} 
+    s_{1} s_{2} & s_{1} c_{2} & 0 & 0 \\ 
+    -s_{2} c_{1} & -c_{1} c_{2} & 0 & 0 \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_2^0}\mathbf{T}}{\partial \theta_2} =
+  \begin{bmatrix} 
+    -c_{1} s_{2} & -c_{1} c_{2} & 0 & 0 \\ 
+    -s_{2} s_{1} & -s_{1} c_{2} & 0 & 0 \\ 
+    c_{2} & -s_{2} & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_2^0}\mathbf{T}}{\partial \theta_2^2} =
+  \begin{bmatrix} 
+    -c_{1} c_{2} & c_{1} s_{2} & 0 & 0 \\ 
+    -c_{2} s_{1} & s_{1} s_{2} & 0 & 0 \\ 
+    -s_{2} & -c_{2} & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_3^0}\mathbf{T}}{\partial \theta_1} =
+  \begin{bmatrix} 
+    -c_{23} s_{1} & s_{23} s_{1} & c_{1} & -l_{1} c_{1} - l_{2} c_{2} s_{1} \\ 
+    c_{23} c_{1} & -s_{23} c_{1} & s_{1} & -l_{1} s_{1} + l_{2} c_{2} c_{1} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_1^2} =
+  \begin{bmatrix} 
+    -c_{23} c_{1} & s_{23} c_{1} & -s_{1} & l_{1} s_{1} - l_{2} c_{2} c_{1} \\ 
+    -c_{23} s_{1} & s_{23} s_{1} & c_{1} & -l_{1} c_{1} - l_{2} c_{2} s_{1} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_1 \partial \theta_2} =
+  \begin{bmatrix} 
+    s_{23} s_{1} & c_{23} s_{1} & 0 & l_{2} s_{1} s_{2} \\ 
+    -s_{23} c_{1} & -c_{23} c_{1} & 0 & -l_{2} c_{1} s_{2} \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_1 \partial \theta_3} =
+  \begin{bmatrix} 
+    s_{23} s_{1} & c_{23} s_{1} & 0 & 0 \\ 
+    -s_{23} c_{1} & -c_{23} c_{1} & 0 & 0 \\ 
+    0 & 0 & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_3^0}\mathbf{T}}{\partial \theta_2} =
+  \begin{bmatrix} 
+    -s_{23} c_{1} & -c_{23} c_{1} & 0 & - l_{2} c_{1} s_{2} \\ 
+    -s_{23} s_{1} & -c_{23} s_{1} & 0 & - l_{2} s_{1} s_{2} \\ 
+    c_{23} & -s_{23} & 0 & l_{2} c_{2} \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_2^2} =
+  \begin{bmatrix} 
+    -c_{23} c_{1} & s_{23} c_{1} & 0 & - l_{2} c_{1} c_{2} \\ 
+    -c_{23} s_{1} & s_{23} s_{1} & 0 & - l_{2} s_{1} c_{2} \\ 
+    -s_{23} & -c_{23} & 0 & -l_{2} s_{2} \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_2 \partial \theta_3} =
+  \begin{bmatrix} 
+    -c_{23} c_{1} & s_{23} c_{1} & 0 & 0 \\ 
+    -c_{23} s_{1} & s_{23} s_{1} & 0 & 0 \\ 
+    -s_{23} & -c_{23} & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial {_3^0}\mathbf{T}}{\partial \theta_3} =
+  \begin{bmatrix} 
+    -s_{23} c_{1} & -c_{23} c_{1} & 0 & 0 \\ 
+    -s_{23} s_{1} & -c_{23} s_{1} & 0 & 0 \\ 
+    c_{23} & -s_{23} & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+\[
+  \frac{\partial^2 {_3^0}\mathbf{T}}{\partial \theta_3^2} =
+  \begin{bmatrix} 
+    -c_{23} c_{1} & s_{23} c_{1} & 0 & 0 \\ 
+    -c_{23} s_{1} & s_{23} s_{1} & 0 & 0 \\ 
+    -s_{23} & -c_{23} & 0 & 0 \\ 
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\]
+
+连杆1的伪惯量矩阵为：
+\[
+  \overline{\mathbf{I}_1} = 
+  \begin{pmatrix}
+    \frac{-I_{xx}^1 + I_{yy}^1 + I_{zz}^1}{2} & 0 & 0 & 0 \\
+    0 & \frac{I_{xx}^1 - I_{yy}^1 + I_{zz}^1}{2} & 0 & 0 \\
+    0 & 0 & \frac{I_{xx}^1 + I_{yy}^1 - I_{zz}^1}{2} & 0 \\
+    0 & 0 & 0 & m_1
+  \end{pmatrix}
+\]
+
+连杆2的伪惯量矩阵为：
+\[
+  \overline{\mathbf{I}_2} = 
+  \begin{pmatrix}
+    \frac{-I_{xx}^2 + I_{yy}^2 + I_{zz}^2}{2} & 0 & 0 & 0 \\
+    0 & \frac{I_{xx}^2 - I_{yy}^2 + I_{zz}^2}{2} & 0 & 0 \\
+    0 & 0 & \frac{I_{xx}^2 + I_{yy}^2 - I_{zz}^2}{2} & 0 \\
+    0 & 0 & 0 & m_2
+  \end{pmatrix}
+\]
+
+连杆3的伪惯量矩阵为：
+\[
+  \overline{\mathbf{I}_3} = 
+  \begin{pmatrix}
+    \frac{-I_{xx}^3 + I_{yy}^3 + I_{zz}^3}{2} & 0 & 0 & 0 \\
+    0 & \frac{I_{xx}^3 - I_{yy}^3 + I_{zz}^3}{2} & 0 & 0 \\
+    0 & 0 & \frac{I_{xx}^3 + I_{yy}^3 - I_{zz}^3}{2} & 0 \\
+    0 & 0 & 0 & m_3
+  \end{pmatrix}
+\]
+
+关节1的伪惯量矩阵为：
+\[
+  \mathbf{I}_{a1} = 
+  \begin{pmatrix}
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 
+  \end{pmatrix}
+\]
+
+关节2的伪惯量矩阵为：
+\[
+  \mathbf{I}_{a2} = 
+  \begin{pmatrix}
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 
+  \end{pmatrix}
+\]
+
+关节3的伪惯量矩阵为：
+\[
+  \mathbf{I}_{a3} = 
+  \begin{pmatrix}
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 
+  \end{pmatrix}
+\]
+
+计算惯性矩阵：
+
+\begin{align*}
+  D_{11} &= \sum_{j=1}^3 [\operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial ({^0_j}\mathbf{T})^T}{\partial \theta_1}) + \mathbf{I}_{a1}] 
+         = [\operatorname{tr} (\frac{\partial {^0_1}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_1} \frac{\partial ({^0_1}\mathbf{T})^T}{\partial \theta_1}) + \mathbf{I}_{a1}] + [\operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial ({^0_2}\mathbf{T})^T}{\partial \theta_1}) + \mathbf{I}_{a1}] + [\operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_1}) + \mathbf{I}_{a1}] \\
+         &= \frac{I_{xx}^2}{2} + \frac{I_{xx}^3}{2} + \frac{I_{yy}^2}{2} + \frac{I_{yy}^3}{2} + I_{zz}^1 - \frac{I_{xx}^3 \cos(2\theta_2 + 2\theta_3)}{2} + \frac{I_{yy}^3 \cos(2\theta_2 + 2\theta_3)}{2} + l_1^2 m_2 + l_1^2 m_3 + \frac{l_2^2 m_3}{2} - \\
+         & \frac{I_{xx}^2 \cos(2\theta_2)}{2} + \frac{I_{yy}^2 \cos(2\theta_2)}{2} + \frac{l_2^2 m_3 \cos(2\theta_2)}{2}
+\end{align*}
+
+\begin{align*}
+  D_{12} = D_{21} = \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial ({^0_j}\mathbf{T})^T}{\partial \theta_2}) 
+                  = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial ({^0_2}\mathbf{T})^T}{\partial \theta_2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_2}) 
+                  = l_1 l_2 m_3 \sin\theta_2
+\end{align*}
+
+\begin{align*}
+  D_{13} = D_{31} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_3}) 
+                  = 0
+\end{align*}
+
+\begin{align*}
+  D_{22} = \sum_{j=2}^3 [\operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_j} \frac{\partial ({^0_j}\mathbf{T})^T}{\partial \theta_2}) + \mathbf{I}_{a2}]
+         = [\operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_2} \frac{\partial ({^0_2}\mathbf{T})^T}{\partial \theta_2}) + \mathbf{I}_{a2}] + [\operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_2}) + \mathbf{I}_{a2}] 
+         = m_3 l_2^2 + I_{zz}^2 + I_{zz}^3
+\end{align*}
+
+\begin{align*}
+  D_{23} = D_{32} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_3}) 
+                  = I_{zz}^3
+\end{align*}
+
+\begin{align*}
+  D_{33} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial ({^0_3}\mathbf{T})^T}{\partial \theta_3}) + \mathbf{I}_{a3}
+         = I_{zz}^3
+\end{align*}
+
+计算科氏力向量：
+
+\begin{align*}
+  H_{111} = \sum_{j=1}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_1^2}) 
+          = \operatorname{tr} (\frac{\partial {^0_1}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_1} \frac{\partial^2 ({^0_1}\mathbf{T})^T}{\partial \theta_1^2}) + \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1^2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1^2})
+          = 0
+\end{align*}
+
+\begin{align*}
+  H_{112} = H_{121} &= \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2}) 
+                    = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2}) \\
+                    &= \frac{I_{xx}^3 \sin(2\theta_2 + 2\theta_3)}{2} - \frac{I_{yy}^3 \sin(2\theta_2 + 2\theta_3)}{2} + \frac{I_{xx}^2 \sin(2\theta_2)}{2} - \frac{I_{yy}^2 \sin(2\theta_2)}{2} - \frac{l_2^2 m_3 \sin(2\theta_2)}{2}
+\end{align*}
+
+\begin{align*}
+  H_{113} = H_{131} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_3}) 
+                    = \frac{\sin(2\theta_2 + 2\theta_3) (I_{xx}^3 - I_{yy}^3)}{2}
+\end{align*}
+
+\begin{align*}
+  H_{122} = \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_2^2}) 
+          = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_2^2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2^2})
+          = l_1 l_2 m_3 \cos\theta_2
+\end{align*}
+
+\begin{align*}
+  H_{123} = H_{132} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2 \partial \theta_3}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{133} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_3^2}) 
+          = 0
+\end{align*}
+
+\begin{align*}
+  H_{211} &= \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_1^2}) 
+          = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1^2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1^2}) \\
+          &= \frac{m_3 \sin(2\theta_2) l_2^2}{2} - \frac{I_{xx}^3 \sin(2\theta_2 + 2\theta_3)}{2} + \frac{I_{yy}^3 \sin(2\theta_2 + 2\theta_3)}{2} - \frac{I_{xx}^2 \sin(2\theta_2)}{2} + \frac{I_{yy}^2 \sin(2\theta_2)}{2}
+\end{align*}
+
+\begin{align*}
+  H_{212} = H_{221} = \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2}) 
+                    = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2})
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{213} = H_{231} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_3}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{222} = \sum_{j=2}^3 \operatorname{tr} (\frac{\partial {^0_j}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_j} \frac{\partial^2 ({^0_j}\mathbf{T})^T}{\partial \theta_2^2}) 
+          = \operatorname{tr} (\frac{\partial {^0_2}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_2} \frac{\partial^2 ({^0_2}\mathbf{T})^T}{\partial \theta_2^2}) + \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2^2})
+          = 0
+\end{align*}
+
+\begin{align*}
+  H_{223} = H_{232} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2 \partial \theta_3}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{233} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_3^2}) 
+          = 0
+\end{align*}
+
+\begin{align*}
+  H_{311} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1^2}) 
+          = -\frac{\sin(2\theta_2 + 2\theta_3) (I_{xx}^3 - I_{yy}^3)}{2}
+\end{align*}
+
+\begin{align*}
+  H_{312} = H_{321} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_2})
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{313} = H_{331} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_1 \partial \theta_3}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{322} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2^2})
+          = 0
+\end{align*}
+
+\begin{align*}
+  H_{323} = H_{332} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_2 \partial \theta_3}) 
+                    = 0
+\end{align*}
+
+\begin{align*}
+  H_{333} = \operatorname{tr} (\frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} \overline{\mathbf{I}_3} \frac{\partial^2 ({^0_3}\mathbf{T})^T}{\partial \theta_3^2}) 
+          = 0
+\end{align*}
+
+计算重力矢量：
+
+连杆1质心的位置矢量 $ {^1}\mathbf{r}_{c1} = \begin{pmatrix}
+    0 \\
+    l_1 - c_1 \\
+    0 \\
+    1
+  \end{pmatrix} $ 
+
+连杆2质心的位置矢量 $ {^2}\mathbf{r}_{c2} = \begin{pmatrix}
+    c_2 \\
+    0 \\
+    0 \\
+    1
+  \end{pmatrix} $ 
+
+连杆3质心的位置矢量 $ {^2}\mathbf{r}_{c3} = \begin{pmatrix}
+    0 \\
+    -c_3 \\
+    0 \\
+    1
+  \end{pmatrix} $ 
+
+重力矢量 $ \mathbf{g} = \begin{pmatrix}
+    0 \\
+    0 \\
+    -g \\
+    0
+  \end{pmatrix} $
+
+\begin{align*}
+  G_1 = \sum_{j=1}^3 (-m_j \mathbf{g}^T \frac{\partial {^0_j}\mathbf{T}}{\partial \theta_1} {^j}\mathbf{r}_{cj}) 
+      = -m_1 \mathbf{g}^T \frac{\partial {^0_1}\mathbf{T}}{\partial \theta_1} {^1}\mathbf{r}_{c1} - m_2 \mathbf{g}^T \frac{\partial {^0_2}\mathbf{T}}{\partial \theta_1} {^2}\mathbf{r}_{c2} - m_3 \mathbf{g}^T \frac{\partial {^0_3}\mathbf{T}}{\partial \theta_1} {^3}\mathbf{r}_{c3}
+      = 0
+\end{align*}
+
+\begin{align*}
+  G_2 = \sum_{j=2}^3 (-m_j \mathbf{g}^T \frac{\partial {^0_j}\mathbf{T}}{\partial \theta_2} {^j}\mathbf{r}_{cj}) 
+      = - m_2 \mathbf{g}^T \frac{\partial {^0_2}\mathbf{T}}{\partial \theta_2} {^2}\mathbf{r}_{c2} - m_3 \mathbf{g}^T \frac{\partial {^0_3}\mathbf{T}}{\partial \theta_2} {^3}\mathbf{r}_{c3}
+      = g ( c_2 m_2 \cos\theta_2 + l_2 m_3 \cos\theta_2 + c_3 m_3 \sin(\theta_2 + \theta_3))
+\end{align*}
+
+\begin{align*}
+  G_3 = - m_3 \mathbf{g}^T \frac{\partial {^0_3}\mathbf{T}}{\partial \theta_3} {^3}\mathbf{r}_{c3}
+      = g c_3 m_3 \sin(\theta_2 + \theta_3)
+\end{align*}
+
+综上，动力学方程为：
+\begin{align*}
+  \begin{pmatrix}
+    \tau_1 \\
+    \tau_2 \\
+    \tau_3 
+  \end{pmatrix} =
+  \begin{pmatrix}
+    D_{11} & D_{12} & D_{13} \\
+    D_{21} & D_{22} & D_{23} \\
+    D_{31} & D_{32} & D_{33}
+  \end{pmatrix}
+  \begin{pmatrix}
+    \ddot{\theta_1} \\
+    \ddot{\theta_2} \\
+    \ddot{\theta_3} 
+  \end{pmatrix} +
+  \begin{pmatrix}
+    H_{111} & H_{112} & H_{113} & H_{121} & H_{122} & H_{123} & H_{131} & H_{132} & H_{133} \\
+    H_{211} & H_{212} & H_{213} & H_{221} & H_{222} & H_{223} & H_{231} & H_{232} & H_{233} \\
+    H_{311} & H_{312} & H_{313} & H_{321} & H_{322} & H_{323} & H_{331} & H_{332} & H_{333}  
+  \end{pmatrix}
+  \begin{pmatrix}
+    \dot{\theta_1}^2 \\
+    \dot{\theta_1} \dot{\theta_2} \\
+    \dot{\theta_1} \dot{\theta_3} \\
+    \dot{\theta_2} \dot{\theta_1} \\
+    \dot{\theta_2}^2 \\
+    \dot{\theta_2} \dot{\theta_3} \\
+    \dot{\theta_3} \dot{\theta_1} \\
+    \dot{\theta_3} \dot{\theta_2} \\
+    \dot{\theta_3}^2
+  \end{pmatrix} +
+  \begin{pmatrix}
+    G_1 \\
+    G_2 \\
+    G_3
+  \end{pmatrix}
+\end{align*}
+
+（b）
+
+关节空间的 $ \mathbf{D}, \mathbf{H}, \mathbf{G} $ 矩阵分别为：
+{
+\small
+\[
+  \mathbf{D} =
+  \begin{pmatrix}
+    \frac{I_{xx}^2}{2} + \frac{I_{xx}^3}{2} + \frac{I_{yy}^2}{2} + \frac{I_{yy}^3}{2} + I_{zz}^1 - \frac{I_{xx}^3 \cos(2\theta_2 + 2\theta_3)}{2} + \frac{I_{yy}^3 \cos(2\theta_2 + 2\theta_3)}{2} + l_1^2 m_2 + l_1^2 m_3 + \frac{l_2^2 m_3}{2} - \frac{I_{xx}^2 \cos(2\theta_2)}{2} + \frac{I_{yy}^2 \cos(2\theta_2)}{2} + \frac{l_2^2 m_3 \cos(2\theta_2)}{2} & l_1 l_2 m_3 \sin\theta_2 & 0 \\
+    l_1 l_2 m_3 \sin\theta_2 & m_3 l_2^2 + I_{zz}^2 + I_{zz}^3 & I_{zz}^3 \\
+    0 & I_{zz}^3 & I_{zz}^3
+  \end{pmatrix}
+\]
+}
+
+{
+\small
+\[
+  \mathbf{H} =
+  \begin{pmatrix}
+    [I_{xx}^3 \sin(2\theta_2 + 2\theta_3) - I_{yy}^3 \sin(2\theta_2 + 2\theta_3) + I_{xx}^2 \sin(2\theta_2) - I_{yy}^2 \sin(2\theta_2) - l_2^2 m_3 \sin(2\theta_2)] \dot{\theta_1} \dot{\theta_2} + [\sin(2\theta_2 + 2\theta_3) (I_{xx}^3 - I_{yy}^3)] \dot{\theta_1} \dot{\theta_3} + [l_1 l_2 m_3 \cos\theta_2] \dot{\theta_2}^2 \\
+    [\frac{m_3 \sin(2\theta_2) l_2^2}{2} - \frac{I_{xx}^3 \sin(2\theta_2 + 2\theta_3)}{2} + \frac{I_{yy}^3 \sin(2\theta_2 + 2\theta_3)}{2} - \frac{I_{xx}^2 \sin(2\theta_2)}{2} + \frac{I_{yy}^2 \sin(2\theta_2)}{2}] \dot{\theta_1}^2 \\
+    [-\frac{\sin(2\theta_2 + 2\theta_3) (I_{xx}^3 - I_{yy}^3)}{2}] \dot{\theta_1}^2
+  \end{pmatrix}
+\]
+}
+
+\[
+  \mathbf{G} =
+  \begin{pmatrix}
+    0 \\
+    g ( c_2 m_2 \cos\theta_2 + l_2 m_3 \cos\theta_2 + c_3 m_3 \sin(\theta_2 + \theta_3)) \\
+    g c_3 m_3 \sin(\theta_2 + \theta_3)
+  \end{pmatrix}
+\]
+
+求得其雅可比矩阵为
+{
+\small
+\[
+  \mathbf{J} =
+  \begin{bmatrix} 
+    -l_{3}\,\left(c_{2}\,s_{1}\,s_{3}+c_{3}\,s_{1}\,s_{2}\right)-l_{1}\,c_{1}-l_{2}\,c_{2}\,s_{1} & c_{1}\,\left(l_{3}\,c_{23}-l_{2}\,s_{2}\right) & l_{3}\,c_{23}\,c_{1} \\ 
+    l_{3}\,\left(c_{1}\,c_{2}\,s_{3}+c_{1}\,c_{3}\,s_{2}\right)-l_{1}\,s_{1}+l_{2}\,c_{1}\,c_{2} & s_{1}\,\left(l_{3}\,c_{23}-l_{2}\,s_{2}\right) & l_{3}\,c_{23}\,s_{1} \\ 
+    0 & l_{3}\,s_{23}+l_{2}\,c_{2} & l_{3}\,s_{23}
+  \end{bmatrix}
+\]
+}
+
+雅可比逆矩阵为
+{
+\small
+\[
+  \mathbf{J}^{-1} =
+  \begin{bmatrix} 
+    -\frac{s_{1}}{l_{3}\,s_{23}+l_{2}\,c_{2}} & \frac{c_{1}}{l_{3}\,s_{23}+l_{2}\,c_{2}} & 0 \\ 
+    -\frac{l_{2}\,\left(c_{1}\,s_{3}\,{c_{2}}^2+c_{1}\,c_{3}\,s_{2}\,c_{2}\right)+l_{3}\,c_{1}\,{c_{2}}^2+l_{3}\,c_{1}\,{c_{3}}^2-2\,l_{3}\,c_{1}\,{c_{2}}^2\,{c_{3}}^2-l_{1}\,c_{2}\,s_{1}\,s_{3}-l_{1}\,c_{3}\,s_{1}\,s_{2}+2\,l_{3}\,c_{1}\,c_{2}\,c_{3}\,s_{2}\,s_{3}}{l_{2}\,c_{3}\,\left(l_{3}\,s_{23}+l_{2}\,c_{2}\right)} & -\frac{l_{2}\,\left(s_{1}\,s_{3}\,{c_{2}}^2+c_{3}\,s_{1}\,s_{2}\,c_{2}\right)+l_{3}\,{c_{2}}^2\,s_{1}+l_{3}\,{c_{3}}^2\,s_{1}-2\,l_{3}\,{c_{2}}^2\,{c_{3}}^2\,s_{1}+l_{1}\,c_{1}\,c_{2}\,s_{3}+l_{1}\,c_{1}\,c_{3}\,s_{2}+2\,l_{3}\,c_{2}\,c_{3}\,s_{1}\,s_{2}\,s_{3}}{l_{2}\,c_{3}\,\left(l_{3}\,s_{23}+l_{2}\,c_{2}\right)} & \frac{c_{23}}{l_{2}\,c_{3}} \\ 
+    \frac{c_{1}\,s_{2}}{l_{2}}+\frac{l_{2}\,c_{1}\,c_{2}-l_{1}\,s_{1}+l_{3}\,c_{1}\,c_{2}\,s_{3}}{l_{2}\,l_{3}\,c_{3}} & \frac{s_{1}\,s_{2}}{l_{2}}+\frac{l_{1}\,c_{1}+l_{2}\,c_{2}\,s_{1}+l_{3}\,c_{2}\,s_{1}\,s_{3}}{l_{2}\,l_{3}\,c_{3}} & -\frac{l_{3}\,c_{23}-l_{2}\,s_{2}}{l_{2}\,l_{3}\,c_{3}}
+  \end{bmatrix}
+\]
+}
+
+雅可比矩阵对时间的导数为
+{
+\small
+\begin{align*}
+  \dot{\mathbf{J}} &= \frac{\partial \mathbf{J}}{\partial \theta_1} \dot{\theta_1} + \frac{\partial \mathbf{J}}{\partial \theta_2} \dot{\theta_2} + \frac{\partial \mathbf{J}}{\partial \theta_3} \dot{\theta_3} \\
+  &=
+  \begin{bmatrix} 
+    - \dot{\theta}_1\left(l_2s_{1}s_{2} - l_1s_{1} + l_3s_{1}s_{2}s_{3} + l_3s_{1}s_{3}s_{2}\right) - \dot{\theta}_2s_{1}\left(l_3c_{23} - l_2s_{2}\right) - l_3\dot{\theta}_3c_{23}s_{1} & - \dot{\theta}_2s_{1}\left(l_3s_{23} + l_2s_{2}\right) - \dot{\theta}_1s_{1}\left(l_3c_{23} - l_2s_{2}\right) - l_3\dot{\theta}_3s_{23}s_{1} & - l_3\dot{\theta}_1c_{23}s_{1} - l_3\dot{\theta}_2s_{23}s_{1} - l_3\dot{\theta}_3s_{23}s_{1} \\ 
+    \dot{\theta}_2s_{1}\left(l_3c_{23} - l_2s_{2}\right) - \dot{\theta}_1\left(l_1s_{1} + l_2s_{2}s_{1} + l_3s_{2}s_{1}s_{3} + l_3s_{3}s_{1}s_{2}\right) + l_3\dot{\theta}_3c_{23}s_{1} & \dot{\theta}_1s_{1}\left(l_3c_{23} - l_2s_{2}\right) - \dot{\theta}_2s_{1}\left(l_3s_{23} + l_2s_{2}\right) - l_3\dot{\theta}_3s_{23}s_{1} & l_3\dot{\theta}_1c_{23}s_{1} - l_3\dot{\theta}_2s_{23}s_{1} - l_3\dot{\theta}_3s_{23}s_{1} \\ 
+    0 & \dot{\theta}_2\left(l_3c_{23} - l_2s_{2}\right) + l_3\dot{\theta}_3c_{23} & l_3c_{23}\left(\dot{\theta}_2 + \dot{\theta}_3\right)
+  \end{bmatrix}
+\end{align*}
+}
+
+则操作空间中的 $ \mathbf{V}, \mathbf{u}, \mathbf{p} $ 矩阵分别为：
+\[
+  \mathbf{V} = \mathbf{J}^{-T} \mathbf{D} \mathbf{J}^{-1}
+\]
+
+\[
+  \mathbf{u} = \mathbf{J}^{-T} \mathbf{H} - \mathbf{V} \dot{\mathbf{J}} \dot{\mathbf{q}}
+\]
+
+{
+\small
+\begin{align*}
+  \mathbf{p} &= \mathbf{J}^{-T} \mathbf{G} \\
+  &=
+  \begin{bmatrix} 
+    -\frac{g\,\left(c_{2}\,m_{2}\,c_{2}+l_{2}\,m_{3}\,c_{2}+c_{3}\,m_{3}\,s_{23}\right)\,\left(l_{3}\,c_{1}\,{c_{2}}^2+l_{3}\,c_{1}\,{c_{3}}^2-2\,l_{3}\,c_{1}\,{c_{2}}^2\,{c_{3}}^2-l_{1}\,c_{2}\,s_{1}\,s_{3}-l_{1}\,c_{3}\,s_{1}\,s_{2}+l_{2}\,c_{1}\,{c_{2}}^2\,s_{3}+l_{2}\,c_{1}\,c_{2}\,c_{3}\,s_{2}+2\,l_{3}\,c_{1}\,c_{2}\,c_{3}\,s_{2}\,s_{3}\right)}{l_{2}\,c_{3}\,\left(l_{3}\,s_{23}+l_{2}\,c_{2}\right)}+\frac{c_{3}\,g\,m_{3}\,s_{23}\,\left(l_{2}\,c_{1}\,c_{2}-l_{1}\,s_{1}+l_{3}\,c_{1}\,c_{2}\,s_{3}+l_{3}\,c_{1}\,c_{3}\,s_{2}\right)}{l_{2}\,l_{3}\,c_{3}} \\ 
+    \frac{c_{3}\,g\,m_{3}\,s_{23}\,\left(l_{1}\,c_{1}+l_{2}\,c_{2}\,s_{1}+l_{3}\,c_{2}\,s_{1}\,s_{3}+l_{3}\,c_{3}\,s_{1}\,s_{2}\right)}{l_{2}\,l_{3}\,c_{3}}-\frac{g\,\left(c_{2}\,m_{2}\,c_{2}+l_{2}\,m_{3}\,c_{2}+c_{3}\,m_{3}\,s_{23}\right)\,\left(l_{3}\,{c_{2}}^2\,s_{1}+l_{3}\,{c_{3}}^2\,s_{1}-2\,l_{3}\,{c_{2}}^2\,{c_{3}}^2\,s_{1}+l_{1}\,c_{1}\,c_{2}\,s_{3}+l_{1}\,c_{1}\,c_{3}\,s_{2}+l_{2}\,{c_{2}}^2\,s_{1}\,s_{3}+l_{2}\,c_{2}\,c_{3}\,s_{1}\,s_{2}+2\,l_{3}\,c_{2}\,c_{3}\,s_{1}\,s_{2}\,s_{3}\right)}{l_{2}\,c_{3}\,\left(l_{3}\,s_{23}+l_{2}\,c_{2}\right)} \\ 
+    \frac{g\,\left(c_{2}\,l_{3}\,m_{2}+c_{3}\,l_{2}\,m_{3}+l_{2}\,l_{3}\,m_{3}\right)}{2\,l_{2}\,l_{3}}+\frac{g\,\left(c_{2}\,l_{3}\,m_{2}\,\cos\left(2\,\theta _{2}+\theta _{3}\right)-c_{3}\,l_{2}\,m_{3}\,\cos\left(2\,\theta _{2}+\theta _{3}\right)+l_{2}\,l_{3}\,m_{3}\,\cos\left(2\,\theta _{2}+\theta _{3}\right)\right)}{2\,l_{2}\,l_{3}\,c_{3}}
+  \end{bmatrix}
+\end{align*}
+}
+
+所以操作空间的动力学方程为：
+\[
+  \begin{pmatrix}
+    F_x \\
+    F_y \\
+    F_z
+  \end{pmatrix} =
+  \mathbf{V}
+  \begin{pmatrix}
+    \ddot{x} \\
+    \ddot{y} \\
+    \ddot{z}
+  \end{pmatrix} +
+  \mathbf{u} +
+  \mathbf{p}
+\]
+
+\end{sol}
+
+\end{document}

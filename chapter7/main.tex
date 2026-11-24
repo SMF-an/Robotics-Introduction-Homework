@@ -1,0 +1,149 @@
+\documentclass{homework}
+\author{Mufan Shi 23307130075}
+\class{Introduction to Robotics}
+\date{\today}
+\title{Homework of Chapter7}
+
+\usepackage{ctex} 
+\usepackage{subcaption}
+\graphicspath{{./media/}}
+
+\begin{document} \maketitle
+
+\question
+
+\begin{sol}
+
+对于第一个曲线段，$ \ddot{\theta_1} = 80.0 $
+
+求出起始点处过渡区段的持续时间
+\[
+  t_1 = t_{d12} - \sqrt{t_{d12}^2 - \frac{2(\theta_2 - \theta_1)}{\ddot{\theta_1}}} = 1 - \sqrt{1 - \frac{2(15 - 10)}{80.0}} = 0.065
+\]
+
+求出速度 $ \dot{\theta_{12}} $
+\[
+  \dot{\theta_{12}} = \frac{\theta_2 - \theta_1}{t_{d12} - \frac{1}{2} t_1} = \frac{15 - 10}{1 - 0.5(0.065)} = 5.168
+\]  
+
+对于最末曲线段，$ \ddot{\theta_3} = -80.0 $
+
+求出 $ t_3 $
+\[
+  t_3 = 1 - \sqrt{1 - \frac{2(40 - 15)}{80.0}} = 0.388
+\]
+
+求出速度 $ \dot{\theta_{23}} $
+\[
+  \dot{\theta_{23}} = \frac{40 - 15}{1 - 0.5(0.388)} = 31.017
+\]
+
+接着，我们得到 $ \ddot{\theta_2} = 80.0 $
+
+求出 $ t_2 $
+\[
+  t_2 = \frac{31.017 - 5.168}{80.0} = 0.323
+\]
+
+位置、速度和加速度图形如图所示：
+\img<q1>[0.95]{Question 1}{figs/q1.png}
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+对于第1个曲线段，列出4个方程为
+\begin{align*}
+  \theta_0 &= a_0 \\
+  \theta_v &= a_0 + a_1 t + a_2 t^2 + a_3 t^3 \\
+  \dot{\theta_0} &= a_1 \\
+  \dot{\theta_v} &= a_1 + 2 a_2 t + 3 a_3 t^2
+\end{align*}
+
+已知 $ \theta_0 = 5, \theta_v = 15, \dot{\theta_0} = 0, \dot{\theta_v} = 0, t = 2 $，解得
+\begin{align*}
+  a_0 &= 5 \\
+  a_1 &= 0 \\
+  a_2 &= 7.5 \\
+  a_3 &= -2.5
+\end{align*}
+
+对于第2个曲线段，列出4个方程为
+\begin{align*}
+  \theta_v &= b_0 \\
+  \theta_g &= b_0 + b_1 t + b_2 t^2 + b_3 t^3 \\
+  \dot{\theta_v} &= b_1 \\
+  \dot{\theta_g} &= b_1 + 2 b_2 t + 3 b_3 t^2
+\end{align*}
+
+已知 $ \theta_v = 15, \theta_g = -15, \dot{\theta_v} = 0, \dot{\theta_g} = 0, t = 2 $，解得
+\begin{align*}
+  b_0 &= 15 \\
+  b_1 &= 0 \\
+  b_2 &= -22.5 \\
+  b_3 &= 7.5
+\end{align*}
+
+位置、速度和加速度图形如图所示：
+\img<q2>[0.95]{Question 2}{figs/q2.png}
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+对于第一个曲线段，$ \ddot{\theta_1} = 60.0 $
+
+求出起始点处过渡区段的持续时间
+\[
+  t_1 = t_{d12} - \sqrt{t_{d12}^2 - \frac{2(\theta_2 - \theta_1)}{\ddot{\theta_1}}} = 2 - \sqrt{4 - \frac{2(20 - 5)}{60.0}} = 0.129
+\]
+
+求出速度 $ \dot{\theta_{12}} $
+\[
+  \dot{\theta_{12}} = \frac{\theta_2 - \theta_1}{t_{d12} - \frac{1}{2} t_1} = \frac{20 - 5}{2 - 0.5(0.129)} = 7.750
+\]  
+
+对于最末曲线段，$ \ddot{\theta_3} = 60.0 $
+
+求出 $ t_3 $
+\[
+  t_3 = 2 - \sqrt{4 + \frac{2(-10 - 20)}{60.0}} = 0.268
+\]
+
+求出速度 $ \dot{\theta_{23}} $
+\[
+  \dot{\theta_{23}} = \frac{-10 - 20}{2 - 0.5(0.268)} = -16.077
+\]
+
+接着，我们得到 $ \ddot{\theta_2} = -60.0 $
+
+求出 $ t_2 $
+\[
+  t_2 = \frac{-16.077 - 7.750}{-60.0} = 0.397
+\]
+
+位置、速度和加速度图形如图所示：
+\img<q3>[0.95]{Question 3}{figs/q3.png}
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+$ ^S\chi_G $ 的前3维是位置分量，直接取 $ ^S\mathbf{P}_{GORG} $ 即可。后3维是姿态分量，采用角度 - 轴表示法：其中旋转轴为 $ \hat{Z} $，即 $ (0, 0, 1)^T $，旋转角度为 $ 30^\circ $，所以姿态分量为 $ (0, 0, 30^\circ)^T $。
+
+最终结果为
+\[
+^S\chi_G = \begin{bmatrix}
+   10 \\ 20 \\ 30 \\ 0 \\ 0 \\ 30^\circ
+\end{bmatrix}
+\]
+
+\end{sol}
+
+\end{document}

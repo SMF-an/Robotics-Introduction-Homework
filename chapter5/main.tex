@@ -1,0 +1,1355 @@
+\documentclass{homework}
+\author{Mufan Shi 23307130075}
+\class{Introduction to Robotics}
+\date{\today}
+\title{Homework of Chapter5}
+
+\usepackage{ctex} 
+\usepackage{subcaption}
+\graphicspath{{./media/}}
+
+\begin{document} \maketitle
+
+\question
+
+\begin{sol}
+
+我们先解释一下这个式子的含义。$ {^A}\mathbf{V}_Q $ 表示点Q相对于坐标系A的速度，$ {^A}\mathbf{\Omega}_B $ 表示坐标系B相对于坐标系A的旋转角速度，$ {^A}\mathbf{Q} $ 表示点Q的位置在坐标系A下的描述。这个式子讨论的是两坐标系原点重合、相对线速度为0时，从坐标系A看固定在坐标系B中的Q点，这个点的速度如何随系统的转动变化。
+
+\img<q1>[0.5]{Question 1}{figs/Q1.jpg}
+
+假设在 $ \Delta t $ 时间内，坐标系B相对于坐标系A旋转了一个小角度 $ {^A}\mathbf{\Omega}_B \Delta t $，点Q从 $ Q(t) $ 旋转到 $ Q(t + \Delta t) $，所以Q的位移为 $ \Delta Q = Q(t + \Delta t) - Q(t) $。
+
+首先从方向上看，$ \Delta Q $ 一定垂直于 $ {^A}\mathbf{Q} $ 和 $ {^A}\mathbf{\Omega}_B $。
+
+其次再从大小上看，
+\[
+  |\Delta Q| = (|{^A}\mathbf{Q}| \sin \theta)(|{^A}\mathbf{\Omega}_B| \Delta t)
+\]
+
+综合以上大小和方向，我们可以得到
+\[
+  \Delta Q = ({^A}\mathbf{\Omega}_B \times {^A}\mathbf{Q}) \Delta t
+\]
+
+所以
+\[
+  {^A}\mathbf{V}_Q = \lim_{\Delta t \to 0} \frac{\Delta Q}{\Delta t} = {^A}\mathbf{\Omega}_B \times {^A}\mathbf{Q}
+\]
+
+证毕。
+
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+问题(a):
+
+建立连杆坐标系如图所示：
+
+\img<q2>[0.5]{Question 2}{figs/Q2.png}
+
+由图写出DH表如下：
+
+\tbl<tb2>{DH-table for question 2} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & 0 & $ \theta_1 $ \\
+    2 & $ L_1 $ & $ \frac{\pi}{2} $ & 0 & $ \theta_2 $ \\
+    3 & $ L_2 $ & 0 & 0 & $ \theta_3 $ \\
+    4 & $ L_3 $ & 0 & 0 & 0 
+  }
+
+问题(b):
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & L_1 \\
+    0 & 0 & -1 & 0 \\
+    \sin\theta_2 & \cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & L_2 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+末端在各坐标系中的变换矩阵为：
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & L_3 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & L_2 + L_3 \cos\theta_3 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & L_3 \sin\theta_3 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos(\theta_2 + \theta_3) & -\sin(\theta_2 + \theta_3) & 0 & L_1 + L_2 \cos\theta_2 + L_3 \cos(\theta_2 + \theta_3) \\
+    0 & 0 & -1 & 0 \\
+    \sin(\theta_2 + \theta_3) & \cos(\theta_2 + \theta_3) & 0 & L_2 \sin\theta_2 + L_3 \sin(\theta_2 + \theta_3) \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\left(\theta _{2}+\theta _{3}\right)\,\cos\left(\theta _{1}\right) & -\sin\left(\theta _{2}+\theta _{3}\right)\,\cos\left(\theta _{1}\right) & \sin\left(\theta _{1}\right) & \cos\left(\theta _{1}\right)\,\left(l_{1}+l_{3}\,\cos\left(\theta _{2}+\theta _{3}\right)+l_{2}\,\cos\left(\theta _{2}\right)\right) \\ 
+    \cos\left(\theta _{2}+\theta _{3}\right)\,\sin\left(\theta _{1}\right) & -\sin\left(\theta _{2}+\theta _{3}\right)\,\sin\left(\theta _{1}\right) & -\cos\left(\theta _{1}\right) & \sin\left(\theta _{1}\right)\,\left(l_{1}+l_{3}\,\cos\left(\theta _{2}+\theta _{3}\right)+l_{2}\,\cos\left(\theta _{2}\right)\right) \\ 
+    \sin\left(\theta _{2}+\theta _{3}\right) & \cos\left(\theta _{2}+\theta _{3}\right) & 0 & l_{3}\,\sin\left(\theta _{2}+\theta _{3}\right)+l_{2}\,\sin\left(\theta _{2}\right) \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+使用微分变换法构造雅可比矩阵：
+
+雅可比矩阵的第一列 $ {^4}\mathbf{J}_1 $ 由 $ _4^1\mathbf{T} $ 决定，且关节1为转动关节，所以
+\[
+  {^4}\mathbf{J}_1 =
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    - L_1 - L_3 \cos(\theta_2 + \theta_3) - L_2 \cos(\theta_2) \\
+    \sin(\theta_2 + \theta_3) \\
+    \cos(\theta_2 + \theta_3) \\
+    0
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第二列 $ {^4}\mathbf{J}_2 $ 由 $ _4^2\mathbf{T} $ 决定，且关节2为转动关节，所以
+\[
+  {^4}\mathbf{J}_2 =
+  \begin{bmatrix}
+    L_2 \sin(\theta_3) \\
+    L_3 + L_2 \cos(\theta_3) \\
+    0 \\
+    0 \\
+    0 \\
+    1
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第三列 $ {^4}\mathbf{J}_3 $ 由 $ _4^3\mathbf{T} $ 决定，且关节3为转动关节，所以
+\[
+  {^4}\mathbf{J}_3 =
+  \begin{bmatrix}
+    0 \\
+    L_3 \\
+    0 \\
+    0 \\
+    0 \\
+    1
+  \end{bmatrix}
+\]
+
+综上，雅可比矩阵为
+\[
+  {^4}\mathbf{J} =
+  \begin{bmatrix}
+    0 & L_2 \sin(\theta_3) & 0 \\
+    0 & L_3 + L_2 \cos(\theta_3) & L_3 \\
+    - L_1 - L_3 \cos(\theta_2 + \theta_3) - L_2 \cos(\theta_2) & 0 & 0 \\
+    \sin(\theta_2 + \theta_3) & 0 & 0 \\
+    \cos(\theta_2 + \theta_3) & 0 & 0 \\
+    0 & 1 & 1
+  \end{bmatrix}
+\]
+
+通过定义法构造雅可比矩阵：
+
+由变换矩阵 $ _4^0\mathbf{T} $ 可以提取出末端在基坐标系中的位置向量和旋转矩阵，对其求导便可得到雅可比矩阵。
+\[
+  {^0}\mathbf{J} =
+  \begin{bmatrix} 
+    -s_{1}\,\left(l_{1}+l_{3}\,c_{23}+l_{2}\,c_{2}\right) & -c_{1}\,\left(l_{3}\,s_{23}+l_{2}\,s_{2}\right) & -l_{3}\,s_{23}\,c_{1} \\ 
+    c_{1}\,\left(l_{1}+l_{3}\,c_{23}+l_{2}\,c_{2}\right) & -s_{1}\,\left(l_{3}\,s_{23}+l_{2}\,s_{2}\right) & -l_{3}\,s_{23}\,s_{1} \\ 
+    0 & l_{3}\,c_{23}+l_{2}\,c_{2} & l_{3}\,c_{23} \\ 
+    0 & s_{1} & s_{1} \\ 
+    0 & -c_{1} & -c_{1} \\ 
+    1 & 0 & 0
+  \end{bmatrix}
+\]
+
+但是这个雅可比矩阵是在坐标系{0}下的。我们需要将其转换到坐标系{4}下，转换关系为
+\[
+  {^4}\mathbf{J} =
+  \begin{bmatrix}
+    {^4_0}\mathbf{R} & 0 \\
+    0 & {^4_0}\mathbf{R}
+  \end{bmatrix}
+  {^0}\mathbf{J} =
+  \begin{bmatrix}
+    {^0_4}\mathbf{R}^T & 0 \\
+    0 & {^0_4}\mathbf{R}^T
+  \end{bmatrix}
+  {^0}\mathbf{J}
+\]
+
+计算可得最终结果与微分变换法得到的雅可比矩阵一致。
+
+从基座到末端的速度传递：
+
+\[
+  {^1}\omega_1 = 
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    \dot{\theta}_1
+  \end{bmatrix}
+\]
+
+\[
+  {^1}v_1 = 
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    0
+  \end{bmatrix}
+\]
+
+\[
+  {^2}\omega_2 = _1^2\mathbf{R} {^1}\omega_1 + \dot{\theta}_2 ^2\hat{Z}_2 =
+  \begin{bmatrix}
+    \sin\theta_2 \dot{\theta}_1 \\
+    \cos\theta_2 \dot{\theta}_1 \\
+    \dot{\theta}_2
+  \end{bmatrix}
+\]
+
+\[
+  {^2}v_2 = _1^2\mathbf{R} ({^1}v_1 + {^1}\omega_1 \times {^1}\mathbf{P}_2) =
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    -L_1 \dot{\theta}_1
+  \end{bmatrix}
+\]
+
+\[
+  {^3}\omega_3 = _2^3\mathbf{R} {^2}\omega_2 + \dot{\theta}_3 {^3}\hat{Z}_3 =
+  \begin{bmatrix}
+    \sin(\theta_2 + \theta_3) \dot{\theta}_1 \\
+    \cos(\theta_2 + \theta_3) \dot{\theta}_1 \\
+    \dot{\theta}_2 + \dot{\theta}_3
+  \end{bmatrix}
+\]
+
+\[
+  {^3}v_3 = _2^3\mathbf{R} ({^2}v_2 + {^2}\omega_2 \times {^2}\mathbf{P}_3) =
+  \begin{bmatrix}
+    \sin\theta_3 L_2 \dot{\theta}_2 \\
+    \cos\theta_3 L_2 \dot{\theta}_2 \\
+    -\cos\theta_2 L_2 \dot{\theta}_1 - L_1 \dot{\theta}_1
+  \end{bmatrix}
+\]
+
+\[
+  {^4}\omega_4 = _3^4\mathbf{R} {^3}\omega_3 + \dot{\theta}_4 {^4}\hat{Z}_4 =
+  \begin{bmatrix}
+    \sin(\theta_2 + \theta_3) \dot{\theta}_1 \\
+    \cos(\theta_2 + \theta_3) \dot{\theta}_1 \\
+    \dot{\theta}_2 + \dot{\theta}_3
+  \end{bmatrix}
+\]
+
+\[
+  {^4}v_4 = _3^4\mathbf{R} ({^3}v_3 + {^3}\omega_3 \times {^3}\mathbf{P}_4) =
+  \begin{bmatrix}
+    \sin\theta_3 L_2 \dot{\theta}_2 \\
+    (\cos\theta_3 L_2 + L_3) \dot{\theta}_2 + L_3 \dot{\theta}_3 \\
+    (-\cos\theta_2 L_2 - L_1 - \cos(\theta_2 + \theta_3) L_3) \dot{\theta}_1
+  \end{bmatrix}
+\]
+
+整理后便可得到雅可比矩阵。
+
+从末端到基座的静力传递：
+
+假设在末端施加一个力矢量 $ {^4}\mathbf{F} $。
+
+\[
+  {^4}f_4 = 
+  \begin{bmatrix}
+    f_x \\
+    f_y \\
+    f_z
+  \end{bmatrix}
+\]
+
+\[
+  {^4}n_4 = 
+  \begin{bmatrix}
+    n_x \\
+    n_y \\
+    n_z
+  \end{bmatrix}
+\]
+
+\[
+  {^3}f_3 = _4^3\mathbf{R} {^4}f_4 =
+  \begin{bmatrix}
+    f_x \\
+    f_y \\
+    f_z
+  \end{bmatrix}
+\]
+
+\[
+  {^3}n_3 = _4^3\mathbf{R} {^4}n_4 + {^3}\mathbf{P}_4 \times {^3}f_3 =
+  \begin{bmatrix}
+    n_x \\
+    n_y - L_3 f_z \\
+    n_z + L_3 f_y
+  \end{bmatrix}
+\]
+
+\[
+  {^2}f_2 = _3^2\mathbf{R} {^3}f_3 =
+  \begin{bmatrix}
+    c_3 f_x - s_3 f_y \\
+    s_3 f_x + c_3 f_y \\
+    f_z
+  \end{bmatrix}
+\]
+
+\[
+  {^2}n_2 = _3^2\mathbf{R} {^3}n_3 + {^2}\mathbf{P}_3 \times {^2}f_2 =
+  \begin{bmatrix}
+    \cos\theta_3 n_x - \sin\theta_3 n_y + \sin\theta_3 L_3 f_z \\
+    \sin\theta_3 n_x + \cos\theta_3 n_y - (\cos\theta_3 L_3 + L_2) f_z \\
+    n_z + \sin\theta_3 L_2 f_x + (\cos\theta_3 L_2 + L_3) f_y
+  \end{bmatrix}
+\]
+
+\[
+  {^1}f_1 = _2^1\mathbf{R} {^2}f_2 =
+  \begin{bmatrix}
+    \cos(\theta_2 + \theta_3) f_x - \sin(\theta_2 + \theta_3) f_y \\
+    -f_z \\
+    \sin(\theta_2 + \theta_3) f_x + \cos(\theta_2 + \theta_3) f_y
+  \end{bmatrix}
+\]
+
+\[
+  {^1}n_1 = _2^1\mathbf{R} {^2}n_2 + {^1}\mathbf{P}_2 \times {^1}f_1 =
+  \begin{bmatrix}
+    \cos(\theta_2 + \theta_3) n_x - \sin(\theta_2 + \theta_3) n_y + (\sin(\theta_2 + \theta_3) L_3 + \sin\theta_2 L_2) f_z \\
+    -n_z - (\sin\theta_3 L_2 + \sin(\theta_2 + \theta_3) L_1) f_x - (\cos\theta_3 L_2 + \cos(\theta_2 + \theta_3) L_1 + L_3) f_y \\
+    \sin(\theta_2 + \theta_3) n_x + \cos(\theta_2 + \theta_3) n_y - (\cos(\theta_2 + \theta_3) L_3 + \cos\theta_2 L_2 + L_1) f_z
+  \end{bmatrix}
+\]
+
+于是有
+\begin{align*}
+  \tau_1 & = \sin(\theta_2 + \theta_3) n_x + \cos(\theta_2 + \theta_3) n_y - (\cos(\theta_2 + \theta_3) L_3 + \cos\theta_2 L_2 + L_1) f_z \\
+  \tau_2 & = n_z + \sin\theta_3 L_2 f_x + (\cos\theta_3 L_2 + L_3) f_y \\
+  \tau_3 & = n_z + L_3 f_y
+\end{align*}
+
+写成矩阵的形式为：
+\[
+  \boldsymbol{\tau} =
+  \begin{bmatrix}
+    0 & 0 & -\cos(\theta_2 + \theta_3) L_3 - \cos\theta_2 L_2 - L_1 & \sin(\theta_2 + \theta_3) & \cos(\theta_2 + \theta_3) & 0 \\
+    \sin\theta_3 L_2 & \cos\theta_3 L_2 + L_3 & 0 & 0 & 0 & 1 \\
+    0 & L_3 & 0 & 0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+    f_x \\
+    f_y \\
+    f_z \\
+    n_x \\
+    n_y \\
+    n_z
+  \end{bmatrix}
+\]
+
+问题(c):
+
+该机械臂在工作空间边界处于奇异位形时，$ \theta_3 = 0 $。
+
+该机械臂在工作空间内部处于奇异位形时，$ \theta_3 = \pi $。
+
+问题(d):
+
+力雅可比矩阵是速度雅可比矩阵的转置。我们这里只需要求力矢量，不需要求力矩矢量，所以把力雅可比矩阵的后三列去掉，于是就得到了一个方阵。
+\[
+  {^4}\mathbf{J}^T =
+  \begin{bmatrix}
+    0 & 0 & - L_1 - L_3 \cos(\theta_2 + \theta_3) - L_2 \cos\theta_2 \\
+    L_2 \sin\theta_3 & L_3 + L_2 \cos\theta_3 & 0 \\
+    0 & L_3 & 0 \\
+  \end{bmatrix}
+\]
+
+但是力雅可比矩阵是将末端力变换成关节力矩。如果要将关节力矩变换成末端力，则需要对其求逆。
+\[
+  {^4}\mathbf{J}^{-T} =
+  \begin{bmatrix}
+    0 & \frac{1}{L_2 \sin\theta_3} & -\frac{L_3 + L_2 \cos\theta_3}{L_2 L_3 \sin\theta_3} \\
+    0 & 0 & \frac{1}{13} \\
+    -\frac{1}{L_1 + L_3 \cos(\theta_2 + \theta_3) + L_2 \cos\theta_2} & 0 & 0 
+  \end{bmatrix}
+\]
+
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+建立连杆坐标系如图所示：
+
+\img<q3>[0.5]{Question 3}{figs/Q3.png}
+
+由图写出DH表如下：
+
+\tbl<tb3>{DH-table for question 3} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & $ L_1 $ & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_2 $ \\
+    3 & $ L_2 $ & 0 & 0 & $ \theta_3 $ \\
+    4 & $ L_3 $ & 0 & 0 & 0 \\
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & L_1 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    -\sin\theta_2 & -\cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & L_2 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+末端在各坐标系中的变换矩阵为：
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & L_3 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & L_2 + L_3 \cos\theta_3 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & L_3 \sin\theta_3 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos(\theta_2 + \theta_3) & -\sin(\theta_2 + \theta_3) & 0 & L_2 \cos\theta_2 + L_3 \cos(\theta_2 + \theta_3) \\
+    0 & 0 & 1 & 0 \\
+    -\sin(\theta_2 + \theta_3) & -\cos(\theta_2 + \theta_3) & 0 & -L_2 \sin\theta_2 - L_3 \sin(\theta_2 + \theta_3) \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+微分变换法构造雅可比矩阵：
+
+雅可比矩阵的第一列 $ {^4}\mathbf{J}_1 $ 由 $ _4^1\mathbf{T} $ 决定，且关节1为转动关节，所以
+\[
+  {^4}\mathbf{J}_1 =
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    L_3 \cos(\theta_2 + \theta_3) + L_2 \cos(\theta_2) \\
+    -\sin(\theta_2 + \theta_3) \\
+    -\cos(\theta_2 + \theta_3) \\
+    0
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第二列 $ {^4}\mathbf{J}_2 $ 由 $ _4^2\mathbf{T} $ 决定，且关节2为转动关节，所以
+\[
+  {^4}\mathbf{J}_2 =
+  \begin{bmatrix}
+    L_2 \sin(\theta_3) \\
+    L_3 + L_2 \cos(\theta_3) \\
+    0 \\
+    0 \\
+    0 \\
+    1
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第三列 $ {^4}\mathbf{J}_3 $ 由 $ _4^3\mathbf{T} $ 决定，且关节3为转动关节，所以
+\[
+  {^4}\mathbf{J}_3 =
+  \begin{bmatrix}
+    0 \\
+    L_3 \\
+    0 \\
+    0 \\
+    0 \\
+    1
+  \end{bmatrix}
+\]
+
+综上，雅可比矩阵为
+\[
+  {^4}\mathbf{J} =
+  \begin{bmatrix}
+    0 & L_2 \sin(\theta_3) & 0 \\
+    0 & L_3 + L_2 \cos(\theta_3) & L_3 \\
+    L_3 \cos(\theta_2 + \theta_3) + L_2 \cos(\theta_2) & 0 & 0 \\
+    -\sin(\theta_2 + \theta_3) & 0 & 0 \\
+    -\cos(\theta_2 + \theta_3) & 0 & 0 \\
+    0 & 1 & 1
+  \end{bmatrix}
+\]
+
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+建立连杆坐标系如图所示：
+
+\img<q4>[0.5]{Question 4}{figs/Q4.png}
+
+由图写出DH表如下：
+
+\tbl<tb4>{DH-table for question 4} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & $ a_1 $ & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_2 $ \\
+    3 & $ a_2 $ & 0 & $ d_3 $ & $ \theta_3 $ \\
+    4 & $ a_3 $ & $ -\frac{\pi}{2} $ & $ d_4 $ & $ \theta_4 $ \\
+    5 & 0 & $ \frac{\pi}{2} $ & 0 & $ \theta_5 $ \\
+    6 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_6 $
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & a_1 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    -\sin\theta_2 & -\cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & a_2 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & d_3 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_4 & -\sin\theta_4 & 0 & a_3 \\
+    0 & 0 & 1 & d_4 \\
+    -\sin\theta_4 & -\cos\theta_4 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^4\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_5 & -\sin\theta_5 & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    \sin\theta_5 & \cos\theta_5 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+末端在各坐标系中的变换矩阵为：
+
+\[
+  _6^5\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_6 & -\sin\theta_6 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    -\sin\theta_6 & -\cos\theta_6 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^4\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_5 \cos\theta_6 & -\cos\theta_5 \sin\theta_6 & -\sin\theta_5 & 0 \\
+    \sin\theta_6 & \cos\theta_6 & 0 & 0 \\
+    \cos\theta_6 \sin\theta_5 & -\sin\theta_5 \sin\theta_6 & \cos\theta_5 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^3\mathbf{T} =
+  \begin{bmatrix} 
+    \cos\left(\theta _{4}\right)\,\cos\left(\theta _{5}\right)\,\cos\left(\theta _{6}\right)-\sin\left(\theta _{4}\right)\,\sin\left(\theta _{6}\right) & -\cos\left(\theta _{6}\right)\,\sin\left(\theta _{4}\right)-\cos\left(\theta _{4}\right)\,\cos\left(\theta _{5}\right)\,\sin\left(\theta _{6}\right) & -\cos\left(\theta _{4}\right)\,\sin\left(\theta _{5}\right) & a_{3} \\ 
+    \cos\left(\theta _{6}\right)\,\sin\left(\theta _{5}\right) & -\sin\left(\theta _{5}\right)\,\sin\left(\theta _{6}\right) & \cos\left(\theta _{5}\right) & d_{4} \\ 
+    -\cos\left(\theta _{4}\right)\,\sin\left(\theta _{6}\right)-\cos\left(\theta _{5}\right)\,\cos\left(\theta _{6}\right)\,\sin\left(\theta _{4}\right) & \cos\left(\theta _{5}\right)\,\sin\left(\theta _{4}\right)\,\sin\left(\theta _{6}\right)-\cos\left(\theta _{4}\right)\,\cos\left(\theta _{6}\right) & \sin\left(\theta _{4}\right)\,\sin\left(\theta _{5}\right) & 0 \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^2\mathbf{T} =
+  \begin{bmatrix} 
+    -c_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)-c_{6}\,s_{3}\,s_{5} & s_{3}\,s_{5}\,s_{6}-c_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right) & -c_{5}\,s_{3}-c_{3}\,c_{4}\,s_{5} & a_{2}+a_{3}\,c_{3}-d_{4}\,s_{3} \\ 
+    c_{3}\,c_{6}\,s_{5}-s_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right) & -s_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)-c_{3}\,s_{5}\,s_{6} & c_{3}\,c_{5}-c_{4}\,s_{3}\,s_{5} & d_{4}\,c_{3}+a_{3}\,s_{3} \\ 
+    -c_{4}\,s_{6}-c_{5}\,c_{6}\,s_{4} & c_{5}\,s_{4}\,s_{6}-c_{4}\,c_{6} & s_{4}\,s_{5} & d_{3} \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _6^1\mathbf{T} =
+  \begin{bmatrix} 
+    r_{11} & r_{12} & r_{13} & p_x \\ 
+    r_{21} & r_{22} & r_{23} & p_y \\ 
+    r_{31} & r_{32} & r_{33} & p_z \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\] 
+
+\begin{align*} 
+  r_{11} &= s_{2}\,\left(s_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)-c_{3}\,c_{6}\,s_{5}\right)-c_{2}\,\left(c_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)+c_{6}\,s_{3}\,s_{5}\right) \\ 
+  r_{12} &= s_{2}\,\left(s_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)+c_{3}\,s_{5}\,s_{6}\right)-c_{2}\,\left(c_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)-s_{3}\,s_{5}\,s_{6}\right) \\ 
+  r_{13} &= -c_{2}\,\left(c_{5}\,s_{3}+c_{3}\,c_{4}\,s_{5}\right)-s_{2}\,\left(c_{3}\,c_{5}-c_{4}\,s_{3}\,s_{5}\right) \\ 
+  p_x &= a_{3}\,c_{23}-d_{4}\,s_{23}+a_{2}\,c_{2} \\ 
+  r_{21} &= -c_{4}\,s_{6}-c_{5}\,c_{6}\,s_{4} \\ 
+  r_{22} &= c_{5}\,s_{4}\,s_{6}-c_{4}\,c_{6} \\ 
+  r_{23} &= s_{4}\,s_{5} \\ 
+  p_y &= d_{3} \\ 
+  r_{31} &= c_{2}\,\left(s_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)-c_{3}\,c_{6}\,s_{5}\right)+s_{2}\,\left(c_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)+c_{6}\,s_{3}\,s_{5}\right) \\ 
+  r_{32} &= c_{2}\,\left(s_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)+c_{3}\,s_{5}\,s_{6}\right)+s_{2}\,\left(c_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)-s_{3}\,s_{5}\,s_{6}\right) \\ 
+  r_{33} &= s_{2}\,\left(c_{5}\,s_{3}+c_{3}\,c_{4}\,s_{5}\right)-c_{2}\,\left(c_{3}\,c_{5}-c_{4}\,s_{3}\,s_{5}\right) \\ 
+  p_z &= -d_{4}\,c_{23}-a_{3}\,s_{23}-a_{2}\,s_{2}
+\end{align*}
+
+微分变换法构造雅可比矩阵：
+
+雅可比矩阵的第一列 $ {^6}\mathbf{J}_1 $ 由 $ _6^1\mathbf{T} $ 决定，且关节1为转动关节，所以
+
+\[
+  {^6}\mathbf{J}_1 =
+  \begin{bmatrix} 
+    J_{11} \\
+    J_{21} \\
+    J_{31} \\
+    J_{41} \\
+    J_{51} \\
+    J_{61}
+  \end{bmatrix}
+\]
+
+{
+\small
+\begin{align*}
+  J_{11} &= d_{3}\,\left(c_{2}\,\left(c_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)+c_{6}\,s_{3}\,s_{5}\right)-s_{2}\,\left(s_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)-c_{3}\,c_{6}\,s_{5}\right)\right)-\left(c_{4}\,s_{6}+c_{5}\,c_{6}\,s_{4}\right)\,\left(c_{2}\,\left(a_{2}+a_{3}\,c_{3}-d_{4}\,s_{3}\right)-s_{2}\,\left(d_{4}\,c_{3}+a_{3}\,s_{3}\right)\right) \\ 
+  J_{21} &= d_{3}\,\left(c_{2}\,\left(c_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)-s_{3}\,s_{5}\,s_{6}\right)-s_{2}\,\left(s_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)+c_{3}\,s_{5}\,s_{6}\right)\right)-\left(c_{4}\,c_{6}-c_{5}\,s_{4}\,s_{6}\right)\,\left(c_{2}\,\left(a_{2}+a_{3}\,c_{3}-d_{4}\,s_{3}\right)-s_{2}\,\left(d_{4}\,c_{3}+a_{3}\,s_{3}\right)\right) \\ 
+  J_{31} &= d_{3}\,\left(c_{2}\,\left(c_{5}\,s_{3}+c_{3}\,c_{4}\,s_{5}\right)+s_{2}\,\left(c_{3}\,c_{5}-c_{4}\,s_{3}\,s_{5}\right)\right)+s_{4}\,s_{5}\,\left(c_{2}\,\left(a_{2}+a_{3}\,c_{3}-d_{4}\,s_{3}\right)-s_{2}\,\left(d_{4}\,c_{3}+a_{3}\,s_{3}\right)\right) \\ 
+  J_{41} &= c_{2}\,\left(s_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)-c_{3}\,c_{6}\,s_{5}\right)+s_{2}\,\left(c_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)+c_{6}\,s_{3}\,s_{5}\right) \\ 
+  J_{51} &= c_{2}\,\left(s_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)+c_{3}\,s_{5}\,s_{6}\right)+s_{2}\,\left(c_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)-s_{3}\,s_{5}\,s_{6}\right) \\ 
+  J_{61} &= s_{2}\,\left(c_{5}\,s_{3}+c_{3}\,c_{4}\,s_{5}\right)-c_{2}\,\left(c_{3}\,c_{5}-c_{4}\,s_{3}\,s_{5}\right)
+\end{align*}
+}
+
+雅可比矩阵的第二列 $ {^6}\mathbf{J}_2 $ 由 $ _6^2\mathbf{T} $ 决定，且关节2为转动关节，所以
+\[
+  {^6}\mathbf{J}_2 =
+  \begin{bmatrix} 
+    \left(c_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)+c_{6}\,s_{3}\,s_{5}\right)\,\left(d_{4}\,c_{3}+a_{3}\,s_{3}\right)-\left(s_{3}\,\left(s_{4}\,s_{6}-c_{4}\,c_{5}\,c_{6}\right)-c_{3}\,c_{6}\,s_{5}\right)\,\left(a_{2}+a_{3}\,c_{3}-d_{4}\,s_{3}\right) \\ 
+    \left(c_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)-s_{3}\,s_{5}\,s_{6}\right)\,\left(d_{4}\,c_{3}+a_{3}\,s_{3}\right)-\left(s_{3}\,\left(c_{6}\,s_{4}+c_{4}\,c_{5}\,s_{6}\right)+c_{3}\,s_{5}\,s_{6}\right)\,\left(a_{2}+a_{3}\,c_{3}-d_{4}\,s_{3}\right) \\ 
+    a_{3}\,c_{5}+a_{2}\,c_{3}\,c_{5}+d_{4}\,c_{4}\,s_{5}-a_{2}\,c_{4}\,s_{3}\,s_{5} \\ 
+    -c_{4}\,s_{6}-c_{5}\,c_{6}\,s_{4} \\ 
+    c_{5}\,s_{4}\,s_{6}-c_{4}\,c_{6} \\ 
+    s_{4}\,s_{5}
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第三列 $ {^6}\mathbf{J}_3 $ 由 $ _6^3\mathbf{T} $ 决定，且关节3为转动关节，所以
+\[
+  {^6}\mathbf{J}_3 =
+  \begin{bmatrix} 
+    d_{4}\,\left(\sin\left(\theta _{4}\right)\,\sin\left(\theta _{6}\right)-\cos\left(\theta _{4}\right)\,\cos\left(\theta _{5}\right)\,\cos\left(\theta _{6}\right)\right)+a_{3}\,\cos\left(\theta _{6}\right)\,\sin\left(\theta _{5}\right) \\ 
+    d_{4}\,\left(\cos\left(\theta _{6}\right)\,\sin\left(\theta _{4}\right)+\cos\left(\theta _{4}\right)\,\cos\left(\theta _{5}\right)\,\sin\left(\theta _{6}\right)\right)-a_{3}\,\sin\left(\theta _{5}\right)\,\sin\left(\theta _{6}\right) \\ 
+    a_{3}\,\cos\left(\theta _{5}\right)+d_{4}\,\cos\left(\theta _{4}\right)\,\sin\left(\theta _{5}\right) \\ 
+    -\cos\left(\theta _{4}\right)\,\sin\left(\theta _{6}\right)-\cos\left(\theta _{5}\right)\,\cos\left(\theta _{6}\right)\,\sin\left(\theta _{4}\right) \\ 
+    \cos\left(\theta _{5}\right)\,\sin\left(\theta _{4}\right)\,\sin\left(\theta _{6}\right)-\cos\left(\theta _{4}\right)\,\cos\left(\theta _{6}\right) \\ 
+    \sin\left(\theta _{4}\right)\,\sin\left(\theta _{5}\right)
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第四列 $ {^6}\mathbf{J}_4 $ 由 $ _6^4\mathbf{T} $ 决定，且关节4为转动关节，所以
+\[
+  {^6}\mathbf{J}_4 =
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    0 \\
+    \cos\theta_6 \sin\theta_5 \\
+    -\sin\theta_5 \sin\theta_6 \\
+    \cos\theta_5
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第五列 $ {^6}\mathbf{J}_5 $ 由 $ _6^5\mathbf{T} $ 决定，且关节5为转动关节，所以
+\[
+  {^6}\mathbf{J}_5 =
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    0 \\
+    -\sin\theta_6 \\
+    -\cos\theta_6 \\
+    0
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第六列 $ {^6}\mathbf{J}_6 $ 由 $ _6^6\mathbf{T} $（也就是单位阵）决定，所以
+\[
+  {^6}\mathbf{J}_6 =
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+    1
+  \end{bmatrix}
+\]
+
+总的雅可比矩阵即可由这六列拼接得到。
+
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+建立连杆坐标系如图所示：
+
+\img<q5>[0.5]{Question 5}{figs/Q5.png}
+
+由图写出DH表如下：
+
+\tbl<tb5>{DH-table for question 5} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & $ d_1 $ & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_2 $ \\
+    3 & $ L_2 $ & 0 & $ d_2 $ & $ \theta_3 $ \\
+    4 & $ L_3 $ & 0 & 0 & 0 
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & L_1 \\
+    0 & 0 & -1 & 0 \\
+    \sin\theta_2 & \cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & L_2 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+末端在各坐标系中的变换矩阵为：
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & L_3 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & L_2 + L_3 \cos\theta_3 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & L_3 \sin\theta_3 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos(\theta_2 + \theta_3) & -\sin(\theta_2 + \theta_3) & 0 & L_1 + L_2 \cos\theta_2 + L_3 \cos(\theta_2 + \theta_3) \\
+    0 & 0 & -1 & 0 \\
+    \sin(\theta_2 + \theta_3) & \cos(\theta_2 + \theta_3) & 0 & L_2 \sin\theta_2 + L_3 \sin(\theta_2 + \theta_3) \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\left(\theta _{2}+\theta _{3}\right)\,\cos\left(\theta _{1}\right) & -\sin\left(\theta _{2}+\theta _{3}\right)\,\cos\left(\theta _{1}\right) & \sin\left(\theta _{1}\right) & \cos\left(\theta _{1}\right)\,\left(l_{1}+l_{3}\,\cos\left(\theta _{2}+\theta _{3}\right)+l_{2}\,\cos\left(\theta _{2}\right)\right) \\ 
+    \cos\left(\theta _{2}+\theta _{3}\right)\,\sin\left(\theta _{1}\right) & -\sin\left(\theta _{2}+\theta _{3}\right)\,\sin\left(\theta _{1}\right) & -\cos\left(\theta _{1}\right) & \sin\left(\theta _{1}\right)\,\left(l_{1}+l_{3}\,\cos\left(\theta _{2}+\theta _{3}\right)+l_{2}\,\cos\left(\theta _{2}\right)\right) \\ 
+    \sin\left(\theta _{2}+\theta _{3}\right) & \cos\left(\theta _{2}+\theta _{3}\right) & 0 & l_{3}\,\sin\left(\theta _{2}+\theta _{3}\right)+l_{2}\,\sin\left(\theta _{2}\right) \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+坐标系{4}处的雅可比矩阵：
+
+使用微分变换法构造雅可比矩阵：
+
+雅可比矩阵的第一列 $ {^4}\mathbf{J}_1 $ 由 $ _4^1\mathbf{T} $ 决定，且关节1为转动关节，所以
+\[
+  {^4}\mathbf{J}_1 =
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    - L_1 - L_3 \cos(\theta_2 + \theta_3) - L_2 \cos(\theta_2) \\
+    \sin(\theta_2 + \theta_3) \\
+    \cos(\theta_2 + \theta_3) \\
+    0
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第二列 $ {^4}\mathbf{J}_2 $ 由 $ _4^2\mathbf{T} $ 决定，且关节2为转动关节，所以
+\[
+  {^4}\mathbf{J}_2 =
+  \begin{bmatrix}
+    L_2 \sin(\theta_3) \\
+    L_3 + L_2 \cos(\theta_3) \\
+    0 \\
+    0 \\
+    0 \\
+    1
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第三列 $ {^4}\mathbf{J}_3 $ 由 $ _4^3\mathbf{T} $ 决定，且关节3为转动关节，所以
+\[
+  {^4}\mathbf{J}_3 =
+  \begin{bmatrix}
+    0 \\
+    L_3 \\
+    0 \\
+    0 \\
+    0 \\
+    1
+  \end{bmatrix}
+\]
+
+综上，雅可比矩阵为
+\[
+  {^4}\mathbf{J} =
+  \begin{bmatrix}
+    0 & L_2 \sin(\theta_3) & 0 \\
+    0 & L_3 + L_2 \cos(\theta_3) & L_3 \\
+    - L_1 - L_3 \cos(\theta_2 + \theta_3) - L_2 \cos(\theta_2) & 0 & 0 \\
+    \sin(\theta_2 + \theta_3) & 0 & 0 \\
+    \cos(\theta_2 + \theta_3) & 0 & 0 \\
+    0 & 1 & 1
+  \end{bmatrix}
+\]
+
+通过定义法构造雅可比矩阵：
+
+由变换矩阵 $ _4^0\mathbf{T} $ 可以提取出末端在基坐标系中的位置向量和旋转矩阵，对其求导便可得到雅可比矩阵。
+\[
+  {^0}\mathbf{J} =
+  \begin{bmatrix} 
+    -d_{2}\,c_{1}-s_{1}\,\left(l_{3}\,c_{23}+l_{2}\,c_{2}\right) & -c_{1}\,\left(l_{3}\,s_{23}+l_{2}\,s_{2}\right) & -l_{3}\,s_{23}\,c_{1} \\ 
+    c_{1}\,\left(l_{3}\,c_{23}+l_{2}\,c_{2}\right)-d_{2}\,s_{1} & -s_{1}\,\left(l_{3}\,s_{23}+l_{2}\,s_{2}\right) & -l_{3}\,s_{23}\,s_{1} \\ 
+    0 & -l_{3}\,c_{23}-l_{2}\,c_{2} & -l_{3}\,c_{23} \\ 
+    0 & -s_{1} & -s_{1} \\ 
+    0 & c_{1} & c_{1} \\ 
+    1 & 0 & 0
+  \end{bmatrix}
+\]
+
+但是这个雅可比矩阵是在坐标系{0}下的。我们需要将其转换到坐标系{4}下，转换关系为
+\[
+  {^4}\mathbf{J} =
+  \begin{bmatrix}
+    {^4_0}\mathbf{R} & 0 \\
+    0 & {^4_0}\mathbf{R}
+  \end{bmatrix}
+  {^0}\mathbf{J} =
+  \begin{bmatrix}
+    {^0_4}\mathbf{R}^T & 0 \\
+    0 & {^0_4}\mathbf{R}^T
+  \end{bmatrix}
+  {^0}\mathbf{J}
+\]
+
+计算可得最终结果与微分变换法得到的雅可比矩阵一致。
+
+坐标系{0}处的雅可比矩阵：
+
+通过定义法求出的雅可比矩阵本身就是坐标系{0}下的。现将通过微分变换法求出的雅可比矩阵转换到坐标系{0}下。
+\[
+  {^0}\mathbf{J} =
+  \begin{bmatrix}
+    {^0_4}\mathbf{R} & 0 \\
+    0 & {^0_4}\mathbf{R}
+  \end{bmatrix}
+  {^4}\mathbf{J}
+\]
+
+得到的结果与通过定义法求出的雅可比矩阵一致。
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+考虑机器人的雅可比矩阵 \( J(\mathbf{q}) \in \mathbb{R}^{m \times n} \)，其中 \( \mathbf{q} \) 是关节角度向量，\( m \) 是任务空间维度，\( n \) 是关节空间维度。奇异位形定义为雅可比矩阵秩亏的条件。
+
+位置域奇异位形：当 \( \operatorname{rank}(J(\mathbf{q})) < \min(m, n) \) 时，机器人失去某些方向的运动能力。
+
+力域奇异位形：当 \( \operatorname{rank}(J^T(\mathbf{q})) < \min(m, n) \) 时，机器人无法在某些方向上施加力。
+
+由于对于任何矩阵 \( J \)，其秩满足 \( \operatorname{rank}(J) = \operatorname{rank}(J^T) \)，因此：
+\[
+\operatorname{rank}(J(\mathbf{q})) < \min(m, n) \iff \operatorname{rank}(J^T(\mathbf{q})) < \min(m, n).
+\]
+
+这意味着，对于任意关节角度配置 \( \mathbf{q} \)，\( \mathbf{q} \) 是位置域奇异位形当且仅当 \( \mathbf{q} \) 是力域奇异位形。因此，力域中的奇异位形与在位置域中的奇异位形发生在相同的关节角度下。
+
+证毕。
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+已知这是一个平面机械臂。由连杆2的原点位置 $ ^0\mathbf{P}_{2O} $ 可知，
+\begin{align*}
+  x = a_1 \cos\theta_1 - d_2 \sin\theta_1 \\
+  y = a_1 \sin\theta_1 + d_2 \cos\theta_1
+\end{align*}
+
+直接求导法得到雅可比矩阵为
+\[
+  {^0}\mathbf{J} =
+  \begin{bmatrix}
+    \frac{\partial x}{\partial \theta_1} & \frac{\partial x}{\partial d_2} \\
+    \frac{\partial y}{\partial \theta_1} & \frac{\partial y}{\partial d_2}
+  \end{bmatrix} =
+  \begin{bmatrix}
+    -a_1 \sin\theta_1 - d_2 \cos\theta_1 & -\sin\theta_1 \\
+    a_1 \cos\theta_1 - d_2 \sin\theta_1 & \cos\theta_1
+  \end{bmatrix}
+\]
+
+当操作臂处于奇异位形时，雅可比矩阵不可逆，即行列式为零：
+\begin{align*}
+  \det({^0}\mathbf{J}) &= (-a_1 \sin\theta_1 - d_2 \cos\theta_1) \cdot \cos\theta_1 - (-\sin\theta_1) \cdot (a_1 \cos\theta_1 - d_2 \sin\theta_1) \\
+  &= -a_1 \sin\theta_1 \cos\theta_1 - d_2 \cos^2\theta_1 + a_1 \sin\theta_1 \cos\theta_1 - d_2 \sin^2\theta_1 \\
+  &= -d_2 (\cos^2\theta_1 + \sin^2\theta_1) \\
+  &= -d_2
+\end{align*}
+
+所以当 $ d_2 = 0 $ 时，操作臂处于奇异位形。
+
+\end{sol}
+
+\question
+
+\begin{sol}
+
+首先将速度雅可比矩阵转置得到力雅可比矩阵：
+\[
+  {^0}\mathbf{J}^T =
+  \begin{bmatrix}
+    - l_1 \sin\theta_1 - l_2 \sin(\theta_1 + \theta_2) & l_1 \cos\theta_1 + l_2 \cos(\theta_1 + \theta_2) \\
+    - l_2 \sin(\theta_1 + \theta_2) & l_2 \cos(\theta_1 + \theta_2) 
+  \end{bmatrix}
+\]
+
+力雅可比矩阵与力矢量相乘得到关节力矩：
+\[
+  \boldsymbol{\tau} =
+  {^0}\mathbf{J}^T {^0}\mathbf{F} =
+  \begin{bmatrix}
+    - l_1 \sin\theta_1 - l_2 \sin(\theta_1 + \theta_2) & l_1 \cos\theta_1 + l_2 \cos(\theta_1 + \theta_2) \\
+    - l_2 \sin(\theta_1 + \theta_2) & l_2 \cos(\theta_1 + \theta_2) 
+  \end{bmatrix}
+  \begin{bmatrix}
+    5 \\
+    3
+  \end{bmatrix} =
+\]
+
+\[
+  \begin{bmatrix}
+    -5 l_1 \sin\theta_1 - 5 l_2 \sin(\theta_1 + \theta_2) + 3 l_1 \cos\theta_1 + 3 l_2 \cos(\theta_1 + \theta_2) \\
+    -5 l_2 \sin(\theta_1 + \theta_2) + 3 l_2 \cos(\theta_1 + \theta_2)
+  \end{bmatrix}
+\]
+
+\end{sol}
+
+\question 
+
+\begin{sol}
+
+问题(a):
+
+为表示方便，我们在A点建立坐标系{5}，其姿态和坐标系{4}相同。
+
+\img<q9>[0.5]{Question 9}{figs/Q9.png}
+
+由图写出DH表如下：
+
+\tbl<tb9>{DH-table for question 9} {
+    i & $ a_{i-1} $ & $ \alpha_{i-1} $ & $ d_i $ & $ \theta_i $ \\
+    1 & 0 & 0 & 40 & $ \theta_1 $ \\
+    2 & 0 & $ -\frac{\pi}{2} $ & 0 & $ \theta_2 $ \\
+    3 & 0 & $ \frac{\pi}{2} $ & 0 & $ \theta_3 $ \\
+    4 & 0 & 0 & 10 & 0 \\
+    5 & 10 & 0 & 5 & 0 \\
+  }
+
+求出各坐标系变换矩阵如下：
+
+\[
+  _1^0\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_1 & -\sin\theta_1 & 0 & 0 \\
+    \sin\theta_1 & \cos\theta_1 & 0 & 0 \\
+    0 & 0 & 1 & 40 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _2^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 & -\sin\theta_2 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    -\sin\theta_2 & -\cos\theta_2 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _3^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & 0 \\
+    0 & 0 & -1 & 0 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 0 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _4^3\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 10 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^4\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & 10 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 5 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+末端在各坐标系中的变换矩阵为：
+
+\[
+  _5^3\mathbf{T} =
+  \begin{bmatrix}
+    1 & 0 & 0 & 10 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 15 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^2\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_3 & -\sin\theta_3 & 0 & 10 \cos\theta_3 \\
+    0 & 0 & -1 & -15 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 10 \sin\theta_3 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^1\mathbf{T} =
+  \begin{bmatrix}
+    \cos\theta_2 \cos\theta_3 & -\cos\theta_2 \sin\theta_3 & \sin\theta_2 & 15 \sin\theta_2 + 10 \cos\theta_2 \cos\theta_3 \\
+    \sin\theta_3 & \cos\theta_3 & 0 & 10 \sin\theta_3 \\
+    -\sin\theta_2 \cos\theta_3 & \sin\theta_2 \sin\theta_3 & \cos\theta_2 & 15 \cos\theta_2 - 10 \cos\theta_3 \sin\theta_2 \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+\[
+  _5^0\mathbf{T} =
+  \begin{bmatrix} 
+    c_{1}\,c_{2}\,c_{3}-s_{1}\,s_{3} & -c_{3}\,s_{1}-c_{1}\,c_{2}\,s_{3} & c_{1}\,s_{2} & c_{1}\,\left(15\,s_{2}+10\,c_{2}\,c_{3}\right)-10\,s_{1}\,s_{3} \\ 
+    c_{1}\,s_{3}+c_{2}\,c_{3}\,s_{1} & c_{1}\,c_{3}-c_{2}\,s_{1}\,s_{3} & s_{1}\,s_{2} & 10\,c_{1}\,s_{3}+s_{1}\,\left(15\,s_{2}+10\,c_{2}\,c_{3}\right) \\ 
+    -c_{3}\,s_{2} & s_{2}\,s_{3} & c_{2} & 15\,c_{2}-10\,c_{3}\,s_{2}+40 \\ 
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+\]
+
+使用微分变换法构造雅可比矩阵：
+
+雅可比矩阵的第一列 $ {^5}\mathbf{J}_1 $ 由 $ _5^1\mathbf{T} $ 决定，且关节1为转动关节，所以
+\[
+  {^5}\mathbf{J}_1 =
+  \begin{bmatrix}
+    15 \sin\theta_2 \sin\theta_3 \\
+    10 \cos\theta_2 + 15 \cos\theta_3 \sin\theta_2 \\
+    -10 \sin\theta_2 \sin\theta_3 \\
+    -\cos\theta_3 \sin\theta_2 \\
+    \sin\theta_2 \sin\theta_3 \\
+    \cos\theta_2
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第二列 $ {^5}\mathbf{J}_2 $ 由 $ _5^2\mathbf{T} $ 决定，且关节2为转动关节，所以
+\[
+  {^5}\mathbf{J}_2 =
+  \begin{bmatrix}
+    15 \cos\theta_3 \\
+    -15 \sin\theta_3 \\
+    -10 \cos\theta_3 \\
+    \sin\theta_3 \\
+    \cos\theta_3 \\
+    0
+  \end{bmatrix}
+\]
+
+雅可比矩阵的第三列 $ {^5}\mathbf{J}_3 $ 由 $ _5^3\mathbf{T} $ 决定，且关节3为转动关节，所以
+\[
+  {^5}\mathbf{J}_3 =
+  \begin{bmatrix}
+    0 \\
+    10 \\
+    0 \\
+    0 \\
+    0 \\
+    1
+  \end{bmatrix}
+\]
+
+综上，雅可比矩阵为
+\[
+  {^5}\mathbf{J} =
+  \begin{bmatrix}
+    15 \sin\theta_2 \sin\theta_3 & 15 \cos\theta_3 & 0 \\
+    10 \cos\theta_2 + 15 \cos\theta_3 \sin\theta_2 & -15 \sin\theta_3 & 10 \\
+    -10 \sin\theta_2 \sin\theta_3 & -10 \cos\theta_3 & 0 \\
+    -\cos\theta_3 \sin\theta_2 & \sin\theta_3 & 0 \\
+    \sin\theta_2 \sin\theta_3 & \cos\theta_3 & 0 \\
+    \cos\theta_2 & 0 & 1
+  \end{bmatrix}
+\]
+
+问题(b):
+
+当关节角 $ \theta_1 = 90^\circ, \theta_2 = 45^\circ, \theta_3 = 0^\circ $，很容易推得磨头与平面的夹角为 $ 45^\circ $。将法向力 $ f_n = 10N $ 和切向力 $ f_t = 8N $ 分解到坐标系{5}的坐标轴下，得到力矢量
+\[
+  \mathbf{F} =
+  \begin{bmatrix}
+    \frac{\sqrt{2}}{2} f_t - \frac{\sqrt{2}}{2} f_n  \\
+    -\frac{\sqrt{2}}{2} f_t - \frac{\sqrt{2}}{2} f_n \\
+    0
+  \end{bmatrix} =
+  \begin{bmatrix}
+    -1.414 \\
+    -12.728 \\
+    0
+  \end{bmatrix}
+\]
+
+同时，力矩矢量为
+\[
+  \mathbf{N} =
+  \begin{bmatrix}
+    4 \\
+    0 \\
+    0
+  \end{bmatrix}
+\]
+
+所以，最终得到广义力矢量
+\[
+  \mathbf{F} =
+  \begin{bmatrix}
+    -1.414 \\
+    -12.728 \\
+    0 \\
+    4 \\
+    0 \\
+    0
+  \end{bmatrix}
+\]
+
+关节力矩 $ \boldsymbol{\tau} = \mathbf{J}^T \mathbf{F} $。计算得，
+\[
+  \boldsymbol{\tau} =
+  \begin{bmatrix}
+    -227.8298 \\
+    -21.2100 \\
+    -127.2800
+  \end{bmatrix}
+\]
+单位为 N·cm。
+
+问题(c):
+
+第一步，将坐标系{4}的广义力矢量转换到坐标系{5}下：
+\[
+  {^5}\mathbf{F} =
+  \begin{bmatrix}
+    {^5_4}\mathbf{R} & 0 \\
+    S({^5}\mathbf{P}_{4O}) {^5_4}\mathbf{R} & {^5_4}\mathbf{R}
+  \end{bmatrix}
+  {^4}\mathbf{F} =
+  \begin{bmatrix}
+    f_x \\
+    f_y \\
+    f_z \\
+    5 f_y + m_x \\
+    10 f_z - 5 f_x + m_y \\
+    m_z - 10 f_y
+  \end{bmatrix}
+\]
+
+第二步，将坐标系{5}的广义力矢量变成坐标系{0}下的表示：
+\[
+      {^0}\mathbf{F} =
+      \begin{bmatrix}
+        {^0_5}\mathbf{R} & 0 \\
+        0 & {^0_5}\mathbf{R}
+      \end{bmatrix}
+      {^5}\mathbf{F} =
+      \begin{bmatrix}
+        \mathrm{f_z}\,c_{1}\,s_{2}-\mathrm{f_y}\,\left(c_{3}\,s_{1}+c_{1}\,c_{2}\,s_{3}\right)-\mathrm{f_x}\,\left(s_{1}\,s_{3}-c_{1}\,c_{2}\,c_{3}\right) \\ 
+        \mathrm{f_x}\,\left(c_{1}\,s_{3}+c_{2}\,c_{3}\,s_{1}\right)+\mathrm{f_y}\,\left(c_{1}\,c_{3}-c_{2}\,s_{1}\,s_{3}\right)+\mathrm{f_z}\,s_{1}\,s_{2} \\ 
+        \mathrm{f_z}\,c_{2}-\mathrm{f_x}\,c_{3}\,s_{2}+\mathrm{f_y}\,s_{2}\,s_{3} \\ 
+        -\left(c_{3}\,s_{1}+c_{1}\,c_{2}\,s_{3}\right)\,\left(10\,\mathrm{f_z}-5\,\mathrm{f_x}+\mathrm{m_y}\right)-\left(s_{1}\,s_{3}-c_{1}\,c_{2}\,c_{3}\right)\,\left(5\,\mathrm{f_y}+\mathrm{m_x}\right)-c_{1}\,s_{2}\,\left(10\,\mathrm{f_y}-\mathrm{m_z}\right) \\ 
+        \left(c_{1}\,c_{3}-c_{2}\,s_{1}\,s_{3}\right)\,\left(10\,\mathrm{f_z}-5\,\mathrm{f_x}+\mathrm{m_y}\right)+\left(c_{1}\,s_{3}+c_{2}\,c_{3}\,s_{1}\right)\,\left(5\,\mathrm{f_y}+\mathrm{m_x}\right)-s_{1}\,s_{2}\,\left(10\,\mathrm{f_y}-\mathrm{m_z}\right) \\ 
+        -c_{2}\,\left(10\,\mathrm{f_y}-\mathrm{m_z}\right)+s_{2}\,s_{3}\,\left(10\,\mathrm{f_z}-5\,\mathrm{f_x}+\mathrm{m_y}\right)-c_{3}\,s_{2}\,\left(5\,\mathrm{f_y}+\mathrm{m_x}\right)
+      \end{bmatrix}
+\]
+
+\end{sol}
+
+\end{document}
